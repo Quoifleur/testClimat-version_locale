@@ -1,0 +1,23 @@
+.Smonth {
+    background-color: rgb(255, 176, 86);
+}
+
+.Wmonth {
+    background-color: rgb(138, 193, 255);
+}
+
+.Smax {
+    background-color: rgb(204, 140, 68);
+}
+
+.Smin {
+    background-color: rgb(255, 198, 86);
+}
+
+.Wmax {
+    background-color: rgb(96, 135, 178);
+}
+
+.Wmin {
+    background-color: rgb(138, 161, 255);
+}
