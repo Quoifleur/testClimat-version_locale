@@ -81,150 +81,150 @@ if (isset($user)) {
             }
         }
     }
-}
-$Voir = $_GET['Voir'] ?? null;
-$a = 0;
-$nommé = false;
+    $Voir = $_GET['Voir'] ?? null;
+    $a = 0;
+    $nommé = false;
 
-// Pour nommer les climats
-for ($i = 0; $i <= $NbRowInTable; $i++) {
-    if (isset($_GET['nom' . $a])) {
-        $Nommage[$a] =  str_replace("'", "’", strip_tags($_GET['nom' . $a]));
-        if (isset($Nommage[$a])) {
-            $sqlQuery = 'UPDATE ' . $user . ' SET `NOMgenerique` = "' . $Nommage[$a] . '" WHERE `id` = ' . $a . '';
-            $NOMStatement = $db->prepare($sqlQuery);
-            $NOMStatement->execute() or die(print_r($db->errorInfo()));
-            $nommé = true;
-        }
-    }
-    $a++;
-}
-if ($nommé) {
-    header('Location: http://localhost/testClimat/userThingsTer.php');
-}
-//téléchargement des données
-$a = 0;
-$downloadPossible = false;
-$downloadNom = 'climat';
-$ecritureLegende = '"ClimatNumero","Nom","Mois","Saison","Te","Pr","hémisphère","Gaussen","Martonne","NomClimat","LettreClimat"';
-//$ecritureSynthetiqueLegende = '"ClimatNumero","Nom","NomClimat","LettreClimat","hémisphère","Gaussen","Martonne"';
-$ecritureSynthetiqueValeurLegendeMois = '"Mois","';
-$ecritureSynthetiqueValeurLegendeTe = '"Température","';
-$ecritureSynthetiqueValeurLegendePr = '"Précipitation","';
-$ponctuation = '","';
-$ponctuationFinal = '"';
-$download[0] = $_GET['Télécharger'] ?? null;
-$download[1] = $_GET['climat-select'] ?? null;
-$download[2] = $_GET['version'] ?? null;
-for ($i = 0; $i <= 2; $i++) {
-    if (isset($download[$i])) {
-        $downloadPossible = true;
-    }
-}
-if ($downloadPossible && $download[1] == 'all') {
-    $download[1] = 'Tout les climats';
-    $downloadNom = '*';
-    while ($Ram[$a] == 2) {
-        $ecriture[] = '"' . $Save[$a] . '","' . $Nom[$a] . '","' . $month[$a] . '","' . $Saison[$a] . '","' . $Te[$a] . '","' . $Pr[$a] . '","' . $hémisphère[$a] . '","' . $Ar[$a] . '","' . $Im[$a] . '","' . $NomClimat[$a] . '","' . $LettreClimat[$a] . '"';
-        $a++;
-    }
-} elseif ($downloadPossible) {
-    $climatAtelecharger = explode('-', $download[1]);
-    while ($Ram[$a] == 2) {
-        if ($Save[$a] == $climatAtelecharger[0]) {
-            if ($download[2] == 'long') {
-                $ecriture[] = '"' . $Save[$a] . '","' . $Nom[$a] . '","' . $month[$a] . '","' . $Saison[$a] . '","' . $Te[$a] . '","' . $Pr[$a] . '","' . $hémisphère[$a] . '","' . $Ar[$a] . '","' . $Im[$a] . '","' . $NomClimat[$a] . '","' . $LettreClimat[$a] . '"';
-                $ecritureSynthetique[] = '"' . $Save[$a] . '","' . $Nom[$a] . '","' . $NomClimat[$a] . '","' . $LettreClimat[$a] . '","' . $hémisphère[$a] . '","' . $Ar[$a] . '","' . $Im[$a] . '"';
-            } else {
-                $ecritureSynthetiqueValeurMois = $month[$a];
-                $ecritureSynthetiqueValeurTe = $Te[$a];
-                $ecritureSynthetiqueValeurPr = $Pr[$a];
+    // Pour nommer les climats
+    for ($i = 0; $i <= $NbRowInTable; $i++) {
+        if (isset($_GET['nom' . $a])) {
+            $Nommage[$a] =  str_replace("'", "’", strip_tags($_GET['nom' . $a]));
+            if (isset($Nommage[$a])) {
+                $sqlQuery = 'UPDATE ' . $user . ' SET `NOMgenerique` = "' . $Nommage[$a] . '" WHERE `id` = ' . $a . '';
+                $NOMStatement = $db->prepare($sqlQuery);
+                $NOMStatement->execute() or die(print_r($db->errorInfo()));
+                $nommé = true;
             }
         }
         $a++;
     }
-}
-$a = 0;
-if ($downloadPossible) {
-    if ($download[2] == 'long' || $download[1] == 'Tout les climats') {
-        $downloadNom = 'TestClimat§' . $download[1] . '§Complet.csv';
-        $fichier = fopen($downloadNom, 'c+b');
-        fwrite($fichier, $ecritureLegende);
-        while (isset($ecriture[$a])) {
-            fwrite($fichier, "\r\n");
-            fwrite($fichier, $ecriture[$a]);
+    if ($nommé) {
+        header('Location: http://localhost/testClimat/userThingsTer.php');
+    }
+    //téléchargement des données
+    $a = 0;
+    $downloadPossible = false;
+    $downloadNom = 'climat';
+    $ecritureLegende = '"ClimatNumero","Nom","Mois","Saison","Te","Pr","hémisphère","Gaussen","Martonne","NomClimat","LettreClimat"';
+    //$ecritureSynthetiqueLegende = '"ClimatNumero","Nom","NomClimat","LettreClimat","hémisphère","Gaussen","Martonne"';
+    $ecritureSynthetiqueValeurLegendeMois = '"Mois","';
+    $ecritureSynthetiqueValeurLegendeTe = '"Température","';
+    $ecritureSynthetiqueValeurLegendePr = '"Précipitation","';
+    $ponctuation = '","';
+    $ponctuationFinal = '"';
+    $download[0] = $_GET['Télécharger'] ?? null;
+    $download[1] = $_GET['climat-select'] ?? null;
+    $download[2] = $_GET['version'] ?? null;
+    for ($i = 0; $i <= 2; $i++) {
+        if (isset($download[$i])) {
+            $downloadPossible = true;
+        }
+    }
+    if ($downloadPossible && $download[1] == 'all') {
+        $download[1] = 'Tout les climats';
+        $downloadNom = '*';
+        while ($Ram[$a] == 2) {
+            $ecriture[] = '"' . $Save[$a] . '","' . $Nom[$a] . '","' . $month[$a] . '","' . $Saison[$a] . '","' . $Te[$a] . '","' . $Pr[$a] . '","' . $hémisphère[$a] . '","' . $Ar[$a] . '","' . $Im[$a] . '","' . $NomClimat[$a] . '","' . $LettreClimat[$a] . '"';
             $a++;
         }
-    } elseif ($download[2] == 'compact_ligne') {
-        $downloadNom = 'TestClimat§' . $download[1] . '§CompactLigne.csv';
-        $fichier = fopen($downloadNom, 'c+b');
-        fwrite($fichier, $ecritureSynthetiqueValeurLegendeMois);
-        $a = 0;
-        while ($a < 12) {
-            fwrite($fichier, $ecritureSynthetiqueValeurMois[$a]);
-            if ($a == 11) {
-                fwrite($fichier, $ponctuationFinal);
-            } else {
-                fwrite($fichier, $ponctuation);
+    } elseif ($downloadPossible) {
+        $climatAtelecharger = explode('-', $download[1]);
+        while ($Ram[$a] == 2) {
+            if ($Save[$a] == $climatAtelecharger[0]) {
+                if ($download[2] == 'long') {
+                    $ecriture[] = '"' . $Save[$a] . '","' . $Nom[$a] . '","' . $month[$a] . '","' . $Saison[$a] . '","' . $Te[$a] . '","' . $Pr[$a] . '","' . $hémisphère[$a] . '","' . $Ar[$a] . '","' . $Im[$a] . '","' . $NomClimat[$a] . '","' . $LettreClimat[$a] . '"';
+                    $ecritureSynthetique[] = '"' . $Save[$a] . '","' . $Nom[$a] . '","' . $NomClimat[$a] . '","' . $LettreClimat[$a] . '","' . $hémisphère[$a] . '","' . $Ar[$a] . '","' . $Im[$a] . '"';
+                } else {
+                    $ecritureSynthetiqueValeurMois = $month[$a];
+                    $ecritureSynthetiqueValeurTe = $Te[$a];
+                    $ecritureSynthetiqueValeurPr = $Pr[$a];
+                }
             }
-            $a++;
-        }
-        $a = 0;
-        fwrite($fichier, "\r\n");
-        fwrite($fichier, $ecritureSynthetiqueValeurLegendeTe);
-        while ($a < 12) {
-            fwrite($fichier, $ecritureSynthetiqueValeurTe[$a]);
-            if ($a == 11) {
-                fwrite($fichier, $ponctuationFinal);
-            } else {
-                fwrite($fichier, $ponctuation);
-            }
-            $a++;
-        }
-        $a = 0;
-        fwrite($fichier, "\r\n");
-        fwrite($fichier, $ecritureSynthetiqueValeurLegendePr);
-        while ($a < 12) {
-            fwrite($fichier, $ecritureSynthetiqueValeurPr[$a]);
-            if ($a == 11) {
-                fwrite($fichier, $ponctuationFinal);
-            } else {
-                fwrite($fichier, $ponctuation);
-            }
-            $a++;
-        }
-        $a = 0;
-    } else {
-        $ecritureSynthetiqueValeurLegendeTe = 'Te","';
-        $ecritureSynthetiqueValeurLegendePr = 'Pr"';
-        for ($i = 0; $i < 12; $i++) {
-            if ($i <= 8) {
-                $ecritureSynthetiqueValeurMois[$i] = 'M0' . $i + 1;
-            } else {
-                $ecritureSynthetiqueValeurMois[$i] = 'M' . $i + 1;
-            }
-        }
-        $downloadNom = 'TestClimat§' . $download[1] . '§CompactColone.csv';
-        $fichier = fopen($downloadNom, 'c+b');
-        fwrite($fichier, $ecritureSynthetiqueValeurLegendeMois . $ecritureSynthetiqueValeurLegendeTe . $ecritureSynthetiqueValeurLegendePr);
-        fwrite($fichier, "\r\n");
-        $a = 0;
-        while ($a < 12) {
-            fwrite($fichier, '"' . $ecritureSynthetiqueValeurMois[$a] . '","' . $ecritureSynthetiqueValeurTe[$a] . '","' . $ecritureSynthetiqueValeurPr[$a] . '"');
-            fwrite($fichier, "\r\n");
             $a++;
         }
     }
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename="' . basename($downloadNom) . '"');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($downloadNom));
-    readfile($downloadNom);
-    unlink($downloadNom);
-    exit;
+    $a = 0;
+    if ($downloadPossible) {
+        if ($download[2] == 'long' || $download[1] == 'Tout les climats') {
+            $downloadNom = 'TestClimat§' . $download[1] . '§Complet.csv';
+            $fichier = fopen($downloadNom, 'c+b');
+            fwrite($fichier, $ecritureLegende);
+            while (isset($ecriture[$a])) {
+                fwrite($fichier, "\r\n");
+                fwrite($fichier, $ecriture[$a]);
+                $a++;
+            }
+        } elseif ($download[2] == 'compact_ligne') {
+            $downloadNom = 'TestClimat§' . $download[1] . '§CompactLigne.csv';
+            $fichier = fopen($downloadNom, 'c+b');
+            fwrite($fichier, $ecritureSynthetiqueValeurLegendeMois);
+            $a = 0;
+            while ($a < 12) {
+                fwrite($fichier, $ecritureSynthetiqueValeurMois[$a]);
+                if ($a == 11) {
+                    fwrite($fichier, $ponctuationFinal);
+                } else {
+                    fwrite($fichier, $ponctuation);
+                }
+                $a++;
+            }
+            $a = 0;
+            fwrite($fichier, "\r\n");
+            fwrite($fichier, $ecritureSynthetiqueValeurLegendeTe);
+            while ($a < 12) {
+                fwrite($fichier, $ecritureSynthetiqueValeurTe[$a]);
+                if ($a == 11) {
+                    fwrite($fichier, $ponctuationFinal);
+                } else {
+                    fwrite($fichier, $ponctuation);
+                }
+                $a++;
+            }
+            $a = 0;
+            fwrite($fichier, "\r\n");
+            fwrite($fichier, $ecritureSynthetiqueValeurLegendePr);
+            while ($a < 12) {
+                fwrite($fichier, $ecritureSynthetiqueValeurPr[$a]);
+                if ($a == 11) {
+                    fwrite($fichier, $ponctuationFinal);
+                } else {
+                    fwrite($fichier, $ponctuation);
+                }
+                $a++;
+            }
+            $a = 0;
+        } else {
+            $ecritureSynthetiqueValeurLegendeTe = 'Te","';
+            $ecritureSynthetiqueValeurLegendePr = 'Pr"';
+            for ($i = 0; $i < 12; $i++) {
+                if ($i <= 8) {
+                    $ecritureSynthetiqueValeurMois[$i] = 'M0' . $i + 1;
+                } else {
+                    $ecritureSynthetiqueValeurMois[$i] = 'M' . $i + 1;
+                }
+            }
+            $downloadNom = 'TestClimat§' . $download[1] . '§CompactColone.csv';
+            $fichier = fopen($downloadNom, 'c+b');
+            fwrite($fichier, $ecritureSynthetiqueValeurLegendeMois . $ecritureSynthetiqueValeurLegendeTe . $ecritureSynthetiqueValeurLegendePr);
+            fwrite($fichier, "\r\n");
+            $a = 0;
+            while ($a < 12) {
+                fwrite($fichier, '"' . $ecritureSynthetiqueValeurMois[$a] . '","' . $ecritureSynthetiqueValeurTe[$a] . '","' . $ecritureSynthetiqueValeurPr[$a] . '"');
+                fwrite($fichier, "\r\n");
+                $a++;
+            }
+        }
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($downloadNom) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($downloadNom));
+        readfile($downloadNom);
+        unlink($downloadNom);
+        exit;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -294,7 +294,7 @@ if ($downloadPossible) {
         <section class="section_fin">
             <h3>Téléchargement</h3>
             <p>
-            <form id="Télécharger" method='get' action='userThings.php'>
+            <form id="Télécharger" method='get' action='userThingsTer.php'>
                 <label for="climat-select">Climat(s)</label>
                 <select name="climat-select" id="climat-select" required>
                     <option class="bouton" value="">--</option>
