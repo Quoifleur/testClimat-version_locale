@@ -3,7 +3,7 @@
 Le site internet testClimat (https://testclimat.ovh/) permet à partir de normales climatiques de déterminer le cliamt d'un lieu selon la classification de Koppen-Geigger.
 Il s'agit ici de la version locale du site. En tant que tel le site fonctionne donc en local avec MAMP.
 
-## Différence entre le site testClimat et la verison locale ici présente.
+## Différence entre le site testClimat et sa version locale
 
 > [!NOTE]
 > Des différences mineures subsistent entre le site et la version ici présente.
@@ -12,7 +12,7 @@ La version de testClimat ici présente est une verison de développement configu
 Cette version de testClimat est donc plus instable.
 Néanmoins le fonctionnement global des deux versions reste le même.
 
-## Script testClimat.
+## Script testClimat
 
 Vous pouvez retrouver le script testClimat (la partie du site chargé de détermnier le climat) ici : https://github.com/Quoifleur/testClimat/tree/main
 Cette version du script est codé en python (et non en PHP comme sur le site, voir la page testClimatinSQLTer.PHP) et se concentre sur l'essentiel.
@@ -36,5 +36,5 @@ Mon contact : victor.maury@testclimat.ovh
 
 Dans votre serveur local :
 
-2. local créer un base de données nommées `testClimat`.
+2. Créer un base de données nommées `testClimat`.
 3. Importer les tables `user` et `CLIMAT` (présentent dans le dossier DATABASE de ce repositorie).

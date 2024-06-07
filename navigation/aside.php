@@ -17,6 +17,9 @@ libxml_clear_errors();
 $xpath = new DOMXPath($dom);
 $headers = $xpath->query('//h1|//h2|//h3|//h4|//h5|//h6');
 
+$idCounter = 0;
+$lastLevel = 0;
+$toc = '';
 foreach ($headers as $header) {
     // Créer un id unique pour chaque titre
     $id = 'section-' . $idCounter++;

@@ -9,17 +9,19 @@ try {
     die();
 }
 $user = strip_tags($_COOKIE['logged']);
+$visibilite = 0;
 $sqlQuery = 'CREATE TABLE IF NOT EXISTS ' . $user . '(
     `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `AA` varchar(32) DEFAULT NULL,
-    `AB` varchar(32) DEFAULT NULL,
+    `COMPTEclef` varchar(64) DEFAULT NULL,
+    `COMPTEvisibilite` tinyint(1) DEFAULT \'0\',
     `AC` varchar(32) DEFAULT NULL,
     `SAVE` int(1) DEFAULT NULL,
     `RAM` int(16) DEFAULT NULL,
-    `AF` int(8) DEFAULT NULL,
     `DATEcollecte` date DEFAULT NULL,
     `DATEentre` date DEFAULT NULL,
+    `TEMPORALITEperiode` varchar(9) DEFAULT NULL,
     `TEMPORALITEmois` varchar(128) DEFAULT NULL,
+    `TEMPORALITEsaison` varchar(24) DEFAULT NULL,
     `NOMlocalisation` varchar(32) DEFAULT NULL,
     `NOMgenerique` varchar(32) DEFAULT NULL,
     `POSITIONhemisphere` varchar(8) DEFAULT NULL,
@@ -449,6 +451,12 @@ for ($i = 0; $i < 12; $i++) {
     $insertClimat->execute(array(':Mois' => $month[$i], ':Saison' => $Saison[$i], ':Te' => $Te[$i], ':Pr' => $Pr[$i], ':Hm' => $Hémisphère, ':Gaussen' => $Ar[$i], ':Martonne' => $Im[$i], ':NomClimat' => $NomClimat, ':LettreClimat' => $LettreClimat));
 }
 */
+$stringMonth = '';
+$stringSaison = '';
+$stringPr = '';
+$stringTe = '';
+$stringAr = '';
+$stringIm = '';
 
 for ($i = 0; $i < 11; $i++) {
     $stringMonth .= $month[$i] . ',';
@@ -483,16 +491,16 @@ echo '<br />$_SESSION[nom] >>> ' . $_SESSION['nom'];
 echo '<br />$_COOKIE[logged] >>> ' . $_COOKIE['logged'];
 
 //Save des anciennes valeurs
-$SaveStatement = $db->prepare('UPDATE ' . $user . ' SET Save = Save+1');
-$SaveStatement->execute([]) or die(print_r($db->errorInfo()));
+//$SaveStatement = $db->prepare('UPDATE ' . $user . ' SET Save = Save+1');
+//$SaveStatement->execute([]) or die(print_r($db->errorInfo()));
 //Ajout des nouvelles valeurs
-$sqlQuery = 'INSERT INTO ' . $user . '(SAVE, DATEentre, TEMPORALITEmois, TEMPORALITEsaison, POSITIONhemisphere, NORMALEte, NORMALEpr, RESULTATkoge, RESULTATgaus, RESULTATmart) VALUES (:SAVE,  :DATEentre, :TEMPORALITEmois, :TEMPORALITEsaison, :POSITIONhemisphere, :NORMALEte, :NORMALEpr, :RESULTATkoge, :RESULTATgaus, :RESULTATmart)';
+$sqlQuery = 'INSERT INTO  `CLIMAT` (COMPTEclef, COMPTEvisibilite, DATEentre, TEMPORALITEmois, TEMPORALITEsaison, POSITIONhemisphere, NORMALEte, NORMALEpr, RESULTATkoge, RESULTATgaus, RESULTATmart) VALUES (:COMPTEclef, :COMPTEvisibilite,  :DATEentre, :TEMPORALITEmois, :TEMPORALITEsaison, :POSITIONhemisphere, :NORMALEte, :NORMALEpr, :RESULTATkoge, :RESULTATgaus, :RESULTATmart)';
 echo '<br /> balise1';
 echo '<br /> sqlQuery >>> ' . $sqlQuery;
 $SaveStatement = $db->prepare($sqlQuery);
 echo '<br /> balise2';
 try {
-    $SaveStatement->execute(['SAVE' => $save, 'DATEentre' => date('Y-m-d'), 'TEMPORALITEmois' => $stringMonth, 'TEMPORALITEsaison' => $stringSaison, 'POSITIONhemisphere' => $Hémisphère,  'NORMALEte' => $stringTe, 'NORMALEpr' => $stringPr, 'RESULTATkoge' => $climatKG, 'RESULTATgaus' => $stringAr, 'RESULTATmart' => $stringIm]);
+    $SaveStatement->execute(['COMPTEclef' => $user, 'COMPTEvisibilite' => $visibilite, 'DATEentre' => date('Y-m-d'), 'TEMPORALITEmois' => $stringMonth, 'TEMPORALITEsaison' => $stringSaison, 'POSITIONhemisphere' => $Hémisphère,  'NORMALEte' => $stringTe, 'NORMALEpr' => $stringPr, 'RESULTATkoge' => $climatKG, 'RESULTATgaus' => $stringAr, 'RESULTATmart' => $stringIm]);
 } catch (PDOException $e) {
     echo 'Erreur : ' . $e->getMessage();
 }

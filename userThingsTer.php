@@ -23,19 +23,20 @@ if (isset($_COOKIE['logged'])) {
 }
 if (isset($user)) {
     //echo 'balise 0 <br />';
-    $sqlQuery = "SHOW TABLES FROM testclimat LIKE '" . $user . "'";
+    $sqlQuery = 'SELECT * FROM `CLIMAT` WHERE COMPTEclef = :COMPTEclef';
     $climatStatement = $db->prepare($sqlQuery);
-    $climatStatement->execute();
+    $climatStatement->execute(['COMPTEclef' => $user]);
     $table = $climatStatement->fetchAll();
     if (!empty($table)) {
         //echo 'balise 1 <br />';
-        $sqlQuery = 'SELECT * FROM ' . $user . '';
+        $sqlQuery = 'SELECT * FROM CLIMAT WHERE COMPTEclef = "' . $user . '" ORDER BY id ASC';
         $climatStatement = $db->prepare($sqlQuery);
         $climatStatement->execute();
         $climatCherche = $climatStatement->fetchAll();
         if (!empty($climatCherche)) {
             //echo 'balise 2 <br />';
             foreach ($climatCherche as $value) {
+                $id = [];
                 $id[] = $value['id'];
                 $Save[] = $value['SAVE'];
                 $DATEcollecte[] = $value['DATEcollecte'];
