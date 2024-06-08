@@ -45,9 +45,6 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `clef`, `mail`, `password`, `dateInscription`, `mailVerifie`, `nom`, `prenom`, `surnom`, `dateNaissance`, `Note`) VALUES
-(3, 'uuvpFQyQsX944orK2HfHoy1kCKFSENFzhV4NyGxUx5RdvDrZtIBKvU3xDzE0Lq6h', 'victor.maury33@gmail.com', '$2y$10$yY1Jxl0mz6/LtWhnaz0RJOu/BdxwAGNdAnRk90zY12UMzM8sNXTlO', '2024-06-02', 0, NULL, NULL, NULL, NULL, NULL),
-(4, 'hJCm27tIuvPWyvNmzw6e5fxidlGJ7cL0x8iRP9oh8vQRnrR9UZHNtp99lfH6r9i9', 'victor.m.maury@gmail.com', '$2y$10$k25BqLrKGPxcIfQNHy5x/O62bGIJheAJhF0ezhyv29Htt8DncNDYa', '2024-06-02', 0, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables

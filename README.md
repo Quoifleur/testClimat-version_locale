@@ -32,9 +32,9 @@ Mon contact : victor.maury@testclimat.ovh
 
 ## Configuration
 
-1. Télécharger et glisser ce repositorie dans le dossier `htdocs` (Si vous utilisez MAMP, le nom du dossier peut différer en fonction de votre solution utilisé pour avoir l'environnement de serveur local).
+1. Téléchargez et glisser ce repositorie dans le dossier `htdocs` (Si vous utilisez MAMP, le nom du dossier peut différer en fonction de votre solution utilisé pour avoir l'environnement de serveur local).
 
 Dans votre serveur local :
 
-2. Créer un base de données nommées `testClimat`.
-3. Importer les tables `user` et `CLIMAT` (présentent dans le dossier DATABASE de ce repositorie).
+2. Créez une base de données nommées `testClimat`.
+3. Dans cette base de données, importez les tables `user` et `CLIMAT` (présentent dans le dossier DATABASE de ce repositorie).
