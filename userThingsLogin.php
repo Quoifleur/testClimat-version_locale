@@ -60,11 +60,11 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
                 $newUser = false;
                 header('Location: userThingsTer.php');
                 exit();
+            } else {
+                $newUser = false;
+                echo '<b> Mauvais mot de passe </b><br /> Pour retourner à la page précédente, <a href="userThingsLogin.php">cliquez ici</a> <br /> Pour retourner à la page d\'accueil, <a href="index.php">cliquez ici</a>';
+                exit();
             }
-        } else {
-            $newUser = false;
-            echo '<b> Mauvais mot de passe </b><br /> Pour retourner à la page précédente, <a href="userThingsLogin.php">cliquez ici</a> <br /> Pour retourner à la page d\'accueil, <a href="index.php">cliquez ici</a>';
-            exit();
         }
     }
 
@@ -81,7 +81,7 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
         if (!isset($_COOKIE['user'])) {
             $_COOKIE['user'] = $_COOKIE['logged'];
         }
-        //header('Location: userThingsTer.php');
+        header('Location: userThingsTer.php');
     }
 }
 
