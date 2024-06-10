@@ -40,21 +40,23 @@ if ($SupprimerOuSauver == 'Sauvegarder') {
 }
 */
 global $climatStatement;
+$user = strip_tags($_COOKIE['logged']) ?? null;
+/*
+echo $user;
 
-$user = strip_tags($_COOKIE['logged']);
-
-$sqlQuery = 'SELECT * FROM ' . $user . '';
 $LimitStatement = $db->prepare($sqlQuery);
-$LimitStatement->execute();
+$LimitStatement->execute(['COMPTEclef' => $user]);
 $Limit = $LimitStatement->fetchAll();
+
 
 foreach ($Limit as $value) {
     $borne[] = $value['Save'];
 }
-
+*/
 // On récupère tout le contenu de la table données
+$sqlQuery = 'SELECT * FROM climat WHERE COMPTEclef = :COMPTEclef';
 $climatStatement = $db->prepare($sqlQuery);
-$climatStatement->execute();
+$climatStatement->execute(['COMPTEclef' => $user]);
 $climatCherche = $climatStatement->fetchAll();
 
 foreach ($climatCherche as $value) {
@@ -64,7 +66,7 @@ foreach ($climatCherche as $value) {
     $DATEentre[] = $value['DATEentre'];
     $TEMPORALITEperiode[] = $value['TEMPORALITEperiode'];
     $TEMPORALITEmois[] = $value['TEMPORALITEmois'];
-    $NOMlocation[] = $value['NOMlocation'];
+    $NOMlocation[] = $value['NOMlocalisation'];
     $NOMgenerique[] = $value['NOMgenerique'];
     $POSITIONhemisphere[] = $value['POSITIONhemisphere'];
     $POSITIONx[] = $value['POSITIONx'];
@@ -81,9 +83,15 @@ foreach ($climatCherche as $value) {
     $RESULTATmart[] = $value['RESULTATmart'];
 }
 $NbRowInTable = count($id);
-
-$Info = explode(" ",  strip_tags($_GET['Voir'] ?? null));
-if ($Info[2] = null || !is_numeric($Info[2]) || $Info[2] > $NbRowInTable - 1 || $Info[2] < 0) {
+$InfoVoir = strip_tags($_GET['Voir'] ?? null);
+if ($InfoVoir == null) {
+    for ($i = 0; $i < 4; $i++) {
+        $Info[$i] = null;
+    }
+} else {
+    $Info = explode(" ",  $InfoVoir);
+}
+if ($Info[2] == null || !is_numeric($Info[2]) || $Info[2] > $NbRowInTable - 1 || $Info[2] < 0) {
     $climatSelected = $NbRowInTable - 1;
 } else {
     $climatSelected = $Info[2];
@@ -97,6 +105,7 @@ $Nom = $NOMlocation[$climatSelected];
 $Ikg = explode(',', $RESULTATkoge[$climatSelected]);
 $Ar = explode(',', $RESULTATgaus[$climatSelected]);
 $Im = explode(',', $RESULTATmart[$climatSelected]);
+$hémisphère = $POSITIONhemisphere[$climatSelected];
 
 //Traitement des données :
 /*Calcule des variables */
@@ -208,8 +217,7 @@ if ($hémisphère == 'Nord') {
     <?php include('navigation/nav.php'); ?>
     <main>
         <section class="section_intro">
-            <h1>Climat <?php echo $Voir . ', ' . $Nom[$Voir]; ?></h1>
-            <!--<p><?php echo $borne[0] . '<br />' . $Voir; ?></p>-->
+            <h1>Climat</h1>
             <p><?php
                 echo '<br /> Le climat trouvé est le suivant : <b>' . $NomClimat .  '</b>; Lettes associées : <b>' . $LettreClimat . '</b>'; ?></p>
         </section>

@@ -85,7 +85,9 @@ if (isset($user)) {
     $Voir = $_GET['Voir'] ?? null;
     $a = 0;
     $nommé = false;
-
+    if (!isset($NbRowInTable)) {
+        $NbRowInTable = 0;
+    }
     // Pour nommer les climats
     for ($i = 0; $i <= $NbRowInTable; $i++) {
         if (isset($_GET['nom' . $a])) {
@@ -244,7 +246,9 @@ if (isset($user)) {
         <section class="section_intro">
             <h1>testClimat-Compte</h1>
             <p>
-                <?php if (!$compteActif) {
+                <?php
+                echo $_COOKIE['logged'] . '<br />';
+                if (!$compteActif) {
                     echo 'Connectez-vous (ou inscrivez-vous) pour pouvoir sauvegarder vos données et plus encore. <br /><a href="userThingsLogin.php">Connection et inscription</a>';
                 } else {
                     echo 'Bienvenue sur votre compte. <br /><form method="post"><button method="post" type="submit" name="deconnexion" value="deconnexion">Déconnexion</button></form>';

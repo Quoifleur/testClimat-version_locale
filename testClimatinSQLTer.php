@@ -508,13 +508,13 @@ echo '<br /> balise3';
 //header("Location: testClimatResultatTerBis.php");
 //exit;
 ?>
-<!--DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 
 <head>
     <title>Redirection HTML</title>
     <meta http-equiv="Content-" content="text/html; charset=ISO-8859-1" />
-    <meta http-equiv="Refresh" content="0;URL=/testClimat/testClimatResultatTerTer.php" />
+    <meta http-equiv="Refresh" content="0;URL=/testClimat-version_locale-/testClimatResultatTerTer.php" />
 </head>
 
 <body>
@@ -523,4 +523,4 @@ echo '<br /> balise3';
     </div>
 </body>
 
-</html>-->
+</html>

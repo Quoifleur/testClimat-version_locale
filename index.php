@@ -37,6 +37,9 @@ if (!isset($_COOKIE['user'])) {
 	<main>
 		<section class="section_intro">
 			<h1>Bienvenue chez TestClimat !</h1>
+			<?php echo $_SESSION['nom'] . '<br />';
+			echo $_COOKIE['user'] . '<br />';
+			echo $_COOKIE['logged'] . '<br />'; ?>
 			<p>Pour vous connecter ou pvous inscrire merci d'aller sur la <a href="userThingsLogin.php">page de connection et d'inscription</a></p>
 			<p>
 				TestClimat est un outil gratuit pour déterminer le climat (selon la classification de <a href="https://fr.wikipedia.org/wiki/Classification_de_K%C3%B6ppen">Köppen-Geiger</a>) d'un lieu donné à partir de données climatiques.

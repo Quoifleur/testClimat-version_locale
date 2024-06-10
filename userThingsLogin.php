@@ -1,4 +1,7 @@
 <?php session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 try {
     $db = new PDO('mysql:host=localhost;dbname=testclimat;charset=utf8', 'root', 'root', [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],);
 } catch (Exception $e) {
@@ -21,39 +24,52 @@ if (isset($_POST['deconnexion']) && isset($_COOKIE['logged'])) {
     exit();
 }
 
-// Inscription
+$newUser = false;
+$dateInscription = date('Y-m-d H:i:s');
 if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
     // Préparation des variables
     $clef = random_string(64);
-    $email = strip_tags($_POST['SIGemail']);
-    $password = strip_tags($_POST['SIGpassword']);
-    $passwordAverifer = strip_tags($_POST['SIGpassword']);
-    $password = password_hash($password, PASSWORD_BCRYPT);
-    $dateInscription = date('Y-m-d H:i:s');
-    // Vérification de l'unicité de l'email, si bon mot de passe, connexion, sinon création du compte.
-    $query = $db->prepare('SELECT * FROM user WHERE mail = :mail');
-    $query->execute(['mail' => $email]);
-    $user = $query->fetch();
-    if ($user) {
-        $query = $db->prepare('SELECT * FROM user');
-        $query->execute();
-        $user = $query->fetch();
-        // Vérification du mot de passe
-        if ($user && password_verify($passwordAverifer, $user['password'])) {
-            $_SESSION['user'] = $user;
-            if (isset($_POST['SIGcheckbox'])) {
-                setcookie('logged', $user['clef'], time() + 3600 * 24 * 365, null, null, false, true);
-            } else {
-                setcookie('logged', $user['clef'], time() + 3600 * 24, null, null, false, true);
+    $email = filter_var(strip_tags($_POST['SIGemail']), FILTER_VALIDATE_EMAIL);
+    $passwordAverifier = strip_tags($_POST['SIGpassword']);
+    if (!$email || !$passwordAverifier) {
+        echo '<b>Adresse mail ou mot de passe incorrecte</b><br /> Pour retourner à la page précédente, <a href="userThingsLogin.php">cliquez ici</a> <br /> Pour retourner à la page d\'accueil, <a href="index.php">cliquez ici</a>';
+        exit();
+    }
+    $password = password_hash($passwordAverifier, PASSWORD_BCRYPT);
+    // Vérification de l'existence de l'utilisateur
+    $query = $db->prepare('SELECT * FROM user');
+    $query->execute();
+    $users = $query->fetchALL();
+    foreach ($users as $value) {
+        $USERSid[] = $value['id'];
+        $USERSclef[] = $value['clef'];
+        $USERSmail[] = $value['mail'];
+        $USERSpassword[] = $value['password'];
+        $USERSmailverif[] = $value['mailVerifie'];
+    }
+    $NbRowInTable = count($USERSid);
+    for ($i = 0; $i < $NbRowInTable; $i++) {
+        if ($USERSmail[$i] === $email) {
+            if ($USERSmail[$i] === $email && password_verify($passwordAverifier, $USERSpassword[$i])) {
+                $newUser = false;
+                if (isset($_POST['SIGcheckbox'])) {
+                    setcookie('logged', $value['clef'], time() + 3600 * 24 * 365, null, null, false, true);
+                } else {
+                    setcookie('logged', $value['clef'], time() + 3600 * 24, null, null, false, true);
+                }
+                $newUser = false;
+                header('Location: userThingsTer.php');
+                exit();
             }
-            header('Location: userThings.php');
-            exit();
-            // Si le mot de passe est incorrect
         } else {
-            echo '<b> Mot de passe incorrect </b><br /> Pour retourner à la page précédente, <a href="userThingsLogin.php">cliquez ici</a> <br /> Pour retourner à la page d\'accueil, <a href="index.php">cliquez ici</a>';
+            $newUser = false;
+            echo '<b> Mauvais mot de passe </b><br /> Pour retourner à la page précédente, <a href="userThingsLogin.php">cliquez ici</a> <br /> Pour retourner à la page d\'accueil, <a href="index.php">cliquez ici</a>';
             exit();
         }
-    } else {
+    }
+
+    $newUser = true;
+    if ($newUser) {
         $query = $db->prepare('INSERT INTO user (clef, mail, password, dateInscription) VALUES (:clef, :mail, :password, :dateInscription)');
         $query->execute(['clef' => $clef, 'mail' => $email, 'password' => $password, 'dateInscription' => $dateInscription]);
         $user = $query->fetch();
@@ -65,7 +81,7 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
         if (!isset($_COOKIE['user'])) {
             $_COOKIE['user'] = $_COOKIE['logged'];
         }
-        header('Location: userThings.php');
+        //header('Location: userThingsTer.php');
     }
 }
 
