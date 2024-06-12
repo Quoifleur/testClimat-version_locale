@@ -1,4 +1,5 @@
-<?php session_start();
+<?php
+session_start();
 include('connexion/bdconnexion.php');
 $compteActif = false;
 // Déconnexion

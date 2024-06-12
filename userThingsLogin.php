@@ -46,9 +46,9 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
                 if ($USERSmail[$i] === $email && password_verify($passwordAverifier, $USERSpassword[$i])) {
                     $newUser = false;
                     if (isset($_POST['SIGcheckbox'])) {
-                        setcookie('logged', $value['clef'], time() + 3600 * 24 * 365, '/', 'testclimat.ovh', false, true);
+                        setcookie('logged', $USERSclef[$i], time() + 3600 * 24 * 365, null, null, false, true);
                     } else {
-                        setcookie('logged', $value['clef'], time() + 3600 * 24, '/', 'testclimat.ovh', false, true);
+                        setcookie('logged', $USERSclef[$i], time() + 3600 * 24, null, null, false, true);
                     }
                     $newUser = false;
                     header('Location: userThingsTer.php');
