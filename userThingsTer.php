@@ -1,13 +1,5 @@
 <?php session_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-try {
-    $db = new PDO('mysql:host=localhost;dbname=testclimat;charset=utf8', 'root', 'root', [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],);
-} catch (Exception $e) {
-    echo 'Erreur : ' . $e->getMessage();
-    die();
-}
+include('connexion/bdconnexion.php');
 $compteActif = false;
 // Déconnexion
 if (isset($_POST['deconnexion']) && isset($_COOKIE['logged'])) {
@@ -247,11 +239,12 @@ if (isset($user)) {
             <h1>testClimat-Compte</h1>
             <p>
                 <?php
-                echo $_COOKIE['logged'] . '<br />';
+                //echo $_COOKIE['logged'] . '<br />';
                 if (!$compteActif) {
                     echo 'Connectez-vous (ou inscrivez-vous) pour pouvoir sauvegarder vos données et plus encore. <br /><a href="userThingsLogin.php">Connection et inscription</a>';
                 } else {
                     echo 'Bienvenue sur votre compte. <br /><form method="post"><button method="post" type="submit" name="deconnexion" value="deconnexion">Déconnexion</button></form>';
+                    echo '<p>Pour supprimer votre compte et effacer toutes vos données associé merci d\'aller à la page de <a href="testClimatCookie.php">gestion du compte</a> </p>';
                 } ?>
             </p>
             <h2>Climats sauvegardé(s).</h2>

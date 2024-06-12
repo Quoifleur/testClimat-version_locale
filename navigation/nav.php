@@ -2,7 +2,7 @@
   <div class="menu">
     <div class="SousMenuG"><a href="index.php">Accueil</a></div>
     <?php
-    if (isset($_COOKIE['user'])) {
+    if (isset($_COOKIE['logged'])) {
       echo '<div class="SousMenu"><a href="userThingsTer.php">Compte</a></div>';
     } else {
       echo '<div class="SousMenu"><a href=""></a></div>';
