@@ -5,10 +5,10 @@
     if (isset($_COOKIE['logged'])) {
       echo '<div class="SousMenu"><a href="userThingsTer.php">Compte</a></div>';
     } else {
-      echo '<div class="SousMenu"><a href=""></a></div>';
+      echo '<div class="SousMenu"><a href="testcarte.php">testcarte</a></div>';
     }
     ?>
-    <div class="SousMenu"><a href=""></a></div>
+    <div class="SousMenu"><a href="testcarte.php">testcarte</a></div>
     <!-- <div class="SousMenu"><a href="testlectureCSV.php">CSV</a></div>
     <div class="SousMenu"><a href="testlectureCSV copy.php">CSV</a></div>
     <div class="SousMenu"><a href="testClimatResultatBis.php">CSVRésultat</a></div>

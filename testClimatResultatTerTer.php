@@ -106,6 +106,9 @@ $Ikg = explode(',', $RESULTATkoge[$climatSelected]);
 $Ar = explode(',', $RESULTATgaus[$climatSelected]);
 $Im = explode(',', $RESULTATmart[$climatSelected]);
 $hémisphère = $POSITIONhemisphere[$climatSelected];
+$Px = explode(',', $POSITIONx[$climatSelected]);
+$Py = explode(',', $POSITIONy[$climatSelected]);
+$Pz = explode(',', $POSITIONz[$climatSelected]);
 
 //Traitement des données :
 /*Calcule des variables */
@@ -293,6 +296,11 @@ if ($hémisphère == 'Nord') {
             <p>
             <div id="chart_div" class="chart_div"></div>
             D'après le tableau de valeurs ci-dessus.
+            </p>
+            <p>
+                <script>
+                    <?php include('carte/js'); ?>
+                </script>
             </p>
         </section>
     </main>

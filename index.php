@@ -248,13 +248,13 @@ if (!isset($_COOKIE['user'])) {
 						<input type="text" placeholder="NORMALEclimatique5" id="NC5c" name="NC5c">
 					</div>
 					<div class="">
-						<input type="text" placeholder="POSITIONlongitude(x)" id="PXc" name="PXc">
+						<input type="text" placeholder="POSITIONlongitude(x)-WGS 84" id="PXc" name="PXc">
 					</div>
 					<div class="">
-						<input type="text" placeholder="POSITIONlattitude(y)" id="PYc" name="PYc">
+						<input type="text" placeholder="POSITIONlattitude(y)-WGS 84" id="PYc" name="PYc">
 					</div>
 					<div class="">
-						<input type="text" placeholder="POSITIONaltitude(z)" id="PZc" name="PZc">
+						<input type="text" placeholder="POSITIONaltitude(z)-WGS 84" id="PZc" name="PZc">
 					</div>
 					<div class="">
 						<input type="text" placeholder="PERIODEdebut-fin" id="TPc" name="TPc">
