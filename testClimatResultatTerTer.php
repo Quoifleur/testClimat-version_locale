@@ -1,11 +1,6 @@
 <?php
 session_start();
-try {
-    $db = new PDO('mysql:host=localhost;dbname=testclimat;charset=utf8', 'root', 'root', [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],);
-} catch (Exception $e) {
-    echo 'Erreur : ' . $e->getMessage();
-    die();
-}
+include('connexion/bdconnexion.php');
 
 //print_r($borne);
 //echo $Voir;
@@ -143,6 +138,8 @@ if ($hémisphère == 'Nord') {
 <html>
 
 <head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load('current', {
@@ -298,10 +295,14 @@ if ($hémisphère == 'Nord') {
             D'après le tableau de valeurs ci-dessus.
             </p>
             <p>
-                <script>
-                    <?php include('carte/js'); ?>
+            <div id="map" style="width: 100%; height: 400px;">
+                <script type="text/javascript">
+                    <?php
+                    include('carte.js');
+                    ?>
                 </script>
-            </p>
+
+                </p>
         </section>
     </main>
     <footer>

@@ -48,9 +48,9 @@ $month = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aou
 
 //Récupération des valeurs.
 //POSITION
-$Px = strip_tags($_POST['Pxc']) ?? null;
-$PY = strip_tags($_POST['PYc']) ?? null;
-$PZ = strip_tags($_POST['PZc']) ?? null;
+$Px = $_POST['PXc'] ? strip_tags($_POST['PXc']) : null;
+$PY = $_POST['PYc'] ? strip_tags($_POST['PYc']) : null;
+$PZ = $_POST['PZc'] ? strip_tags($_POST['PZc']) : null;
 $Hémisphère = $_POST['hémisphère'];
 //NORMALE CLIMATIQUE
 if (isset($_POST['Tec']) && isset($_POST['Prc'])) {
@@ -503,7 +503,7 @@ echo '<br />$_COOKIE[logged] >>> ' . $_COOKIE['logged'];
 //$SaveStatement = $db->prepare('UPDATE ' . $user . ' SET Save = Save+1');
 //$SaveStatement->execute([]) or die(print_r($db->errorInfo()));
 //Ajout des nouvelles valeurs
-$sqlQuery = 'INSERT INTO  `CLIMAT` (COMPTEclef, COMPTEvisibilite, DATEentre, TEMPORALITEmois, TEMPORALITEsaison, POSITIONhemisphere, POSITIONx, POSITIONy, POSITIONz, NORMALEte, NORMALEpr, RESULTATkoge, RESULTATgaus, RESULTATmart) VALUES (:COMPTEclef, :COMPTEvisibilite,  :DATEentre, :TEMPORALITEmois, :TEMPORALITEsaison, :POSITIONhemisphere, :POSITIONx, :POSITIONy, :POSITIONz, :NORMALEte, :NORMALEpr, :RESULTATkoge, :RESULTATgaus, :RESULTATmart)';
+$sqlQuery = 'INSERT INTO  `climat` (COMPTEclef, COMPTEvisibilite, DATEentre, TEMPORALITEmois, TEMPORALITEsaison, POSITIONhemisphere, POSITIONx, POSITIONy, POSITIONz, NORMALEte, NORMALEpr, RESULTATkoge, RESULTATgaus, RESULTATmart) VALUES (:COMPTEclef, :COMPTEvisibilite,  :DATEentre, :TEMPORALITEmois, :TEMPORALITEsaison, :POSITIONhemisphere, :POSITIONx, :POSITIONy, :POSITIONz, :NORMALEte, :NORMALEpr, :RESULTATkoge, :RESULTATgaus, :RESULTATmart)';
 echo '<br /> balise1';
 echo '<br /> sqlQuery >>> ' . $sqlQuery;
 $SaveStatement = $db->prepare($sqlQuery);
@@ -514,22 +514,5 @@ try {
     echo 'Erreur : ' . $e->getMessage();
 }
 echo '<br /> balise3';
-//header("Location: testClimatResultatTerBis.php");
-//exit;
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
-
-<head>
-    <title>Redirection HTML</title>
-    <meta http-equiv="Content-" content="text/html; charset=ISO-8859-1" />
-    <meta http-equiv="Refresh" content="0;URL=/testClimat-version_locale-/testClimatResultatTerTer.php" />
-</head>
-
-<body>
-    <div>
-        <p>Redirection dans un instant</p>
-    </div>
-</body>
-
-</html>
+header("Location: testClimatResultatTerTer.php");
+exit;

@@ -1,13 +1,7 @@
 <nav>
   <div class="menu">
     <div class="SousMenuG"><a href="index.php">Accueil</a></div>
-    <?php
-    if (isset($_COOKIE['logged'])) {
-      echo '<div class="SousMenu"><a href="userThingsTer.php">Compte</a></div>';
-    } else {
-      echo '<div class="SousMenu"><a href="testcarte.php">testcarte</a></div>';
-    }
-    ?>
+    <div class="SousMenu"><a href="userThingsTer.php">Compte</a></div>
     <div class="SousMenu"><a href="testcarte.php">testcarte</a></div>
     <!-- <div class="SousMenu"><a href="testlectureCSV.php">CSV</a></div>
     <div class="SousMenu"><a href="testlectureCSV copy.php">CSV</a></div>

@@ -264,6 +264,19 @@ if (!isset($_COOKIE['user'])) {
 					</div>
 				</div>
 			</form>
+			<h3>Exemple</h3>
+			<p>
+				Exemple des normales climatique pour la ville de Lyon. Climat associé : Cfb.
+			<ul>
+				<li>hémisphère : NORD</li>
+				<li>x:45.763, y:4.835</li>
+				<li>Te(°C) : 3.2,3.8,7.5,11.2,15.1,19.4,21.4,21,17.1,12.9,7.4,4
+				</li>
+				<li>Pr(mm) : 75,62,64,87,95,87,81,81,95,103,107,78
+				</li>
+			</ul>
+			Source des données, <a href="https://fr.climate-data.org/europe/france/rhone-alpes/lyon-67/">climate-data.org</a>.
+			</p>
 		</section>
 	</main>
 	<footer>
