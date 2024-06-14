@@ -1,6 +1,3 @@
-var CodeClimat = "Cfb";
-var Px = 45.763;
-var Py = 4.835;
 var map = L.map("map").setView([Px, Py], 13);
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,

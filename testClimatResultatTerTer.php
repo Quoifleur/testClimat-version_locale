@@ -131,8 +131,29 @@ if ($hémisphère == 'Nord') {
 } elseif ($hémisphère == 'Sud') {
     $Nord = false;
 }
-//print_r($month);
-//Mois S ou W
+//Encodage pour javascript
+$JsonTe = json_encode($Te);
+$JsonPr = json_encode($Pr);
+$JsonMonth = json_encode($month);
+$JsonSaison = json_encode($Saison);
+$JsonAr = json_encode($Ar);
+$JsonIm = json_encode($Im);
+$JsonNom = json_encode($Nom);
+$JsonLettreClimat = json_encode($LettreClimat[$climatSelected]);
+$JsonNomClimat = json_encode($NomClimat);
+$JsonTmax = json_encode($Tmax);
+$JsonTmin = json_encode($Tmin);
+$JsonTannuelle = json_encode($Tannuelle);
+$JsonPmax = json_encode($Pmax);
+$JsonPmin = json_encode($Pmin);
+$JsonPannuelle = json_encode($Pannuelle);
+$JsonIMmax = json_encode($IMmax);
+$JsonIMmin = json_encode($IMmin);
+$JsonNord = json_encode($Nord);
+$JsonPx = json_encode($Px[$climatSelected]);
+$JsonPy = json_encode($Py[$climatSelected]);
+$JsonPz = json_encode($Pz[$climatSelected]);
+$JsonHémisphère = json_encode($hémisphère);
 ?>
 <!DOCTYPE html>
 <html>
@@ -293,13 +314,36 @@ if ($hémisphère == 'Nord') {
             <p>
             <div id="chart_div" class="chart_div"></div>
             D'après le tableau de valeurs ci-dessus.
+            <?php echo $JsonPx;
+            $JPx = "45.763";
+            $JPy = "4.835";
+            ?>
             </p>
             <p>
             <div id="map" style="width: 100%; height: 400px;">
                 <script type="text/javascript">
-                    <?php
-                    include('carte.js');
-                    ?>
+                    var Px = <?php echo $JsonPx; ?> || null;
+                    var Py = <?php echo $JsonPy; ?> || null;
+                    var Pz = <?php echo $JsonPz; ?> || null;
+                    var CodeClimat = <?php echo $JsonLettreClimat; ?>;
+
+                    var map = L.map("map").setView([Px, Py], 13);
+                    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    }).addTo(map);
+                    var marker = L.marker([Px, Py]).addTo(map);
+                    marker.bindPopup(CodeClimat).openPopup();
+                    var popup = L.popup();
+
+                    function onMapClick(e) {
+                        popup
+                            .setLatLng(e.latlng)
+                            .setContent("You clicked the map at " + e.latlng.toString())
+                            .openOn(map);
+                    }
+
+                    map.on("click", onMapClick);
                 </script>
 
                 </p>
