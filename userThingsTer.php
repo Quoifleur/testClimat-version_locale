@@ -79,15 +79,14 @@ if (isset($user)) {
     $nommé = false;
     if (!isset($NbRowInTable)) {
         $NbRowInTable = 0;
-    }
-    // Pour nommer les climats
+    }    // Pour nommer les climats
     for ($i = 0; $i <= $NbRowInTable; $i++) {
         if (isset($_GET['nom' . $a])) {
             $Nommage[$a] =  str_replace("'", "’", strip_tags($_GET['nom' . $a]));
             if (isset($Nommage[$a])) {
-                $sqlQuery = 'UPDATE ' . $user . ' SET `NOMgenerique` = "' . $Nommage[$a] . '" WHERE `id` = ' . $a . '';
+                $sqlQuery = 'UPDATE `climat` SET `NOMgenerique` = :NOMgenerique WHERE `id` = :id AND `COMPTEclef` = :COMPTEclef';
                 $NOMStatement = $db->prepare($sqlQuery);
-                $NOMStatement->execute() or die(print_r($db->errorInfo()));
+                $NOMStatement->execute(['NOMgenerique' => $Nommage[$a], 'id' => $id[$a], 'COMPTEclef' => $user]) or die(print_r($db->errorInfo()));
                 $nommé = true;
             }
         }
