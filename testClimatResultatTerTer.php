@@ -53,7 +53,7 @@ $sqlQuery = 'SELECT * FROM climat WHERE COMPTEclef = :COMPTEclef';
 $climatStatement = $db->prepare($sqlQuery);
 $climatStatement->execute(['COMPTEclef' => $user]);
 $climatCherche = $climatStatement->fetchAll();
-
+$id = array();
 foreach ($climatCherche as $value) {
     $id[] = $value['id'];
     $Save[] = $value['SAVE'];

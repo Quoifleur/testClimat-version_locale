@@ -1,6 +1,15 @@
 <?php
 session_start();
 include('connexion/bdconnexion.php');
+function NettoyageString($string)
+{
+    $string = strip_tags($string);
+    $string = str_replace("'", "’", strip_tags($string));
+    $string = str_replace('"', '“', $string);
+    $string = str_replace('<', '«', $string);
+    $string = str_replace('>', '»', $string);
+    return $string;
+}
 $compteActif = false;
 // Déconnexion
 if (isset($_POST['deconnexion']) && isset($_COOKIE['logged'])) {
@@ -14,6 +23,7 @@ if (isset($_COOKIE['logged'])) {
     $user = strip_tags($_COOKIE['logged']);
     $compteActif = true;
 }
+
 if (isset($user)) {
     //echo 'balise 0 <br />';
     $sqlQuery = 'SELECT * FROM `CLIMAT` WHERE COMPTEclef = :COMPTEclef';
@@ -28,8 +38,10 @@ if (isset($user)) {
         $climatCherche = $climatStatement->fetchAll();
         if (!empty($climatCherche)) {
             //echo 'balise 2 <br />';
+            $id = array();
             foreach ($climatCherche as $value) {
                 $id[] = $value['id'];
+                $COMPTEclef[] = $value['COMPTEclef'];
                 $Save[] = $value['SAVE'];
                 $DATEcollecte[] = $value['DATEcollecte'];
                 $DATEentre[] = $value['DATEentre'];
@@ -52,13 +64,14 @@ if (isset($user)) {
                 $RESULTATmart[] = $value['RESULTATmart'];
             }
             $NbRowInTable = count($id);
+            $LastEntryInID = end($id);
             //echo 'balise boucle : <br />';
             for ($i = 0; $i < $NbRowInTable; $i++) {
                 if ($NOMgenerique[$i] != null) {
                     $Nom[$i] = $NOMgenerique[$i];
-                } else {
-                    $Nom[$i] = 'n/a';
-                }
+                } //else {
+                //   $Nom[$i] = 'n/a';
+                //}
                 $LettrePlusNomClimat[$i] = explode(',', $RESULTATkoge[$i]);
                 $LettreClimat[$i] = $LettrePlusNomClimat[$i][0];
                 $NomClimat[$i] = $LettrePlusNomClimat[$i][1];
@@ -75,25 +88,22 @@ if (isset($user)) {
         }
     }
     $Voir = $_GET['Voir'] ?? null;
-    $a = 0;
     $nommé = false;
     if (!isset($NbRowInTable)) {
         $NbRowInTable = 0;
-    }    // Pour nommer les climats
-    for ($i = 0; $i <= $NbRowInTable; $i++) {
-        if (isset($_GET['nom' . $a])) {
-            $Nommage[$a] =  str_replace("'", "’", strip_tags($_GET['nom' . $a]));
-            if (isset($Nommage[$a])) {
+    }
+    // Pour nommer les climats
+    for ($i = 0; $i < $NbRowInTable; $i++) {
+        if (isset($_GET['nom' . $id[$i]])) {
+            $Nommage[$i] = NettoyageString($_GET['nom' . $id[$i]]);
+            if (isset($Nommage[$i])) {
                 $sqlQuery = 'UPDATE `climat` SET `NOMgenerique` = :NOMgenerique WHERE `id` = :id AND `COMPTEclef` = :COMPTEclef';
                 $NOMStatement = $db->prepare($sqlQuery);
-                $NOMStatement->execute(['NOMgenerique' => $Nommage[$a], 'id' => $id[$a], 'COMPTEclef' => $user]) or die(print_r($db->errorInfo()));
-                $nommé = true;
+                $NOMStatement->execute(['NOMgenerique' => $Nommage[$i], 'id' => $id[$i], 'COMPTEclef' => $user]) or die(print_r($db->errorInfo()));
+                header('Location: userThingsTer.php');
+                exit();
             }
         }
-        $a++;
-    }
-    if ($nommé) {
-        header('Location: http://localhost/testClimat/userThingsTer.php');
     }
     //téléchargement des données
     $a = 0;
@@ -278,7 +288,7 @@ if (isset($user)) {
 						<td><code>' . $LettreClimat[$i] . '</code></td>
 						<td><code>' . $hémisphère[$i] . '</code></td>
 						<td><form id="Save" name="Voir" method="get" action="testClimatResultatTerTer.php"> <input type="submit" name="Voir" value="Observer climat ' . $id[$i] . '" /></form></td>
-						<td><form id="nommer" name="nommer" method="get" action="userThingsTer.php"><input type="text" placeholder="" id="nom' . $id[$i] . '" name="nom' . $id[$i] . '" required><input type="submit" value="Nommer" /></form></td>
+						<td><form id="nommer" name="nommer" method="get" action=""><input type="text" placeholder="" id="nom' . $id[$i] . '" name="nom' . $id[$i] . '" required><input type="submit" value="Nommer" /></form></td>
 					  </tr>
 				    ';
                             $i++;
