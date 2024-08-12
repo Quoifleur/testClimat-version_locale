@@ -8,6 +8,15 @@ try {
     echo 'Erreur : ' . $e->getMessage();
     die();
 }
+function NettoyageString($string)
+{
+    $string = strip_tags($string);
+    $string = str_replace("'", "’", strip_tags($string));
+    $string = str_replace('"', '“', $string);
+    $string = str_replace('<', '«', $string);
+    $string = str_replace('>', '»', $string);
+    return $string;
+}
 $user = strip_tags($_COOKIE['logged']);
 $visibilite = 0;
 /*

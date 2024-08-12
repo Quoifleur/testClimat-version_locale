@@ -293,7 +293,7 @@ $JsonHémisphère = json_encode($hémisphère);
                 < 2T. <br /><br />Pour en savoir plus sur l'indice de Martonne <a href="https://fr.wikipedia.org/wiki/Aridit%C3%A9">Indice de Martonne</a>, <a href="testClimatAide.php#Martonne">Aide.</a>
             </p>
         </section>
-        <section class="section_fin">
+        < class="section_fin">
             <p>
                 <?php
                 /*Annonce du climat trouvé */
@@ -342,12 +342,11 @@ $JsonHémisphère = json_encode($hémisphère);
                             .setContent("You clicked the map at " + e.latlng.toString())
                             .openOn(map);
                     }
-
                     map.on("click", onMapClick);
                 </script>
-
-                </p>
-        </section>
+            </div>
+            </p>
+            </section>
     </main>
     <footer>
         <?php include('navigation/footer.php'); ?>
