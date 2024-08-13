@@ -29,18 +29,17 @@ if (isset($_FILES['file'])) {
             <div class="A_noter">
                 <div class="A_noter_titre">A noter</div>
                 <p>Le fichier doit être au format .zip</p>
-                <form method="POST" action="horsThemeGTFS.php" enctype="multipart/form-data">
-                    <input type="hidden" name="MAX_FILE_SIZE" value="9000000">
-                    <input type="file" name="file" id="file" accept=".zip">
-                    <input type="submit" value="Envoyer">
-                </form>
-        </section>
-        <section class="section_milieu">
+            </div>
+            <form method="POST" action="horsThemeGTFS.php" enctype="multipart/form-data">
+                <input type="hidden" name="MAX_FILE_SIZE" value="9000000">
+                <input type="file" name="file" id="file" accept=".zip">
+                <input type="submit" value="Envoyer">
+            </form>
             <?php
             if ($fichierChargé) {
                 echo '<div class="A_noter">
                 <div class="A_noter_titre">A noter</div>
-                <p>Le fichier <b>' . $fichier . '</b> a été chargé avec succès </p>
+                <p>Le fichier <b>' . $Nomfichier[0] . '</b> a été chargé avec succès </p>
             </div>';
             } else {
                 echo '<div class="attention">
@@ -54,6 +53,98 @@ if (isset($_FILES['file'])) {
                 <p>Une erreur est survenue. Le fichier doit être au format zip et ne doit pas dépasser 9000000 octets</p>';
             }
             ?>
+        </section>
+        <section class="section_milieu">
+            <h2><?php echo $Nomfichier[0]; ?></h2>
+            <div class="A_noter">
+                <div class="A_noter_titre">A noter</div>
+                <p>Seul les dix premières lignes de chaque fichiers sont affichées ici. Pour retrouvé les données au complets merci d'aller
+                <form id="voir" method="get" action="horsThemeGTFScomplet.php">
+                    <input type="submit" name="voir" value=<?php echo '"' . $fichier . '"'; ?>>
+                </form>
+                </p>
+            </div>
+            <h3>Agences</h3>
+            <p>Information sur l'organisme ayant fournit les données GTFS chargées ici. Les données affichées ici sont issus dz<a href=<?php echo '"upload/extract/' . $fichier . '/agency.txt"'; ?>>agency.txt</a>.</p>
+            <table>
+                <tr>
+                    <th>agency_id</th>
+                    <th>agency_name</th>
+                    <th>agency_url</th>
+                    <th>agency_timezone</th>
+                    <th>agency_lang</th>
+                    <th>agency_phone</th>
+                </tr>
+                <?php
+                if ($fichierChargé) {
+                    $agency = file('upload/extract/' . $fichier . '/agency.txt');
+                    $InfoAgency = explode(',', $agency[1]);
+                    echo '<tr>';
+                    for ($i = 0; $i < 6; $i++) {
+                        echo '<td>' . $InfoAgency[$i] . '</td>';
+                    }
+                    echo '</tr>';
+                }
+                ?>
+            </table>
+            <h3>Itinéraires</h3>
+            <p>Itinéraires du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo '"upload/extract/' . $fichier . '/routes.txt"'; ?>>routes.txt</a>.</p>
+            <table>
+                <?php
+                if ($fichierChargé) {
+                    $fichierBrut = file('upload/extract/' . $fichier . '/routes.txt');
+                    $Legende = explode(',', $fichierBrut[0]);
+                    $Nbligne = count($fichierBrut);
+                    $Nbcolonnes = count($Legende);
+                    for ($i = 0; $i < $Nbligne; $i++) {
+                        $Info[$i] = explode(',', $fichierBrut[$i]);
+                    }
+                    //print_r($Info);
+                    echo '<tr>';
+                    for ($i = 0; $i < $Nbcolonnes; $i++) {
+                        echo '<th>' . $Legende[$i] . '</th>';
+                    }
+                    echo '</tr>';
+                    for ($i = 1; $i < 11; $i++) {
+                        echo '<tr>';
+                        for ($y = 0; $y < $Nbcolonnes; $y++) {
+                            echo '<td>' . $Info[$i][$y] . '</td>';
+                        }
+                        echo '</tr>';
+                    }
+                }
+                ?>
+            </table>
+            <h3>Arrêts</h3>
+            <p>Arrêts du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo '"upload/extract/' . $fichier . '/stops.txt"'; ?>>stops.txt</a>.</p>
+            <table>
+                <?php
+                if ($fichierChargé) {
+                    $fichierBrut = file('upload/extract/' . $fichier . '/stops.txt');
+                    $Legende = explode(',', $fichierBrut[0]);
+                    $Nbligne = count($fichierBrut);
+                    $Nbcolonnes = count($Legende);
+                    for ($i = 0; $i < $Nbligne; $i++) {
+                        $Info[$i] = explode(',', $fichierBrut[$i]);
+                    }
+                    //print_r($Info);
+                    echo '<tr>';
+                    for ($i = 0; $i < $Nbcolonnes; $i++) {
+                        echo '<th>' . $Legende[$i] . '</th>';
+                    }
+                    echo '</tr>';
+                    for ($i = 1; $i < 11; $i++) {
+                        echo '<tr>';
+                        for ($y = 0; $y < $Nbcolonnes; $y++) {
+                            echo '<td>' . $Info[$i][$y] . '</td>';
+                        }
+                        echo '</tr>';
+                    }
+                }
+                ?>
+            </table>
+            <h3>Calendrier</h3>
+
 
         </section>
         <section class="section_fin">

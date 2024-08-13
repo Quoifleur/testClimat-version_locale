@@ -38,7 +38,10 @@ if (!$erreur) //S'il n'y a pas d'erreur, on upload
 // Fin des vérifications de sécurité...
 // On extrait le fichier
 if (!$erreur && $fichierChargé) {
-    mkdir('upload/extract' . $fichier, 0777, true);
+    $Nomfichier = explode('.', $fichier);
+    if (!file_exists('upload/extract' . $fichier)) {
+        mkdir('upload/extract' . $fichier, 0777, true);
+    }
     $ZipGTFS = new ZipArchive;
     if ($ZipGTFS->open('upload/' . $fichier) === TRUE) {
         $ZipGTFS->extractTo('upload/extract/' . $fichier);
