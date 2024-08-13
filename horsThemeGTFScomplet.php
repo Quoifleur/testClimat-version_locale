@@ -13,83 +13,7 @@ $fichier = strip_tags($_GET['voir']);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,900;1,900&family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        body {
-            margin: auto;
-            font-family: 'Ubuntu', sans-serif;
-            background: linear-gradient(333deg, rgba(17, 122, 78, 1) 0%, rgb(6, 105, 100) 20%, rgb(37, 115, 178) 66%, rgba(104, 104, 235, 1) 100%);
-            background-size: 100%;
-        }
-
-        header,
-        nav {
-            background: rgb(91, 196, 154);
-            text-align: justify;
-            padding: 1%;
-            position: sticky;
-            top: 0px;
-            z-index: 1;
-        }
-
-        .menu,
-        .pied {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-
-        .menu {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            grid-template-rows: 1.5fr;
-        }
-
-        a {
-            outline: none;
-            font-weight: bold;
-            text-decoration: none;
-            color: rgb(255, 225, 106);
-        }
-
-
-        a:hover {
-            color: rgb(91, 196, 154);
-        }
-
-        a#header:hover {
-            color: rgb(255, 225, 106);
-        }
-
-        a:visited {
-            color: rgb(255, 225, 106);
-        }
-
-        a:visited:hover {
-            color: rgb(91, 196, 154);
-        }
-
-        .flou {
-            background-color: rgb(255, 225, 106);
-            color: rgb(255, 225, 106);
-        }
-
-        table {
-            border-collapse: collapse;
-            background-color: rgba(230, 255, 245, 0.514);
-            width: 100%;
-        }
-
-        th,
-        td {
-            border: 1px solid black;
-            text-align: left;
-            padding: 8px;
-        }
-
-        th {
-            position: sticky;
-            top: 50px;
-            background-color: rgba(230, 255, 245);
-        }
+        <?php include('FCSS/GTFS.css'); ?>
     </style>
     <title>Visonneuse GTFS</title>
 </head>
@@ -104,12 +28,31 @@ $fichier = strip_tags($_GET['voir']);
         echo ' - ' . $fichier;
         ?>
     </header>
+    <!--<div class="rectangle"></div>-->
     <?php include('navigation/nav.php'); ?>
+    <aside>
+        <div class="aside">
+            <div class="sousAside"><a href="#sommaire">Sommaire</a></div>
+            <div class="sousAside"><a href="#agency">Agences</a></div>
+            <div class="sousAside"><a href="#routes">Itinéraires</a></div>
+            <div class="sousAside"><a href="#stops">Arrêts</a></div>
+            <div class="sousAside"><a href="#calendar">Calendrier</a></div>
+            <div class="sousAside"><a href="#trips">Trajet</a></div>
+        </div>
+    </aside>
     <main>
         <h2><?php echo $fichier; ?></h2>
-        <h3>Agences</h3>
+        <h3 id="sommaire">Sommaire</h3>
+        <ul>
+            <li><a href="#agency">Agences</a></li>
+            <li><a href="#routes">Itinéraires</a></li>
+            <li><a href="#stops">Arrêts</a></li>
+            <li><a href="#calendar">Calendrier</a></li>
+        </ul>
+        <h3 id="agency">Agence</h3>
         <p>Information sur l'organisme ayant fournit les données GTFS chargées ici. Les données affichées ici sont issus dz<a href=<?php echo '"upload/extract/' . $fichier . '/agency.txt"'; ?>>agency.txt</a>.</p>
         <table>
+            <caption>Agence (agency.txt)</caption>
             <tr>
                 <th>agency_id</th>
                 <th>agency_name</th>
@@ -128,9 +71,10 @@ $fichier = strip_tags($_GET['voir']);
             echo '</tr>';
             ?>
         </table>
-        <h3>Itinéraires</h3>
+        <h3 id="routes">Itinéraires</h3>
         <p>Itinéraires du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo '"upload/extract/' . $fichier . '/routes.txt"'; ?>>routes.txt</a>.</p>
         <table>
+            <caption>Itinéraires (routes.txt)</caption>
             <?php
             $fichierBrut = file('upload/extract/' . $fichier . '/routes.txt');
             $Legende = explode(',', $fichierBrut[0]);
@@ -154,9 +98,10 @@ $fichier = strip_tags($_GET['voir']);
             }
             ?>
         </table>
-        <h3>Arrêts</h3>
+        <h3 id="stops">Arrêts</h3>
         <p>Arrêts du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo '"upload/extract/' . $fichier . '/stops.txt"'; ?>>stops.txt</a>.</p>
         <table>
+            <caption>Arrêts (stops.txt)</caption>
             <?php
             $fichierBrut = file('upload/extract/' . $fichier . '/stops.txt');
             $Legende = explode(',', $fichierBrut[0]);
@@ -180,7 +125,60 @@ $fichier = strip_tags($_GET['voir']);
             }
             ?>
         </table>
-        <h3>Calendrier</h3>
+        <h3 id="calendar">Calendrier</h3>
+        <p>Jours de service des différentes lignes du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo '"upload/extract/' . $fichier . '/calendar.txt"'; ?>>stops.txt</a>.</p>
+        <table>
+            <caption>Calendrier (calendar.txt)</caption>
+            <?php
+            $fichierBrut = file('upload/extract/' . $fichier . '/calendar.txt');
+            $Legende = explode(',', $fichierBrut[0]);
+            $Nbligne = count($fichierBrut);
+            $Nbcolonnes = count($Legende);
+            for ($i = 0; $i < $Nbligne; $i++) {
+                $Info[$i] = explode(',', $fichierBrut[$i]);
+            }
+            //print_r($Info);
+            echo '<tr>';
+            for ($i = 0; $i < $Nbcolonnes; $i++) {
+                echo '<th>' . $Legende[$i] . '</th>';
+            }
+            echo '</tr>';
+            for ($i = 1; $i < $Nbligne; $i++) {
+                echo '<tr>';
+                for ($y = 0; $y < $Nbcolonnes; $y++) {
+                    echo '<td>' . $Info[$i][$y] . '</td>';
+                }
+                echo '</tr>';
+            }
+            ?>
+        </table>
+        <h3 id="trips">trajet</h3>
+        <p>Complémentaire au fichier calendar.txt, décrit les trajets des différentes lignes du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo '"upload/extract/' . $fichier . '/trips.txt"'; ?>>trips.txt</a>.</p>
+        <table>
+            <caption>Trajet (trips.txt)</caption>
+            <?php
+            $fichierBrut = file('upload/extract/' . $fichier . '/trips.txt');
+            $Legende = explode(',', $fichierBrut[0]);
+            $Nbligne = count($fichierBrut);
+            $Nbcolonnes = count($Legende);
+            for ($i = 0; $i < $Nbligne; $i++) {
+                $Info[$i] = explode(',', $fichierBrut[$i]);
+            }
+            //print_r($Info);
+            echo '<tr>';
+            for ($i = 0; $i < $Nbcolonnes; $i++) {
+                echo '<th>' . $Legende[$i] . '</th>';
+            }
+            echo '</tr>';
+            for ($i = 1; $i < $Nbligne; $i++) {
+                echo '<tr>';
+                for ($y = 0; $y < $Nbcolonnes; $y++) {
+                    echo '<td>' . $Info[$i][$y] . '</td>';
+                }
+                echo '</tr>';
+            }
+            ?>
+        </table>
     </main>
 </body>
 <footer>

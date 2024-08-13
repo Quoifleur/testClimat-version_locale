@@ -25,11 +25,22 @@ if (isset($_FILES['file'])) {
             <h1>Visonneuse GTFS</h1>
             <h2>GTFS</h2>
             <p>Le General Transit Feed Specification (GTFS) est un format de fichier qui contient les horaires des transports en commun. Il est utilisé par de nombreuses applications de transport en commun, telles que Google Maps, pour afficher les horaires des bus, des trains et des métros. Le GTFS est un format de fichier simple et facile à utiliser qui permet aux développeurs de créer des applications de transport en commun.</p>
+            <h3>Documentation</h3>
+            <ul>
+                <li>Site internet de <a href="https://gtfs.org/fr/">gtfs.org</a></li>
+                <li>repository de google relatif au GTFS et GTFS Realtime<a href="https://github.com/google/transit">github.com/google/transit</a></li>
+            </ul>
             <h2>Fichier à visualiser</h2>
-            <div class="A_noter">
+            <?php
+            if (!$fichierChargé) {
+                echo '<div class="A_noter">
                 <div class="A_noter_titre">A noter</div>
-                <p>Le fichier doit être au format .zip</p>
+                <p>Le fichier doit obligatoirement être au format .zip et ne pas dépasser la taille de 9000000 octets (9Mo).</p>
             </div>
+                ';
+            }
+            ?>
+
             <form method="POST" action="horsThemeGTFS.php" enctype="multipart/form-data">
                 <input type="hidden" name="MAX_FILE_SIZE" value="9000000">
                 <input type="file" name="file" id="file" accept=".zip">
@@ -55,17 +66,21 @@ if (isset($_FILES['file'])) {
             ?>
         </section>
         <section class="section_milieu">
-            <h2><?php echo $Nomfichier[0]; ?></h2>
-            <div class="A_noter">
+            <h2><?php echo $Nomfichier[0] ?? 'Bienvenue dans la liseuse de fichier GTFS'; ?></h2>
+            <?php if ($fichierChargé) {
+                echo '<div class="A_noter">
                 <div class="A_noter_titre">A noter</div>
-                <p>Seul les dix premières lignes de chaque fichiers sont affichées ici. Pour retrouvé les données au complets merci d'aller
+                <p>Seul les dix premières lignes de chaque fichiers sont affichées ici. Pour retrouver les données au complets merci d\'aller
                 <form id="voir" method="get" action="horsThemeGTFScomplet.php">
-                    <input type="submit" name="voir" value=<?php echo '"' . $fichier . '"'; ?>>
+                    <input type="submit" name="voir" value="' . $fichier . '">
                 </form>
                 </p>
-            </div>
+            </div>';
+            }
+            ?>
+
             <h3>Agences</h3>
-            <p>Information sur l'organisme ayant fournit les données GTFS chargées ici. Les données affichées ici sont issus dz<a href=<?php echo '"upload/extract/' . $fichier . '/agency.txt"'; ?>>agency.txt</a>.</p>
+            <p>Information sur l'organisme ayant fournit les données GTFS chargées ici. Les données affichées ici sont issus de <a href=<?php echo $fichierChargé == true ? '"upload/extract/' . $fichier . '/agency.txt"' : ''; ?>>agency.txt</a>.</p>
             <table>
                 <tr>
                     <th>agency_id</th>
@@ -88,7 +103,7 @@ if (isset($_FILES['file'])) {
                 ?>
             </table>
             <h3>Itinéraires</h3>
-            <p>Itinéraires du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo '"upload/extract/' . $fichier . '/routes.txt"'; ?>>routes.txt</a>.</p>
+            <p>Itinéraires du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo $fichierChargé == true ? '"upload/extract/' . $fichier . '/routes.txt"' : ''; ?>>routes.txt</a>.</p>
             <table>
                 <?php
                 if ($fichierChargé) {
@@ -116,7 +131,7 @@ if (isset($_FILES['file'])) {
                 ?>
             </table>
             <h3>Arrêts</h3>
-            <p>Arrêts du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo '"upload/extract/' . $fichier . '/stops.txt"'; ?>>stops.txt</a>.</p>
+            <p>Arrêts du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo $fichierChargé == true ? '"upload/extract/' . $fichier . '/stops.txt"' : ''; ?>>stops.txt</a>.</p>
             <table>
                 <?php
                 if ($fichierChargé) {

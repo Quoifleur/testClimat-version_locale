@@ -1,0 +1,111 @@
+body {
+    margin: auto;
+    font-family: 'Ubuntu', sans-serif;
+    background: linear-gradient(333deg, rgba(17, 122, 78, 1) 0%, rgb(6, 105, 100) 20%, rgb(37, 115, 178) 66%, rgba(104, 104, 235, 1) 100%);
+    background-size: 100%;
+}
+
+header {
+    background: rgb(91, 196, 154);
+    font-family: 'Merriweather', serif;
+    font-style: italic;
+    color: rgb(255, 225, 106);
+    padding: 1%;
+    z-index: 1;
+    position: sticky;
+    top: 0px;
+}
+
+/*.rectangle {
+    background: rgb(91, 196, 154);
+    padding: 2%;
+    z-index: 0;
+}*/
+
+nav {
+    text-align: justify;
+    padding: 1%;
+    z-index: 1;
+    position: sticky;
+    top: 0px;
+}
+
+aside {
+    background: rgb(91, 196, 154);
+    position: sticky;
+    top: 57px;
+    padding: 1%;
+}
+
+.SousMenuG {
+    grid-column-start: 2
+}
+
+.menu,
+.pied {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.menu,
+.aside {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+a {
+    outline: none;
+    font-weight: bold;
+    text-decoration: none;
+    color: rgb(255, 225, 106);
+}
+
+
+a:hover {
+    color: rgb(91, 196, 154);
+}
+
+a#header:hover {
+    color: rgb(255, 225, 106);
+}
+
+a:visited {
+    color: rgb(255, 225, 106);
+}
+
+a:visited:hover {
+    color: rgb(91, 196, 154);
+}
+
+.flou {
+    background-color: rgb(255, 225, 106);
+    color: rgb(255, 225, 106);
+}
+
+table {
+    border-collapse: collapse;
+    background-color: rgba(230, 255, 245, 0.514);
+    width: 100%;
+}
+
+th,
+td {
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+}
+
+
+caption {
+    position: sticky;
+    top: 131px;
+    background-color: rgb(231, 255, 246);
+}
+
+th {
+    position: sticky;
+    top: 148px;
+    background-color: rgb(231, 255, 246);
+}
