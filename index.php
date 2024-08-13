@@ -44,6 +44,7 @@ if (!isset($_COOKIE['user'])) {
 			<p>
 				TestClimat est un outil gratuit pour déterminer le climat (selon la classification de <a href="https://fr.wikipedia.org/wiki/Classification_de_K%C3%B6ppen">Köppen-Geiger</a>) d'un lieu donné à partir de données climatiques.
 			</p>
+			<a href="info.php">php.info</a>
 		</section>
 		<section class="section_milieu">
 			<!--<h2>Rentrer vos valeurs dans ce tableaux</h2>
