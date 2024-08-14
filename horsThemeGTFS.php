@@ -5,6 +5,7 @@ if (isset($_FILES['file'])) {
     $fichierChargé = false;
     $erreur = false;
 }
+include('cartoGTFS.php');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -78,8 +79,15 @@ if (isset($_FILES['file'])) {
             </div>';
             }
             ?>
-
-            <h3>Agences</h3>
+            <h3 id="sommaire">Sommaire</h3>
+            <ul>
+                <li><a href="#agency">Agences</a></li>
+                <li><a href="#routes">Itinéraires</a></li>
+                <li><a href="#stops">Arrêts</a></li>
+                <li><a href="#calendar">Calendrier</a></li>
+                <li><a href="#trips">Trajets</a></li>
+            </ul>
+            <h3 id="agency">Agences</h3>
             <p>Information sur l'organisme ayant fournit les données GTFS chargées ici. Les données affichées ici sont issus de <a href=<?php echo $fichierChargé == true ? '"upload/extract/' . $fichier . '/agency.txt"' : ''; ?>>agency.txt</a>.</p>
             <table>
                 <tr>
@@ -102,7 +110,7 @@ if (isset($_FILES['file'])) {
                 }
                 ?>
             </table>
-            <h3>Itinéraires</h3>
+            <h3 id="routes">Itinéraires</h3>
             <p>Itinéraires du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo $fichierChargé == true ? '"upload/extract/' . $fichier . '/routes.txt"' : ''; ?>>routes.txt</a>.</p>
             <table>
                 <?php
@@ -130,7 +138,7 @@ if (isset($_FILES['file'])) {
                 }
                 ?>
             </table>
-            <h3>Arrêts</h3>
+            <h3 id="stops">Arrêts</h3>
             <p>Arrêts du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo $fichierChargé == true ? '"upload/extract/' . $fichier . '/stops.txt"' : ''; ?>>stops.txt</a>.</p>
             <table>
                 <?php
@@ -158,18 +166,88 @@ if (isset($_FILES['file'])) {
                 }
                 ?>
             </table>
-            <h3>Calendrier</h3>
+            <h3 id="calendar">Calendrier</h3>
+            <p>Jours de service des différentes lignes du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo $fichierChargé == true ?  '"upload/extract/' . $fichier . '/calendar.txt"' : ''; ?>>stops.txt</a>.</p>
+            <table>
+                <caption>Calendrier (calendar.txt)</caption>
+                <?php
+                if ($fichierChargé) {
+                    $fichierBrut = file('upload/extract/' . $fichier . '/calendar.txt');
+                    $Legende = explode(',', $fichierBrut[0]);
+                    $Nbligne = count($fichierBrut);
+                    $Nbcolonnes = count($Legende);
+                    for ($i = 0; $i < $Nbligne; $i++) {
+                        $Info[$i] = explode(',', $fichierBrut[$i]);
+                    }
+                    //print_r($Info);
+                    echo '<tr>';
+                    for ($i = 0; $i < $Nbcolonnes; $i++) {
+                        echo '<th>' . $Legende[$i] . '</th>';
+                    }
+                    echo '</tr>';
+                    for ($i = 1; $i < 11; $i++) {
+                        echo '<tr>';
+                        for ($y = 0; $y < $Nbcolonnes; $y++) {
+                            echo '<td>' . $Info[$i][$y] . '</td>';
+                        }
+                        echo '</tr>';
+                    }
+                }
+
+                ?>
+            </table>
+            <h3 id="trips">trajet</h3>
+            <p>Complémentaire au fichier calendar.txt, décrit les trajets des différentes lignes du réseaux de transports en commun décrit dans le fichiers GTFS. Les données affichées ici sont issus de <a href=<?php echo $fichierChargé == true ? '"upload/extract/' . $fichier . '/trips.txt"' : ''; ?>>trips.txt</a>.</p>
+            <table>
+                <caption>Trajet (trips.txt)</caption>
+                <?php
+                if ($fichierChargé) {
+                    $fichierBrut = file('upload/extract/' . $fichier . '/trips.txt');
+                    $Legende = explode(',', $fichierBrut[0]);
+                    $Nbligne = count($fichierBrut);
+                    $Nbcolonnes = count($Legende);
+                    for ($i = 0; $i < $Nbligne; $i++) {
+                        $Info[$i] = explode(',', $fichierBrut[$i]);
+                    }
+                    //print_r($Info);
+                    echo '<tr>';
+                    for ($i = 0; $i < $Nbcolonnes; $i++) {
+                        echo '<th>' . $Legende[$i] . '</th>';
+                    }
+                    echo '</tr>';
+                    for ($i = 1; $i < 11; $i++) {
+                        echo '<tr>';
+                        for ($y = 0; $y < $Nbcolonnes; $y++) {
+                            echo '<td>' . $Info[$i][$y] . '</td>';
+                        }
+                        echo '</tr>';
+                    }
+                }
+
+                ?>
+            </table>
 
 
         </section>
         <section class="section_fin">
-            <div id="mapid"></div>
-            <script>
-                var mymap = L.map('mapid').setView([48.8534, 2.3488], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                }).addTo(mymap);
-            </script>
+            <div id="map" style="width: 100%; height: 600px;">
+                <script type="text/javascript">
+                    var Px = <?php echo $lat ?? 44.841; ?>;
+                    var Py = <?php echo $long ?? -0.587; ?>;
+
+                    var map = L.map("map").setView([Px, Py], 13);
+                    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    }).addTo(map);
+                    <?php
+                    for ($i = 1; $i < $NbStops ?? 2; $i++) {
+                        echo 'L.marker([' . json_encode($stop[$i][1]) . ', ' . json_encode($stop[$i][2]) . ']).addTo(map)
+                            .bindPopup(' . json_encode($stop[$i][0]) . ');';
+                    }
+                    ?>
+                </script>
+            </div>
         </section>
     </main>
 </body>
