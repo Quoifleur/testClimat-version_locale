@@ -245,9 +245,12 @@ include('cartoGTFS.php');
                         echo 'L.marker([' . json_encode($stop[$i][1]) . ', ' . json_encode($stop[$i][2]) . ']).addTo(map)
                             .bindPopup(' . json_encode($stop[$i][0]) . ');';
                     }
+                    $lienFichier = 'upload/extract/' . $fichier . '/shapes.geojson';
+                    echo 'L.geoJSON(' . json_encode($lienFichier) . ').addTo(map);';
                     ?>
                 </script>
             </div>
+            <?php echo $lienFichier; ?>
         </section>
     </main>
 </body>
