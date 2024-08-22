@@ -36,7 +36,7 @@ if ($fichierChargé) {
     for ($i = 0; $i < 10000; $i++) {
         $Info[$i] = explode(',', $fichierShapes[$i]);
     }
-    $id = $Info[0][0];
+    $id = str_replace('"', '', $Info[1][0]);
     $forme[0][0] = $Info[1][1];
     $forme[0][1] = $Info[1][2];
     $y = 1;
@@ -56,16 +56,16 @@ if ($fichierChargé) {
             "geometry": {
                 "type": "LineString",
                 "coordinates": [');
-    $sautDeLigne = ' \n ';
+    $sautDeLigne = ' \r\n ';
     //fwrite($fichierGEOJSON, $sautDeLigne);
     //fwrite($fichierGEOJSON, '{"type": "LineString", "coordinates": [');
     for ($i = 1; $i < $Nbligne; $i++) {
-        fwrite($fichierGEOJSON, '[' . $forme[$i][1] . ',' . $forme[$i][0] . ']');
+        fwrite($fichierGEOJSON, "\r\n[" . $forme[$i][0] . "," . $forme[$i][1] . "]");
         if (isset($forme[$i + 1][0])) {
-            fwrite($fichierGEOJSON, ',');
+            fwrite($fichierGEOJSON, ",");
         }
     }
-    fwrite($fichierGEOJSON, ']},');
-    fwrite($fichierGEOJSON, '"properties": {"name": "' . $id . '"}');
-    fwrite($fichierGEOJSON, '}]}');
+    fwrite($fichierGEOJSON, "]},");
+    fwrite($fichierGEOJSON, "\r\n\"properties\": {\"name\": \"" . $id . "\"}");
+    fwrite($fichierGEOJSON, "}]}");
 }

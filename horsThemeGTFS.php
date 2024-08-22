@@ -230,8 +230,14 @@ include('cartoGTFS.php');
 
         </section>
         <section class="section_fin">
-            <div id="map" style="width: 100%; height: 600px;">
-                <script type="text/javascript">
+            <?php
+            $lienFichier = 'upload/extract/' . $fichier . '/shapes.geojson';
+            $lienFichier = json_encode($lienFichier);
+            ?>
+            <button id="toggleStops">Afficher/Masquer les arrêts</button>
+            <div id="map" style="width: 100%; height: 600px;"></div>
+            <script type="text/javascript">
+                document.addEventListener('DOMContentLoaded', function() {
                     var Px = <?php echo $lat ?? 44.841; ?>;
                     var Py = <?php echo $long ?? -0.587; ?>;
 
@@ -240,16 +246,26 @@ include('cartoGTFS.php');
                         maxZoom: 19,
                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
                     }).addTo(map);
+
+                    var stopsLayer = L.layerGroup();
                     <?php
                     for ($i = 1; $i < $NbStops ?? 2; $i++) {
-                        echo 'L.marker([' . json_encode($stop[$i][1]) . ', ' . json_encode($stop[$i][2]) . ']).addTo(map)
-                            .bindPopup(' . json_encode($stop[$i][0]) . ');';
+                        echo 'L.marker([' . json_encode($stop[$i][1]) . ', ' . json_encode($stop[$i][2]) . ']).addTo(stopsLayer).bindPopup(' . json_encode($stop[$i][0]) . ');';
                     }
-                    $lienFichier = 'upload/extract/' . $fichier . '/shapes.geojson';
-                    echo 'L.geoJSON(' . json_encode($lienFichier) . ').addTo(map);';
                     ?>
-                </script>
-            </div>
+                    stopsLayer.addTo(map);
+
+                    var geoJsonLayer = L.geoJSON(<?php echo $lienFichier; ?>).addTo(map);
+
+                    document.getElementById('toggleStops').addEventListener('click', function() {
+                        if (map.hasLayer(stopsLayer)) {
+                            map.removeLayer(stopsLayer);
+                        } else {
+                            map.addLayer(stopsLayer);
+                        }
+                    });
+                });
+            </script>
             <?php echo $lienFichier; ?>
         </section>
     </main>
