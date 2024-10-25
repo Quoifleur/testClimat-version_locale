@@ -1,4 +1,8 @@
 <?php
+include('mapHP/function_drawing.php');
+include('mapHP/function_super.php');
+include('mapHP/function_geojson.php');
+include('mapHP/function_other.php');
 if (isset($_FILES['file'])) {
     include('ZIPtoTXT.php');
 } else {
@@ -231,10 +235,10 @@ include('cartoGTFS.php');
         </section>
         <section class="section_fin">
             <?php
-            $lienFichier = 'upload/extract/' . $fichier . '/shapes.geojson';
-            $lienFichier = json_encode($lienFichier);
+            include('cartodessinGTFS.php');
             ?>
-            <button id="toggleStops">Afficher/Masquer les arrêts</button>
+            <img src="carte.png" alt="Carte">
+            <!--<button id="toggleStops">Afficher/Masquer les arrêts</button>
             <div id="map" style="width: 100%; height: 600px;"></div>
             <script type="text/javascript">
                 document.addEventListener('DOMContentLoaded', function() {
@@ -255,7 +259,7 @@ include('cartoGTFS.php');
                     ?>
                     stopsLayer.addTo(map);
 
-                    var geoJsonLayer = L.geoJSON(<?php echo $lienFichier; ?>).addTo(map);
+                    var geoJsonLayer = L.geoJSON(<?php echo json_encode($lienFichier); ?>).addTo(map);
 
                     document.getElementById('toggleStops').addEventListener('click', function() {
                         if (map.hasLayer(stopsLayer)) {
@@ -265,8 +269,7 @@ include('cartoGTFS.php');
                         }
                     });
                 });
-            </script>
-            <?php echo $lienFichier; ?>
+            </script>-->
         </section>
     </main>
 </body>
