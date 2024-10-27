@@ -240,7 +240,9 @@ $JsonHémisphère = json_encode($hémisphère);
         <section class="section_intro">
             <h1>Climat</h1>
             <p><?php
-                echo '<br /> Le climat trouvé est le suivant : <b>' . $NomClimat .  '</b>; Lettes associées : <b>' . $LettreClimat . '</b>'; ?></p>
+                echo '<br /> Le climat trouvé est le suivant : <b>' . $NomClimat .  '</b>; Lettes associées : <b>' . $LettreClimat . '</b>'; ?>
+                <br /><br /><b>Ce climat a été enregistré automatiquement</b>, pour retrouver tous vos anciens climats recherchés, rendez-vous sur la page <a href="userThingsTer.php">compte</a>.
+            </p>
         </section>
         <section class="section_milieu">
             <div>
@@ -288,12 +290,15 @@ $JsonHémisphère = json_encode($hémisphère);
                 ?>
             </table>
             <p class="legende">
+                La sauvegarde des climats est automatique, pour retrouver tous vos anciens climats recherchés, rendez-vous sur la page <a href="userThingsTer.php">compte</a>.<br />
+                <br />
                 Pour déterminer si un mois est aride nous utilisons l'indice Gaussen.
                 <br /> Cette indice est calculé ainsi : Un mois est aride si P
                 < 2T. <br /><br />Pour en savoir plus sur l'indice de Martonne <a href="https://fr.wikipedia.org/wiki/Aridit%C3%A9">Indice de Martonne</a>, <a href="testClimatAide.php#Martonne">Aide.</a>
+
             </p>
         </section>
-        < class="section_fin">
+        <section class="section_fin">
             <p>
                 <?php
                 /*Annonce du climat trouvé */
@@ -314,39 +319,26 @@ $JsonHémisphère = json_encode($hémisphère);
             <p>
             <div id="chart_div" class="chart_div"></div>
             D'après le tableau de valeurs ci-dessus.
-            <?php echo $JsonPx;
-            $JPx = "45.763";
-            $JPy = "4.835";
-            ?>
+
             </p>
             <p>
-            <div id="map" style="width: 100%; height: 400px;">
+                <?php
+                if (isset($Px[0]) && isset($Py[0])) {
+                    echo 'Coordonnées géographiques : ' . $Px[$climatSelected] . ' ; ' . $Py[$climatSelected] . ' ; ' . $Pz[$climatSelected];
+                    echo '<div id="map" style="width: 100%; height: 400px;">
                 <script type="text/javascript">
-                    var Px = <?php echo $JsonPx; ?> || null;
-                    var Py = <?php echo $JsonPy; ?> || null;
-                    var Pz = <?php echo $JsonPz; ?> || null;
-                    var CodeClimat = <?php echo $JsonLettreClimat; ?>;
-
-                    var map = L.map("map").setView([Px, Py], 13);
-                    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                        maxZoom: 19,
-                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                    }).addTo(map);
-                    var marker = L.marker([Px, Py]).addTo(map);
-                    marker.bindPopup(CodeClimat).openPopup();
-                    var popup = L.popup();
-
-                    function onMapClick(e) {
-                        popup
-                            .setLatLng(e.latlng)
-                            .setContent("You clicked the map at " + e.latlng.toString())
-                            .openOn(map);
-                    }
-                    map.on("click", onMapClick);
+                    var Px = ' . $JsonPx . ' || null;
+                    var Py = ' . $JsonPy . ' || null;
+                    var Pz = ' .  $JsonPz . ' || null;
+                    var CodeClimat = ' .  $JsonLettreClimat . ';
+                    ' . include ('carte.js') . '
                 </script>
-            </div>
+            </div>';
+                }
+                ?>
+
             </p>
-            </section>
+        </section>
     </main>
     <footer>
         <?php include('navigation/footer.php'); ?>

@@ -1,8 +1,10 @@
 <?php session_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-include('connexion/bdconnexion.php');
+try {
+    $db = new PDO('mysql:host=testcljclimat.mysql.db;dbname=testcljclimat;charset=utf8', 'testcljclimat', 'jG9JE9UJpT');
+} catch (Exception $e) {
+    echo 'Erreur: ' . $e->getMessage();
+    die();
+}
 function random_string($length)
 {
     $str = random_bytes($length);
@@ -10,21 +12,6 @@ function random_string($length)
     $str = str_replace(["+", "/", "="], "", $str);
     $str = substr($str, 0, $length);
     return $str;
-}
-$CanHaveNewPassword = false;
-if (isset($_POST['FORcode'])) {
-    $FORcode = strip_tags($_POST['FORcode']);
-    if ($FORcode === $_COOKIE['MAILverif']) {
-        $CanHaveNewPassword = true;
-    }
-}
-
-if ($CanHaveNewPassword && isset($_POST['FORpassword'])) {
-    $FORpassword = strip_tags($_POST['FORpassword']);
-    $password = password_hash($FORpassword, PASSWORD_BCRYPT);
-    $query = $db->prepare('UPDATE user SET password = :password WHERE mail = :mail');
-    $query->execute(['mail' => $email, 'password' => $password]);
-    $user = $query->fetch();
 }
 $SENDmail = false;
 if (isset($_POST['FORemail'])) {
@@ -45,12 +32,17 @@ if (isset($_POST['FORemail'])) {
         for ($i = 0; $i < $NbRowInTable; $i++) {
             if ($USERSmail[$i] === $email) {
                 $mailFIND = true;
-                setcookie('MAILverif',  random_string(6), time() + 1800, '/', 'testclimat.ovh', false, true);
+                $codeConnexion = random_string(6);
+                $query = $db->prepare('UPDATE user SET CODEverif = :CODEverif WHERE mail = :mail');
+                $user = $query->execute(['mail' => $email, 'CODEverif' => $codeConnexion]);
                 //Le message
-                $message = 'Merci ne ne pas répondre à ce message. (Notez que ce code expirera au bout d\'une demie heure. Code : ' . $_COOKIE['MAILverif'] . '';
+                $resetLink = "https://www.testclimat.ovh/userThingsLoginNewMDP.php";
+                $message = 'Merci de ne pas répondre à ce message. Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien suivant : ' . $resetLink . ' code=' . $codeConnexion . ' Si vous n\'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer ce message.';
+                $message = wordwrap($message, 70, "\r\n");
                 // Envoi du mail
                 $NEWmail = mail($email, 'Rénitialisation du mot de passe', $message);
                 $SENDmail = true;
+                break;
             }
         }
         if ($mailFIND && !$SENDmail) {
@@ -61,8 +53,6 @@ if (isset($_POST['FORemail'])) {
         }
     }
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -78,32 +68,13 @@ if (isset($_POST['FORemail'])) {
     <main>
         <section class="section_intro">
             <h1>Mot de passe oublié?</h1>
-            <p>Merci de rentrer votre mail, si celui-ci existe dans notre base de données un mail vous sera envoyé pour réinitialiser votre mot de passe</p>
+            <p>Merci de rentrer votre mail, si celui-ci existe dans notre base de données un mail vous sera envoyé pour réinitialiser votre mot de passe.</p>
+            <p>Si vous ne recevez pas de mail, vérifiez votre dossier spam.</p>
             <form action="userThingsLoginMAIL.php" method="post">
                 <label for="FORemail">Email</label>
                 <input type="email" name="FORemail" id="FORemail" required>
                 <input type="submit" value="Valider mon mail">
             </form>
-            <?php
-            if ($SENDmail) {
-                echo
-                'Un mail vous a été envoyé pour réinitialiser votre mot de passe. Entrez le code reçu ci-dessous.
-                <form action="userThingsLoginMAIL.php" method="post">
-                <label for="FORcode">code</label>
-                <input type="texte" placeholder="code reçu par mail" name="FORcode" id="FORcode" maxlength="6" required>
-                <input type="submit" value="Valider mon code">
-            </form>';
-            }
-            if ($CanHaveNewPassword) {
-                echo
-                'Code correct, entrez votrz nouveau mot de passe.
-                <form action="userThingsLoginMAIL.php" method="post">
-                <label for="FORpassword">Nouveau mot de passe</label>
-                <input type="password" placeholder="Nouveau mot de passe" name="FORpassword" id="FORpassword" required>
-                <input type="submit" value="Valider mon nouveau mot de passe">
-                </form>';
-            }
-            ?>
         </section>
         <section class="section_milieu">
         </section>

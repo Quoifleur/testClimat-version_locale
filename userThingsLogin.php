@@ -10,8 +10,9 @@ function random_string($length)
 }
 // Déconnexion
 if (isset($_POST['deconnexion']) && isset($_COOKIE['logged'])) {
-    setcookie('logged', '', time() + 1, null, null, false, true);
+    setcookie('logged', $value['clef'], time() + 1, '/', 'testclimat.ovh', true, true);
     unset($_COOKIE['logged']);
+    session_destroy();
     header('Location: userThingsLogin.php');
     exit();
 }
@@ -46,9 +47,9 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
                 if ($USERSmail[$i] === $email && password_verify($passwordAverifier, $USERSpassword[$i])) {
                     $newUser = false;
                     if (isset($_POST['SIGcheckbox'])) {
-                        setcookie('logged', $USERSclef[$i], time() + 3600 * 24 * 365, null, null, false, true);
+                        setcookie('logged', $USERSclef[$i], time() + 3600 * 24 * 365, '/', 'testclimat.ovh', true, true);
                     } else {
-                        setcookie('logged', $USERSclef[$i], time() + 3600 * 24, null, null, false, true);
+                        setcookie('logged', $USERSclef[$i], time() + 3600 * 24, '/', 'testclimat.ovh', true, true);
                     }
                     $newUser = false;
                     header('Location: userThingsTer.php');
