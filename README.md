@@ -37,4 +37,4 @@ Mon contact : victor.maury@testclimat.ovh
 Dans votre serveur local :
 
 2. Créez une base de données nommées `testClimat`.
-3. Dans cette base de données, importez les tables `user` et `CLIMAT` (présentent dans le dossier DATABASE de ce repositorie).
+3. Dans cette base de données, importez les tables `user` et `CLIMAT` (vous trouverez ces deux fichiers dans le dossier DATABASE de ce repositorie).
