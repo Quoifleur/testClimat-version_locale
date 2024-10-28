@@ -1,8 +1,8 @@
 <?php
 $downloadPossible = false;
-$climatSelect =  $_GET['climat-select'] ?? null;
+$climatSelect =  strip_tags($_GET['climat-select'] ?? null);
 $climatAtelecharger = explode('-', $climatSelect);
-$instruction = $_GET['Télécharger'] ?? null;
+$instruction = strip_tags($_GET['Télécharger'] ?? null);
 $ecriture = array();
 $downloadNom = 'climat';
 $ecritureLegende = '"id","DATEcollecte","DATEentre","TEMPORALITEperiode","TEMPORALITEmois","NOMlocalisation","NOMgenerique","POSITIONhemisphere","POSITIONx","POSITIONy","POSITIONz","SAISON","NORMALETe","NORMALEPr","NORMALE2","NORMALE3","NORMALE4","RESULTATkoge","RESULTATgaus","RESULTATmart"';

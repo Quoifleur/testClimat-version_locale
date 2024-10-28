@@ -17,13 +17,13 @@ if (isset($_COOKIE['logged'])) {
 }
 if (isset($user)) {
     //echo 'balise 0 <br />';
-    $sqlQuery = 'SELECT * FROM `CLIMAT` WHERE COMPTEclef = :COMPTEclef';
+    $sqlQuery = 'SELECT * FROM `climat` WHERE COMPTEclef = :COMPTEclef';
     $climatStatement = $db->prepare($sqlQuery);
     $climatStatement->execute(['COMPTEclef' => $user]);
     $table = $climatStatement->fetchAll();
     if (!empty($table)) {
         //echo 'balise 1 <br />';
-        $sqlQuery = 'SELECT * FROM CLIMAT WHERE COMPTEclef = "' . $user . '" ORDER BY id ASC';
+        $sqlQuery = 'SELECT * FROM climat WHERE COMPTEclef = "' . $user . '" ORDER BY id ASC';
         $climatStatement = $db->prepare($sqlQuery);
         $climatStatement->execute();
         $climatCherche = $climatStatement->fetchAll();
@@ -99,26 +99,34 @@ if (isset($user)) {
         }
     }
     $Voir = $_GET['Voir'] ?? null;
-    $a = 0;
     $nommé = false;
     if (!isset($NbRowInTable)) {
         $NbRowInTable = 0;
     }
     // Pour nommer les climats
-    for ($i = 0; $i <= $NbRowInTable; $i++) {
-        if (isset($_GET['nom' . $a])) {
-            $Nommage[$a] =  str_replace("'", "’", strip_tags($_GET['nom' . $a]));
-            if (isset($Nommage[$a])) {
-                $sqlQuery = 'UPDATE ' . $user . ' SET `NOMgenerique` = "' . $Nommage[$a] . '" WHERE `id` = ' . $a . '';
-                $NOMStatement = $db->prepare($sqlQuery);
-                $NOMStatement->execute() or die(print_r($db->errorInfo()));
-                $nommé = true;
+    echo $user;
+    $a = 0;
+    $Nommage = array();
+    print_r($_GET);
+    echo '<br />';
+    print_r($id);
+    for ($i = 0; $i < end($id); $i++) {
+        $NomAverifierExistence = strip_tags($_GET['nom' . $id[$i]]);
+        if (isset($NomAverifierExistence)) {
+            $Nommage[$a] =  str_replace("'", "’", $NomAverifierExistence);
+            $sqlQuery = 'UPDATE `climat` SET `NOMgenerique` = :NOMgenerique WHERE `COMPTEclef` = :id';
+            $SaveStatement = $db->prepare($sqlQuery);
+            echo '<br /> balise2';
+            try {
+                $SaveStatement->execute(['id' => $user, 'NOMgenerique' => $Nommage[$a]]);
+            } catch (PDOException $e) {
+                echo 'Erreur : ' . $e->getMessage();
             }
         }
         $a++;
     }
     if ($nommé) {
-        header('Location: http://localhost/testClimat/userThingsTer.php');
+        header('Location: http://localhost/testClimat-version_locale/userThingsTer.php');
     }
     //téléchargement des données
     include('outils/download_Climat.php');
@@ -181,7 +189,7 @@ if (isset($user)) {
 						<td><code>' . $LettreClimat[$i] . '</code></td>
 						<td><code>' . $hémisphère[$i] . '</code></td>
 						<td><form id="Save" name="Voir" method="get" action="testClimatResultatTerTer.php"> <input type="submit" name="Voir" value="Observer climat ' . $id[$i] . '" /></form></td>
-						<td><form id="nommer" name="nommer" method="get" action="userThingsTer.php"><input type="text" placeholder="" id="nom' . $id[$i] . '" name="nom' . $id[$i] . '" required><input type="submit" value="Nommer" /></form></td>
+						<td><form id="nommer" name="nommer" method="get" action="userThingsTer.php"><input type="text" placeholder="" id="nom' . $id[$i] . '" name="nom' . $id[$i] . '" required><input type="submit" value="Nommer' . $id[$i] . '" /></form></td>
 					  </tr>
 				    ';
                             $i++;
@@ -227,39 +235,6 @@ if (isset($user)) {
                 <input id="Télécharger" type="submit" name="Télécharger" value="Télécharger" onClick="doModifie()">
             </form>
             </p>
-            <?php
-            print_r($ecriture);
-            echo '<br /><br />';
-            print_r($id);
-            echo '<br />';
-            print_r($Save);
-            echo '<br />';
-            print_r($DATEcollecte);
-            echo '<br />';
-            print_r($DATEentre);
-            echo '<br />';
-            print_r($TEMPORALITEperiode);
-            echo '<br />';
-            print_r($mois);
-            echo '<br />';
-            print_r($NOMlocalisation);
-            echo '<br />';
-            print_r($NOMgenerique);
-            echo '<br />';
-            print_r($hémisphère);
-            echo '<br />';
-            print_r($POSITIONx);
-            echo '<br />';
-            print_r($POSITIONy);
-            echo '<br />';
-            print_r($POSITIONz);
-            echo '<br />';
-            print_r($SAISON);
-            echo '<br />';
-            print_r($Te);
-            echo '<br />';
-            print_r($Pr);
-            print_r($NORMALE2); ?>
         </section>
     </main>
     <?php include('navigation/footer.php'); ?>
