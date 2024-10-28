@@ -150,9 +150,9 @@ $JsonPannuelle = json_encode($Pannuelle);
 $JsonIMmax = json_encode($IMmax);
 $JsonIMmin = json_encode($IMmin);
 $JsonNord = json_encode($Nord);
-$JsonPx = json_encode($Px[$climatSelected]);
-$JsonPy = json_encode($Py[$climatSelected]);
-$JsonPz = json_encode($Pz[$climatSelected]);
+$JsonPx = isset($Px[$climatSelected]) ? json_encode($Px[$climatSelected]) : null;
+$JsonPy = isset($Py[$climatSelected]) ? json_encode($Py[$climatSelected]) : null;
+$JsonPz = isset($Pz[$climatSelected]) ? json_encode($Pz[$climatSelected]) : null;
 $JsonHémisphère = json_encode($hémisphère);
 ?>
 <!DOCTYPE html>
