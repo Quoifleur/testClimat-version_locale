@@ -1,32 +1,12 @@
 <?php
 session_start();
 $LienVersTraitementDesClimats = '';
-if (isset($_COOKIE['user'])) {
-	$_SESSION['nom'] = $_COOKIE['user'];
-	if (isset($_COOKIE['logged'])) {
-		$LienVersTraitementDesClimats = 'testClimatinSQLTer.php';
-		$_SESSION['nom'] = $_COOKIE['logged'];
-	}
-}
-if ($LienVersTraitementDesClimats !== 'testClimatinSQLTer.php') {
+if (isset($_COOKIE['logged'])) {
+	$LienVersTraitementDesClimats = 'testClimatinSQLTer.php';
+	$_SESSION['nom'] = $_COOKIE['logged'];
+} else {
 	$LienVersTraitementDesClimats = 'testClimatResultatsanscokiees.php';
 }
-/*
-//echo $_SESSION['nom'] . '<br />';
-if (!isset($_COOKIE['user'])) {
-	$arr_cookie_options = array(
-		'expires' => time() + 365 * 24 * 3600,
-		'path' => '/',
-		//'domain' => 'testclimatique.000webhostapp.com', // leading dot for compatibility or use subdomain
-		'secure' => true,     // or false
-		'httponly' => true,    // or false
-	);
-	setcookie('user', $_SESSION['nom'], $arr_cookie_options);
-	//echo 'Cookie :' . $_COOKIE['user'] . ' //// Créé <br />';
-	//echo '<br />Si vous arrivez sur une page blanche après utilisation de testClimat, merci de bien activer les cookies pour TestClimat afin qu\'il puisse fonctionner correctement. <br/> Si le problème persiste, merci de nous contacter.';
-} else {
-	//echo 'Cookie :' . $_COOKIE['user'] . ' //// Déja présent <br />';
-}*/
 ?>
 <!DOCTYPE html>
 <html>
@@ -43,15 +23,14 @@ if (!isset($_COOKIE['user'])) {
 		<section class="section_intro">
 			<h1>Bienvenue chez TestClimat !</h1>
 			<?php
+			echo $LienVersTraitementDesClimats . '<br />';
 			echo $_SESSION['nom'] . '<br />';
-			echo $_COOKIE['user'] . '<br />';
 			echo $_COOKIE['logged'] . '<br />';
 			?>
 			<p>Pour vous connecter ou pvous inscrire merci d'aller sur la <a href="userThingsLogin.php">page de connection et d'inscription</a></p>
 			<p>
 				TestClimat est un outil gratuit pour déterminer le climat (selon la classification de <a href="https://fr.wikipedia.org/wiki/Classification_de_K%C3%B6ppen">Köppen-Geiger</a>) d'un lieu donné à partir de données climatiques.
 			</p>
-			<a href="info.php">php.info</a>
 		</section>
 		<section class="section_milieu">
 			<div class="hauteur">
@@ -162,10 +141,10 @@ if (!isset($_COOKIE['user'])) {
 						<label for="Sud">Sud</label>
 					</div>
 					<div class="">
-						<input type="text" placeholder="NOMlieux-dit,communes,département,..." id="NPc" name="NPc">
+						<input type="text" placeholder="NOMlieux-dit,communes,département,..." id="NGc" name="NGc">
 					</div>
 					<div class="">
-						<input type="text" placeholder="NOMlibellé" id="NGc" name="NGc">
+						<input type="text" placeholder="NOMstation" id="NSc" name="NSc">
 					</div>
 					<div class="">
 						<input type="text" placeholder="*TM1,TM2,TM3,..." id="Tec" name="Tec" required>

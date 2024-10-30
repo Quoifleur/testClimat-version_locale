@@ -2,12 +2,7 @@
 session_start();
 //echo $_SESSION['nom'] . '<br />';
 //echo $_COOKIE['user'] . '<br />';
-try {
-    $db = new PDO('mysql:host=localhost;dbname=testclimat;charset=utf8', 'root', 'root', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],);
-} catch (Exception $e) {
-    echo 'Erreur : ' . $e->getMessage();
-    die();
-}
+include('connexion/bdconnexion.php');
 function NettoyageString($string)
 {
     $string = strip_tags($string);
@@ -16,6 +11,36 @@ function NettoyageString($string)
     $string = str_replace('<', '«', $string);
     $string = str_replace('>', '»', $string);
     return $string;
+}
+function detectionErreur($array)
+{
+    for ($i = 0; $i < 11; $i++) {
+        if (!is_numeric($array[$i])) {
+            header('refresh:7;url=http://localhost/testClimat/index.php');
+            echo '<br /><br />L\'une des valeurs saisi n\'est pas un nombre.<br /><br />Vous allez être redirigé dans sept secondes. Si la redirection ne se fait pas <a href="index.php">cliquez ici</a>.';
+            die();
+        }
+        if (!isset($array[$i])) {
+            header('refresh:7;url=http://localhost/testClimat/index.php');
+            echo '<br /><br />L\'une des valeurs saisi manque. <br />Merci de bien saisir 12 valeurs<br /><br />Vous allez être redirigé dans sept secondes. Si la redirection ne se fait pas <a href="index.php">cliquez ici</a>.';
+            die();
+        }
+    }
+}
+function debugVar($array)
+{
+    echo '<pre>';
+    print_r($array);
+    echo '</pre>';
+}
+function SUPER_gestionErreur($array)
+{
+    if (isset($array)) {
+        debugVar($array);
+        detectionErreur($array);
+    } else {
+        echo 'array non définie <br />';
+    }
 }
 $user = strip_tags($_COOKIE['logged']);
 $visibilite = 0;
@@ -57,10 +82,21 @@ $month = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aou
 
 //Récupération des valeurs.
 //POSITION
-$Px = $_POST['PXc'] ? strip_tags($_POST['PXc']) : null;
-$PY = $_POST['PYc'] ? strip_tags($_POST['PYc']) : null;
-$PZ = $_POST['PZc'] ? strip_tags($_POST['PZc']) : null;
+$Px = $_POST['PXc'] ? NettoyageString($_POST['PXc']) : null;
+$PY = $_POST['PYc'] ? NettoyageString($_POST['PYc']) : null;
+$PZ = $_POST['PZc'] ? NettoyageString($_POST['PZc']) : null;
 $Hémisphère = $_POST['hémisphère'];
+$NC3 = $_POST['NC3c'] ? NettoyageString($_POST['NC3c']) : null;
+$NC4 = $_POST['NC4c'] ? NettoyageString($_POST['NC4c']) : null;
+$NC5 = $_POST['NC5c'] ? NettoyageString($_POST['NC5c']) : null;
+if ($NC3 != null && $NC4 != null && $NC5 != null) {
+    $NC3 = explode(",", $NC3);
+    $NC4 = explode(",", $NC4);
+    $NC5 = explode(",", $NC5);
+}
+
+$NONgenerique = $_POST['NGc'] ? NettoyageString($_POST['NGc']) : null;
+$NOMstation = $_POST['NSc'] ? NettoyageString($_POST['NSc']) : null;
 //NORMALE CLIMATIQUE
 if (isset($_POST['Tec']) && isset($_POST['Prc'])) {
     $Te = explode(",", strip_tags($_POST['Tec']));
@@ -69,38 +105,13 @@ if (isset($_POST['Tec']) && isset($_POST['Prc'])) {
     $Te = [strip_tags($_POST['TM1']), strip_tags($_POST['TM2']), strip_tags($_POST['TM3']), strip_tags($_POST['TM4']), strip_tags($_POST['TM5']), strip_tags($_POST['TM6']), strip_tags($_POST['TM7']), strip_tags($_POST['TM8']), strip_tags($_POST['TM9']), strip_tags($_POST['TM10']), strip_tags($_POST['TM11']), strip_tags($_POST['TM12'])];
     $Pr = [strip_tags($_POST['PM1']), strip_tags($_POST['PM2']), strip_tags($_POST['PM3']), strip_tags($_POST['PM4']), strip_tags($_POST['PM5']), strip_tags($_POST['PM6']), strip_tags($_POST['PM7']), strip_tags($_POST['PM8']), strip_tags($_POST['PM9']), strip_tags($_POST['PM10']), strip_tags($_POST['PM11']), strip_tags($_POST['PM12'])];
 }
-for ($i = 0; $i < 11; $i++) {
-    if (!is_numeric($Te[$i])) {
-        header('refresh:7;url=http://localhost/testClimat/index.php');
-        echo '<br /><br />L\'une des valeurs saisi n\'est pas un nombre. <br />Merci de saisir les valeurs sous cette forme, par exemple : -2.6,-2.0,2.3,8.3,12.7,17.2,21.1,21.1,17.1,12.0,5.3,0.1 <br /><br />Vous allez être redirigé dans sept secondes. Si la redirection ne se fait pas <a href="index.php">cliquez ici</a>.';
-        die();
-    }
-    if (!isset($Te[$i])) {
-        header('refresh:7;url=http://localhost/testClimat/index.php');
-        echo '<br /><br />L\'une des valeurs saisi manque. <br />Merci de bien saisir 12 valeurs sous cette forme, par exemple : -2.6,-2.0,2.3,8.3,12.7,17.2,21.1,21.1,17.1,12.0,5.3,0.1 <br /><br />Vous allez être redirigé dans sept secondes. Si la redirection ne se fait pas <a href="index.php">cliquez ici</a>.';
-        die();
-    }
-}
-for ($i = 0; $i <= 11; $i++) {
-    if (!is_numeric($Pr[$i])) {
-        header('refresh:7;url=http://localhost/testClimat/index.php');
-        '<br /><br />L\'une des valeurs entré n\'est pas un nombre. <br />Merci d\'entré les valeurs sous cette forme, par exemple : 41.4,92.4,89.9,63.0,64.9,42.4,14.1,6.7,41.0,56.6,63.6,58.0 <br /><br />Vous allez être redirigé dans sept secondes. Si la redirection ne se fait pas <a href="index.php">cliquez ici</a>.';
-        die();
-    }
-    if (!isset($Pr[$i])) {
-        header('refresh:7;url=http://localhost/testClimat/index.php');
-        echo '<br /><br />L\'une des valeurs saisi manque. <br />Merci de bien saisir 12 valeurs sous cette forme, par exemple : 41.4,92.4,89.9,63.0,64.9,42.4,14.1,6.7,41.0,56.6,63.6,58.0 <br /><br />Vous allez être redirigé dans sept secondes. Si la redirection ne se fait pas <a href="index.php">cliquez ici</a>.';
-        die();
-    }
-}
-echo 'Te (température en °C)';
-for ($i = 0; $i < 12; $i++) {
-    echo '<br />Te[' . $i . '] >>> ' . $Te[$i];
-}
-echo '<br /><br /> Pr (précipitation en mm)';
-for ($i = 0; $i < 12; $i++) {
-    echo '<br />Pr[' . $i . ']  >>> ' . $Pr[$i];
-}
+//Détection d'erreur
+SUPER_gestionErreur($Te);
+SUPER_gestionErreur($Pr);
+SUPER_gestionErreur($NC3);
+SUPER_gestionErreur($NC4);
+SUPER_gestionErreur($NC5);
+
 echo '<br /><br />';
 /* Détermination de l'hémisphère */
 if ($Hémisphère == 'Nord') {
@@ -470,6 +481,9 @@ $stringMonth = '';
 $stringSaison = '';
 $stringPr = '';
 $stringTe = '';
+$stringNC3 = '';
+$stringNC4 = '';
+$stringNC5 = '';
 $stringAr = '';
 $stringIm = '';
 
@@ -478,6 +492,9 @@ for ($i = 0; $i < 11; $i++) {
     $stringSaison .= $Saison[$i] . ',';
     $stringPr .= $Pr[$i] . ',';
     $stringTe .= $Te[$i] . ',';
+    $stringNC3 .= $NC3[$i] . ',';
+    $stringNC4 .= $NC4[$i] . ',';
+    $stringNC5 .= $NC5[$i] . ',';
     $stringAr .= $Ar[$i] . ',';
     $stringIm .= $Im[$i] . ',';
 }
@@ -486,10 +503,15 @@ $stringMonth .= $month[$i];
 $stringSaison .= $Saison[$i];
 $stringPr .= $Pr[$i];
 $stringTe .= $Te[$i];
+$stringNC3 .= $NC3[$i];
+$stringNC4 .= $NC4[$i];
+$stringNC5 .= $NC5[$i];
 $stringAr .= $Ar[$i];
 $stringIm .= $Im[$i];
 $save = 1;
 $ram = 1;
+echo '<br />NOMstation >>> ' . $NOMstation;
+echo '<br />NONgenerique >>> ' . $NONgenerique;
 echo '<br />Hémisphère >>> ' . $Hémisphère;
 echo '<br />Px >>> ' . $Px;
 echo '<br />PY >>> ' . $PY;
@@ -512,16 +534,16 @@ echo '<br />$_COOKIE[logged] >>> ' . $_COOKIE['logged'];
 //$SaveStatement = $db->prepare('UPDATE ' . $user . ' SET Save = Save+1');
 //$SaveStatement->execute([]) or die(print_r($db->errorInfo()));
 //Ajout des nouvelles valeurs
-$sqlQuery = 'INSERT INTO  `climat` (COMPTEclef, COMPTEvisibilite, DATEentre, TEMPORALITEmois, TEMPORALITEsaison, POSITIONhemisphere, POSITIONx, POSITIONy, POSITIONz, NORMALEte, NORMALEpr, RESULTATkoge, RESULTATgaus, RESULTATmart) VALUES (:COMPTEclef, :COMPTEvisibilite,  :DATEentre, :TEMPORALITEmois, :TEMPORALITEsaison, :POSITIONhemisphere, :POSITIONx, :POSITIONy, :POSITIONz, :NORMALEte, :NORMALEpr, :RESULTATkoge, :RESULTATgaus, :RESULTATmart)';
+$sqlQuery = 'INSERT INTO  `climat` (COMPTEclef, COMPTEvisibilite, DATEentre, TEMPORALITEmois, TEMPORALITEsaison, NOMlocalisation, NOMgenerique, POSITIONhemisphere, POSITIONx, POSITIONy, POSITIONz, NORMALEte, NORMALEpr, NORMALE2,NORMALE3,NORMALE4, RESULTATkoge, RESULTATgaus, RESULTATmart) VALUES (:COMPTEclef, :COMPTEvisibilite,  :DATEentre, :TEMPORALITEmois, :TEMPORALITEsaison,:NOMlocalisation, :NOMgenerique, :POSITIONhemisphere, :POSITIONx, :POSITIONy, :POSITIONz, :NORMALEte, :NORMALEpr,:NORMALE2,:NORMALE3,:NORMALE4, :RESULTATkoge, :RESULTATgaus, :RESULTATmart)';
 echo '<br /> balise1';
 echo '<br /> sqlQuery >>> ' . $sqlQuery;
 $SaveStatement = $db->prepare($sqlQuery);
 echo '<br /> balise2';
 try {
-    $SaveStatement->execute(['COMPTEclef' => $user, 'COMPTEvisibilite' => $visibilite, 'DATEentre' => date('Y-m-d'), 'TEMPORALITEmois' => $stringMonth, 'TEMPORALITEsaison' => $stringSaison, 'POSITIONhemisphere' => $Hémisphère, 'POSITIONx' => $Px, 'POSITIONy' => $PY, 'POSITIONz' => $PZ,  'NORMALEte' => $stringTe, 'NORMALEpr' => $stringPr, 'RESULTATkoge' => $climatKG, 'RESULTATgaus' => $stringAr, 'RESULTATmart' => $stringIm]);
+    $SaveStatement->execute(['COMPTEclef' => $user, 'COMPTEvisibilite' => $visibilite, 'DATEentre' => date('Y-m-d'), 'TEMPORALITEmois' => $stringMonth, 'TEMPORALITEsaison' => $stringSaison, 'NOMlocalisation' => $NOMstation, 'NOMgenerique' => $NONgenerique, 'POSITIONhemisphere' => $Hémisphère, 'POSITIONx' => $Px, 'POSITIONy' => $PY, 'POSITIONz' => $PZ,  'NORMALEte' => $stringTe, 'NORMALEpr' => $stringPr, 'NORMALE2' => $stringNC3, 'NORMALE3' => $stringNC4, 'NORMALE4' => $stringNC5, 'RESULTATkoge' => $climatKG, 'RESULTATgaus' => $stringAr, 'RESULTATmart' => $stringIm]);
 } catch (PDOException $e) {
     echo 'Erreur : ' . $e->getMessage();
 }
 echo '<br /> balise3';
-header("Location: testClimatResultatTerTer.php");
+//header("Location: testClimatResultatTerTer.php");
 exit;
