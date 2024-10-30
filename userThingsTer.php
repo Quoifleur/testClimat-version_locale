@@ -3,14 +3,8 @@ session_start();
 include('connexion/bdconnexion.php');
 $compteActif = false;
 // Déconnexion
-if (isset($_POST['deconnexion']) && isset($_COOKIE['logged'])) {
-    $compteActif = false;
-    setcookie('logged', $value['clef'], time() + 1, '/', '', true, true);
-    unset($_COOKIE['logged']);
-    session_destroy();
-    header('Location: userThingsLogin.php');
-    exit();
-}
+include('connexion/deconnexion.php');
+
 if (isset($_COOKIE['logged'])) {
     $user = strip_tags($_COOKIE['logged']);
     $compteActif = true;
@@ -154,7 +148,8 @@ if (isset($user)) {
                 if (!$compteActif) {
                     echo 'Connectez-vous (ou inscrivez-vous) pour pouvoir sauvegarder vos données et plus encore. <br /><a href="userThingsLogin.php">Connection et inscription</a>';
                 } else {
-                    echo 'Bienvenue sur votre compte. <br /><form method="post"><button method="post" type="submit" name="deconnexion" value="deconnexion">Déconnexion</button></form>';
+                    echo 'Bienvenue sur votre compte. <br />';
+                    include('connexion/formulaireDeconnexion.php');
                     echo '<p>Pour supprimer votre compte et effacer toutes vos données associé merci d\'aller à la page de <a href="userThingsCompte.php">gestion du compte</a> </p>';
                 } ?>
             </p>

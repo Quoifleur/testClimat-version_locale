@@ -9,13 +9,7 @@ function random_string($length)
     return $str;
 }
 // Déconnexion
-if (isset($_POST['deconnexion']) && isset($_COOKIE['logged'])) {
-    setcookie('logged', $value['clef'], time() + 1, '/', 'testclimat.ovh', true, true);
-    unset($_COOKIE['logged']);
-    session_destroy();
-    header('Location: userThingsLogin.php');
-    exit();
-}
+include('connexion/deconnexion.php');
 
 $newUser = false;
 $dateInscription = date('Y-m-d H:i:s');
@@ -47,9 +41,9 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
                 if ($USERSmail[$i] === $email && password_verify($passwordAverifier, $USERSpassword[$i])) {
                     $newUser = false;
                     if (isset($_POST['SIGcheckbox'])) {
-                        setcookie('logged', $USERSclef[$i], time() + 3600 * 24 * 365, '/', 'testclimat.ovh', true, true);
+                        setcookie('logged', $USERSclef[$i], time() + 3600 * 24 * 365, '/', null, true, true);
                     } else {
-                        setcookie('logged', $USERSclef[$i], time() + 3600 * 24, '/', 'testclimat.ovh', true, true);
+                        setcookie('logged', $USERSclef[$i], time() + 3600 * 24, '/', null, true, true);
                     }
                     $newUser = false;
                     header('Location: userThingsTer.php');
@@ -68,14 +62,16 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
         $query->execute(['clef' => $clef, 'mail' => $email, 'password' => $password, 'dateInscription' => $dateInscription]);
         $user = $query->fetch();
         if (isset($_POST['SIGcheckbox'])) {
-            setcookie('logged', $user['clef'], time() + 3600 * 24 * 365, null, null, false, true);
+            echo 'cookie';
+            echo $clef;
+            setcookie('logged', $user['clef'], time() + 3600 * 24 * 365, null, null, false, false);
         } else {
-            setcookie('logged', $user['clef'], time() + 3600 * 24, null, null, false, true);
+            setcookie('logged', $user['clef'], time() + 3600 * 24, null, null, false, false);
         }
         if (!isset($_COOKIE['user'])) {
             $_COOKIE['user'] = $_COOKIE['logged'];
         }
-        header('Location: userThingsTer.php');
+        //header('Location: userThingsTer.php');
         exit();
     }
 }
@@ -103,7 +99,7 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
             <?php
             if (isset($_COOKIE['logged'])) {
                 echo '<p>Vous êtes déjà connecté</p><br />';
-                echo '<form method="post"><button method="post" type="submit" name="deconnexion" value="deconnexion">Déconnexion</button></form>';
+                include('connexion/formulaireDeconnexion.php');
             } else {
                 include('connexion/formulaireLogin.php');
                 echo 'Mot de passe oublié ? <a href="userThingsLoginMAIL.php">Cliquez ici</a>';
