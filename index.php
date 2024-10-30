@@ -1,10 +1,15 @@
 <?php
 session_start();
+$LienVersTraitementDesClimats = '';
 if (isset($_COOKIE['user'])) {
 	$_SESSION['nom'] = $_COOKIE['user'];
 	if (isset($_COOKIE['logged'])) {
+		$LienVersTraitementDesClimats = 'testClimatinSQLTer.php';
 		$_SESSION['nom'] = $_COOKIE['logged'];
 	}
+}
+if ($LienVersTraitementDesClimats !== 'testClimatinSQLTer.php') {
+	$LienVersTraitementDesClimats = 'testClimatResultatsanscokiees.php';
 }
 /*
 //echo $_SESSION['nom'] . '<br />';
@@ -37,9 +42,11 @@ if (!isset($_COOKIE['user'])) {
 	<main>
 		<section class="section_intro">
 			<h1>Bienvenue chez TestClimat !</h1>
-			<?php echo $_SESSION['nom'] . '<br />';
+			<?php
+			echo $_SESSION['nom'] . '<br />';
 			echo $_COOKIE['user'] . '<br />';
-			echo $_COOKIE['logged'] . '<br />'; ?>
+			echo $_COOKIE['logged'] . '<br />';
+			?>
 			<p>Pour vous connecter ou pvous inscrire merci d'aller sur la <a href="userThingsLogin.php">page de connection et d'inscription</a></p>
 			<p>
 				TestClimat est un outil gratuit pour déterminer le climat (selon la classification de <a href="https://fr.wikipedia.org/wiki/Classification_de_K%C3%B6ppen">Köppen-Geiger</a>) d'un lieu donné à partir de données climatiques.
@@ -47,77 +54,8 @@ if (!isset($_COOKIE['user'])) {
 			<a href="info.php">php.info</a>
 		</section>
 		<section class="section_milieu">
-			<!--<h2>Rentrer vos valeurs dans ce tableaux</h2>
-		<div class="longueur">
-			<form method='post' action = 'testClimatResultat.php'>
-				<legend>Les valeurs ont était récolté dans l'hémisphère :</legend>
-				<div>
-				<input type="radio" id="Nord" name="hémisphère" value="Nord" checked>
-				<label for="Nord">Nord</label>
-				</div>
-				<div>
-				<input type="radio" id="Sud" name="hémisphère" value="Sud">
-				<label for="Sud">Sud</label>
-				</div>
-				<table>
-					<colgroup span="13" class="columns"> </colgroup>
-					<tr>
-						<th class="month" scope="col">/</th>
-						<th class="month" scope="col">Janvier</th>
-						<th class="month" scope="col">Février</th>
-						<th class="month" scope="col">Mars</th>
-						<th class="month" scope="col">Avril</th>
-						<th class="month" scope="col">Mai</th>
-						<th class="month" scope="col">Juin</th>
-						<th class="month" scope="col">Juillet</th>
-						<th class="month" scope="col">Aout</th>
-						<th class="month" scope="col">Septembre</th>
-						<th class="month" scope="col">Octobre</th>
-						<th class="month" scope="col">Novembre</th>
-						<th class="month" scope="col">Décenbre</th>
-					</tr>
-					<tr>
-						<th scope="row">Température (°C)</th>
-						<td><input type="number" placeholder="0" step="0.01" id="TM1" name="TM1" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="TM2" name="TM2" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="TM3" name="TM3" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="TM4" name="TM4" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="TM5" name="TM5" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="TM6" name="TM6" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="TM7" name="TM7" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="TM8" name="TM8" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="TM9" name="TM9" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="TM10" name="TM10" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="TM11" name="TM11" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="TM12" name="TM12" maxlength="5" size="4" required></td>
-					</tr>
-					<tr>
-						<th scope="row">Précipitation (mm)</th>
-						<td><input type="number" placeholder="0" step="0.01" id="PM1" name="PM1" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="PM2" name="PM2" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="PM3" name="PM3" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="PM4" name="PM4" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="PM5" name="PM5" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="PM6" name="PM6" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="PM7" name="PM7" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="PM8" name="PM8" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="PM9" name="PM9" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="PM10" name="PM10" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="PM11" name="PM11" maxlength="5" size="4" required></td>
-						<td><input type="number" placeholder="0" step="0.01" id="PM12" name="PM12" maxlength="5" size="4" required></td>
-					</tr>
-				</table>
-				<div>
-					<input type="submit" value="Envoyer">
-				</div>
-			</form>
-		</div>	 -->
 			<div class="hauteur">
-				<form method='post' action=<?php if (isset($_COOKIE['logged'])) {
-												echo '"testClimatinSQLTer.php"';
-											} else {
-												echo '"testClimatResultatsanscokiees.php"';
-											} ?>>
+				<form method='post' action="<?php echo $LienVersTraitementDesClimats; ?>">
 					<legend>Les valeurs ont était récolté dans l'hémisphère :</legend>
 					<div>
 						<input type="radio" id="Nord" name="hémisphère" value="Nord" checked>
@@ -212,11 +150,7 @@ if (!isset($_COOKIE['user'])) {
 			<br />Remplacer TM1 pour la valeur des températures de janvier, TM2 pour celles de février etc. De même pour les précipitations dans le deuxième cadre.
 			<br />Les valeurs doivent être séparés par des virgules, merci d'écrire les valeurs décimals avec des points (Pour en savoir plus voir la rubrique <a href="testClimatAide.php">Aide</a>).
 			</p>
-			<form method='post' action=<?php if (isset($_COOKIE['logged'])) {
-											echo '"testClimatinSQLTer.php"';
-										} else {
-											echo '"testClimatResultatsanscokiees.php"';
-										} ?> enctype='multipart/form-data'>
+			<form method='post' action="<?php echo $LienVersTraitementDesClimats; ?>" enctype='multipart/form-data'>
 				<legend>*Les valeurs ont était récolté dans l'hémisphère :</legend>
 				<div class="boiteHémisphère">
 					<div class="">

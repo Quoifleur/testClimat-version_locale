@@ -5,7 +5,7 @@ $compteActif = false;
 // Déconnexion
 if (isset($_POST['deconnexion']) && isset($_COOKIE['logged'])) {
     $compteActif = false;
-    setcookie('logged', $value['clef'], time() + 1, '/', 'testclimat.ovh', true, true);
+    setcookie('logged', $value['clef'], time() + 1, '/', '', true, true);
     unset($_COOKIE['logged']);
     session_destroy();
     header('Location: userThingsLogin.php');
@@ -103,7 +103,7 @@ if (isset($user)) {
     if (!isset($NbRowInTable)) {
         $NbRowInTable = 0;
     }
-    // Pour nommer les climats
+    /* Pour nommer les climats
     echo $user;
     $a = 0;
     $Nommage = array();
@@ -130,6 +130,7 @@ if (isset($user)) {
     }
     //téléchargement des données
     include('outils/download_Climat.php');
+    */
 }
 ?>
 <!DOCTYPE html>
