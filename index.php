@@ -171,7 +171,7 @@ if (isset($_COOKIE['logged'])) {
 						<input type="text" placeholder="POSITIONaltitude(z)-WGS 84" id="PZc" name="PZc">
 					</div>
 					<div class="">
-						<input type="text" placeholder="PERIODEdebut-fin" id="TPc" name="TPc">
+						<input type="text" placeholder="ANNEE" id="TPc" name="TPc" minlength="4" maxlength="4">
 					</div>
 					<div class="box huit">
 						<input type="submit" value="Envoyer">
