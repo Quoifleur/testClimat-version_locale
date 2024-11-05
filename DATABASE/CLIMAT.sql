@@ -30,24 +30,24 @@ SET
 -- Structure de la table `CLIMAT`
 --
 CREATE TABLE
-  `CLIMAT` (
-    `id` int UNSIGNED NOT NULL,
+  `climat` (
+    `id` int (10) UNSIGNED NOT NULL,
     `COMPTEclef` varchar(64) DEFAULT NULL,
     `COMPTEvisibilite` tinyint (1) DEFAULT '0',
     `AC` varchar(32) DEFAULT NULL,
-    `SAVE` int DEFAULT NULL,
-    `RAM` int DEFAULT NULL,
-    `DATEcollecte` date DEFAULT NULL,
+    `SAVE` int (11) DEFAULT NULL,
+    `RAM` int (11) DEFAULT NULL,
+    `DATEcollecte` year (4) DEFAULT '0000',
     `DATEentre` date DEFAULT NULL,
     `TEMPORALITEperiode` varchar(9) DEFAULT NULL,
     `TEMPORALITEmois` varchar(128) DEFAULT NULL,
     `TEMPORALITEsaison` varchar(24) DEFAULT NULL,
-    `NOMlocalisation` varchar(32) DEFAULT NULL,
-    `NOMgenerique` varchar(32) DEFAULT NULL,
+    `NOMlocalisation` varchar(255) DEFAULT NULL,
+    `NOMgenerique` varchar(255) DEFAULT NULL,
     `POSITIONhemisphere` varchar(8) DEFAULT NULL,
-    `POSITIONx` decimal(20, 20) DEFAULT NULL,
-    `POSITIONy` decimal(20, 20) DEFAULT NULL,
-    `POSITIONz` decimal(20, 20) DEFAULT NULL,
+    `POSITIONx` decimal(20, 10) DEFAULT NULL,
+    `POSITIONy` decimal(20, 10) DEFAULT NULL,
+    `POSITIONz` decimal(20, 10) DEFAULT NULL,
     `NORMALEte` varchar(256) DEFAULT NULL,
     `NORMALEpr` varchar(256) DEFAULT NULL,
     `NORMALE2` varchar(256) DEFAULT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE
     `RESULTATkoge` varchar(256) DEFAULT NULL,
     `RESULTATgaus` varchar(256) DEFAULT NULL,
     `RESULTATmart` varchar(256) DEFAULT NULL
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb3;
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 --
 -- Déchargement des données de la table `CLIMAT`

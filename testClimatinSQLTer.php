@@ -498,9 +498,11 @@ for ($i = 0; $i < 11; $i++) {
     $stringSaison .= $Saison[$i] . ',';
     $stringPr .= $Pr[$i] . ',';
     $stringTe .= $Te[$i] . ',';
-    $stringNC3 .= $NC3[$i] . ',';
-    $stringNC4 .= $NC4[$i] . ',';
-    $stringNC5 .= $NC5[$i] . ',';
+    if ($NC3 != null && $NC4 != null && $NC5 != null) {
+        $stringNC3 .= $NC3[$i] . ',';
+        $stringNC4 .= $NC4[$i] . ',';
+        $stringNC5 .= $NC5[$i] . ',';
+    }
     $stringAr .= $Ar[$i] . ',';
     $stringIm .= $Im[$i] . ',';
 }
@@ -509,13 +511,17 @@ $stringMonth .= $month[$i];
 $stringSaison .= $Saison[$i];
 $stringPr .= $Pr[$i];
 $stringTe .= $Te[$i];
-$stringNC3 .= $NC3[$i];
-$stringNC4 .= $NC4[$i];
-$stringNC5 .= $NC5[$i];
+if ($NC3 != null && $NC4 != null && $NC5 != null) {
+    $stringNC3 .= $NC3[$i];
+    $stringNC4 .= $NC4[$i];
+    $stringNC5 .= $NC5[$i];
+}
 $stringAr .= $Ar[$i];
 $stringIm .= $Im[$i];
 $save = 1;
 $ram = 1;
+$TEMPORALITEanneeInt = intval($TEMPORALITEannee);
+echo '<br />TEMPORALITEannee >>> ' . $TEMPORALITEannee;
 echo '<br />NOMstation >>> ' . $NOMstation;
 echo '<br />NONgenerique >>> ' . $NONgenerique;
 echo '<br />Hémisphère >>> ' . $Hémisphère;
@@ -535,21 +541,42 @@ echo '<br />$ram >>> ' . $ram;
 echo '<br />';
 echo '<br />$_SESSION[nom] >>> ' . $_SESSION['nom'];
 echo '<br />$_COOKIE[logged] >>> ' . $_COOKIE['logged'];
-
+$Px = 45.763; // Exemple de valeur
 //Save des anciennes valeurs
 //$SaveStatement = $db->prepare('UPDATE ' . $user . ' SET Save = Save+1');
 //$SaveStatement->execute([]) or die(print_r($db->errorInfo()));
 //Ajout des nouvelles valeurs
-$sqlQuery = 'INSERT INTO  `climat` (COMPTEclef, COMPTEvisibilite,DATEcollecte; DATEentre, TEMPORALITEmois, TEMPORALITEsaison, NOMlocalisation, NOMgenerique, POSITIONhemisphere, POSITIONx, POSITIONy, POSITIONz, NORMALEte, NORMALEpr, NORMALE2,NORMALE3,NORMALE4, RESULTATkoge, RESULTATgaus, RESULTATmart) VALUES (:COMPTEclef, :COMPTEvisibilite,:DATEcollecte,  :DATEentre, :TEMPORALITEmois, :TEMPORALITEsaison,:NOMlocalisation, :NOMgenerique, :POSITIONhemisphere, :POSITIONx, :POSITIONy, :POSITIONz, :NORMALEte, :NORMALEpr,:NORMALE2,:NORMALE3,:NORMALE4, :RESULTATkoge, :RESULTATgaus, :RESULTATmart)';
+$sqlQuery = 'INSERT INTO  `climat` (COMPTEclef, COMPTEvisibilite,DATEcollecte, DATEentre, TEMPORALITEmois, TEMPORALITEsaison, NOMlocalisation, NOMgenerique, POSITIONhemisphere, POSITIONx, POSITIONy, POSITIONz, NORMALEte, NORMALEpr, NORMALE2,NORMALE3,NORMALE4, RESULTATkoge, RESULTATgaus, RESULTATmart) VALUES (:COMPTEclef, :COMPTEvisibilite,:DATEcollecte,  :DATEentre, :TEMPORALITEmois, :TEMPORALITEsaison,:NOMlocalisation, :NOMgenerique, :POSITIONhemisphere, :POSITIONx, :POSITIONy, :POSITIONz, :NORMALEte, :NORMALEpr,:NORMALE2,:NORMALE3,:NORMALE4, :RESULTATkoge, :RESULTATgaus, :RESULTATmart)';
 echo '<br /> balise1';
 echo '<br /> sqlQuery >>> ' . $sqlQuery;
 $SaveStatement = $db->prepare($sqlQuery);
 echo '<br /> balise2';
 try {
-    $SaveStatement->execute(['COMPTEclef' => $user, 'COMPTEvisibilite' => $visibilite, 'DATEcollecte' => $TEMPORALITEannee, 'DATEentre' => date('Y-m-d'), 'TEMPORALITEmois' => $stringMonth, 'TEMPORALITEsaison' => $stringSaison, 'NOMlocalisation' => $NOMstation, 'NOMgenerique' => $NONgenerique, 'POSITIONhemisphere' => $Hémisphère, 'POSITIONx' => $Px, 'POSITIONy' => $PY, 'POSITIONz' => $PZ,  'NORMALEte' => $stringTe, 'NORMALEpr' => $stringPr, 'NORMALE2' => $stringNC3, 'NORMALE3' => $stringNC4, 'NORMALE4' => $stringNC5, 'RESULTATkoge' => $climatKG, 'RESULTATgaus' => $stringAr, 'RESULTATmart' => $stringIm]);
+    $SaveStatement->execute([
+        'COMPTEclef' => $user,
+        'COMPTEvisibilite' => $visibilite,
+        'DATEcollecte' => $TEMPORALITEanneeInt,
+        'DATEentre' => date('Y-m-d'),
+        'TEMPORALITEmois' => $stringMonth,
+        'TEMPORALITEsaison' => $stringSaison,
+        'NOMlocalisation' => $NOMstation,
+        'NOMgenerique' => $NONgenerique,
+        'POSITIONhemisphere' => $Hémisphère,
+        'POSITIONx' => $Px,
+        'POSITIONy' => $PY,
+        'POSITIONz' => $PZ,
+        'NORMALEte' => $stringTe,
+        'NORMALEpr' => $stringPr,
+        'NORMALE2' => $stringNC3,
+        'NORMALE3' => $stringNC4,
+        'NORMALE4' => $stringNC5,
+        'RESULTATkoge' => $climatKG,
+        'RESULTATgaus' => $stringAr,
+        'RESULTATmart' => $stringIm
+    ]);
 } catch (PDOException $e) {
     echo 'Erreur : ' . $e->getMessage();
 }
 echo '<br /> balise3';
-header("Location: testClimatResultatTerTer.php");
-exit;
+//header("Location: testClimatResultatTerTer.php");
+//exit;

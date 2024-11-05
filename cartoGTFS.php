@@ -25,7 +25,7 @@ if ($fichierChargé) {
         $stop[$i]['x'] = $Info[$i][4];
         $stop[$i]['y'] = $Info[$i][5];
     }
-    //baricentre
+    /*baricentre
     $coordo = explode(',', baricentre($Info));
     //echo $coordo[0] . ',' . $coordo[1];
     $lat = json_encode($coordo[0]);
@@ -70,5 +70,5 @@ if ($fichierChargé) {
     }
     fwrite($fichierGEOJSON, "]},");
     fwrite($fichierGEOJSON, "\r\n\"properties\": {\"name\": \"" . $id . "\"}");
-    fwrite($fichierGEOJSON, "}]}");
+    fwrite($fichierGEOJSON, "}]}");*/
 }

@@ -235,7 +235,7 @@ include('cartoGTFS.php');
         </section>
         <section class="section_fin">
             <?php
-            include('cartodessinGTFS.php');
+            //include('cartodessinGTFS.php');
             ?>
             <img src="carte.png" alt="Carte">
             <!--<button id="toggleStops">Afficher/Masquer les arrêts</button>
