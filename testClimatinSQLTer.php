@@ -578,5 +578,5 @@ try {
     echo 'Erreur : ' . $e->getMessage();
 }
 echo '<br /> balise3';
-//header("Location: testClimatResultatTerTer.php");
-//exit;
+header("Location: testClimatResultatTerTer.php");
+exit;
