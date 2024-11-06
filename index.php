@@ -23,9 +23,9 @@ if (isset($_COOKIE['logged'])) {
 		<section class="section_intro">
 			<h1>Bienvenue chez TestClimat !</h1>
 			<?php
-			echo $LienVersTraitementDesClimats . '<br />';
-			echo $_SESSION['nom'] . '<br />';
-			echo $_COOKIE['logged'] . '<br />';
+			//echo $LienVersTraitementDesClimats . '<br />';
+			//echo $_SESSION['nom'] . '<br />';
+			//echo $_COOKIE['logged'] . '<br />';
 			?>
 			<p>Pour vous connecter ou pvous inscrire merci d'aller sur la <a href="userThingsLogin.php">page de connection et d'inscription</a></p>
 			<p>

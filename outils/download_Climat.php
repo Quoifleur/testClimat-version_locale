@@ -100,18 +100,6 @@ if ($climatAtelecharger != null && $instruction != null) {
     unlink($downloadNom);
     exit;
 }
-/*
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename="' . basename($downloadNom) . '"');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($downloadNom));
-    readfile($downloadNom);
-    unlink($downloadNom);
-    exit;*/
-
 /* Pour un affichage moins compacts. Mise en page différntes. (pas tout à fait satisfaisant)
         for ($i = 0; $i < $NbRowInTable; $i++) {
             $ligne = ''; // Initialiser une chaîne vide pour chaque ligne

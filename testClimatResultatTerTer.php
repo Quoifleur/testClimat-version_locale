@@ -97,6 +97,7 @@ $Pr = explode(',', $NORMALEPr[$climatSelected]);
 $month = explode(',', $TEMPORALITEmois[$climatSelected]);
 $Saison = explode(',', $SAISON[$climatSelected]);
 $Nom = $NOMlocation[$climatSelected];
+$NOMgenerique = $NOMgenerique[$climatSelected];
 $Ikg = explode(',', $RESULTATkoge[$climatSelected]);
 $Ar = explode(',', $RESULTATgaus[$climatSelected]);
 $Im = explode(',', $RESULTATmart[$climatSelected]);
@@ -104,7 +105,8 @@ $hémisphère = $POSITIONhemisphere[$climatSelected];
 $Px = explode(',', $POSITIONx[$climatSelected]);
 $Py = explode(',', $POSITIONy[$climatSelected]);
 $Pz = explode(',', $POSITIONz[$climatSelected]);
-
+$DATE_collecte = $DATEcollecte[$climatSelected];
+$DATE_entre = $DATEentre[$climatSelected];
 //Traitement des données :
 /*Calcule des variables */
 $LettreClimat = $Ikg[0];
@@ -243,6 +245,52 @@ $JsonHémisphère = json_encode($hémisphère);
                 echo '<br /> Le climat trouvé est le suivant : <b>' . $NomClimat .  '</b>; Lettes associées : <b>' . $LettreClimat . '</b>'; ?>
                 <br /><br /><b>Ce climat a été enregistré automatiquement</b>, pour retrouver tous vos anciens climats recherchés, rendez-vous sur la page <a href="userThingsTer.php">compte</a>.
             </p>
+            <table>
+                <colgroup>
+                    <col span="1" class="Nom de la sation">
+                    <col span="1" class="Nom générique">
+                    <col span="1" class="DATEcollecte">
+                    <col span="1" class="DATEentre">
+                    <col span="1" class="POSITIONx">
+                    <col span="1" class="POSITIONy">
+                    <col span="1" class="POSITIONz">
+                </colgroup>
+                <tr>
+                    <th scope="col">
+                        <label for="Nom de la sation">Nom de la sation</label>
+                    </th>
+                    <th scope="col">
+                        <label for="Nom générique">Nom générique</label>
+                    </th>
+                    <th scope="col">
+                        <label for="DATEcollecte">DATEcollecte</label>
+                    </th>
+                    <th scope="col">
+                        <label for="DATEentre">DATEentre</label>
+                    </th>
+                    <th scope="col">
+                        <label for="POSITIONx">POSITIONx</label>
+                    </th>
+                    <th scope="col">
+                        <label for="POSITIONy">POSITIONy</label>
+                    </th>
+                    <th scope="col">
+                        <label for="POSITIONz">POSITIONz</label>
+                    </th>
+                </tr>
+                <?php
+                echo '
+                <tr>
+                    <th class="' . $Nom . '">' . $Nom . '</th>
+                    <td class="' . $NOMgenerique . '">' . $NOMgenerique . '</td>
+                    <td class="' . $DATE_collecte . '">' . $DATE_collecte . '</td>
+                    <td class="' . $DATE_entre . '">' . $DATE_entre . '</td>
+                    <td class="' . $Px[0] . '">' . $Px[0] . '</td>
+                    <td class="' . $Py[0] . '">' . $Py[0] . '</td>
+                    <td class="' . $Pz[0] . '">' . $Pz[0] . '</td>
+                </tr>';
+                ?>
+            </table>
         </section>
         <section class="section_milieu">
             <div>
