@@ -64,9 +64,9 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
         if (isset($_POST['SIGcheckbox'])) {
             echo 'cookie';
             echo $clef;
-            setcookie('logged', $user['clef'], time() + 3600 * 24 * 365, null, null, false, false);
+            setcookie('logged', $user['clef'], time() + 3600 * 24 * 365, '/', null, true, true);
         } else {
-            setcookie('logged', $user['clef'], time() + 3600 * 24, null, null, false, false);
+            setcookie('logged', $user['clef'], time() + 3600 * 24, '/', null, true, true);
         }
         if (!isset($_COOKIE['user'])) {
             $_COOKIE['user'] = $_COOKIE['logged'];

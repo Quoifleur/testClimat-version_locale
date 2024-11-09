@@ -1,104 +1,13 @@
 <?php
 session_start();
-include('connexion/bdconnexion.php');
-
-global $climatStatement;
-$user = strip_tags($_COOKIE['logged']) ?? null;
-
-// On récupère tout le contenu de la table données
-$sqlQuery = 'SELECT * FROM climat WHERE COMPTEclef = :COMPTEclef';
-$climatStatement = $db->prepare($sqlQuery);
-$climatStatement->execute(['COMPTEclef' => $user]);
-$climatCherche = $climatStatement->fetchAll();
-$id = array();
-foreach ($climatCherche as $value) {
-    $id[] = $value['id'];
-    $Save[] = $value['SAVE'];
-    $DATEcollecte[] = $value['DATEcollecte'];
-    $DATEentre[] = $value['DATEentre'];
-    $TEMPORALITEperiode[] = $value['TEMPORALITEperiode'];
-    $TEMPORALITEmois[] = $value['TEMPORALITEmois'];
-    $NOMlocation[] = $value['NOMlocalisation'];
-    $NOMgenerique[] = $value['NOMgenerique'];
-    $POSITIONhemisphere[] = $value['POSITIONhemisphere'];
-    $POSITIONx[] = $value['POSITIONx'];
-    $POSITIONy[] = $value['POSITIONy'];
-    $POSITIONz[] = $value['POSITIONz'];
-    $SAISON[] = $value['TEMPORALITEsaison'];
-    $NORMALETe[] = $value['NORMALEte'];
-    $NORMALEPr[] = $value['NORMALEpr'];
-    $NORMALE2[] = $value['NORMALE2'];
-    $NORMALE3[] = $value['NORMALE3'];
-    $NORMALE4[] = $value['NORMALE4'];
-    $RESULTATkoge[] = $value['RESULTATkoge'];
-    $RESULTATgaus[] = $value['RESULTATgaus'];
-    $RESULTATmart[] = $value['RESULTATmart'];
-}
-$NbRowInTable = count($id);
-$InfoVoir = strip_tags($_GET['Voir'] ?? null);
-if ($InfoVoir == null) {
-    for ($i = 0; $i < 4; $i++) {
-        $Info[$i] = null;
-    }
-} else {
-    $Info = explode(" ",  $InfoVoir);
-}
-if ($Info[2] == null || !is_numeric($Info[2]) || $Info[2] > $NbRowInTable - 1 || $Info[2] < 0) {
-    $climatSelected = $NbRowInTable - 1;
-} else {
-    $climatSelected = $Info[2];
-}
-// Récupération du bon climat
-$Te = explode(',', $NORMALETe[$climatSelected]);
-$Pr = explode(',', $NORMALEPr[$climatSelected]);
-$month = explode(',', $TEMPORALITEmois[$climatSelected]);
-$Saison = explode(',', $SAISON[$climatSelected]);
-$Nom = $NOMlocation[$climatSelected];
-$NOMgenerique = $NOMgenerique[$climatSelected];
-$Ikg = explode(',', $RESULTATkoge[$climatSelected]);
-$Ar = explode(',', $RESULTATgaus[$climatSelected]);
-$Im = explode(',', $RESULTATmart[$climatSelected]);
-$hémisphère = $POSITIONhemisphere[$climatSelected];
-$Px = explode(',', $POSITIONx[$climatSelected]);
-$Py = explode(',', $POSITIONy[$climatSelected]);
-$Pz = explode(',', $POSITIONz[$climatSelected]);
-$DATE_collecte = $DATEcollecte[$climatSelected];
-$DATE_entre = $DATEentre[$climatSelected];
-//Traitement des données :
-/*Calcule des variables */
-$LettreClimat = $Ikg[0];
-$NomClimat = $Ikg[1];
-$Tmax = max($Te);
-$Tmin = min($Te);
-$Tannuelle = array_sum($Te) / 12;
-$Pmax = max($Pr);
-$Pmin = min($Pr);
-$Pannuelle = array_sum($Pr);
-$IMmax = max($Im);
-$IMmin = min($Im);
-
-for ($i = 0; $i < 12; $i++) {
-    $Ar[$i] = ((bool) $Ar[$i]);
-    if ($Ar[$i]) {
-        $Ar[$i] = '<b> OUI </b>';
-    } else {
-        $Ar[$i] = 'non';
-    }
-}
-if ($hémisphère == 'Nord') {
-    $Nord = true;
-} elseif ($hémisphère == 'Sud') {
-    $Nord = false;
-}
 
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <?php include('navigation/head.php'); ?>
-    <title>testClimatModificationClimat</title>
+    <title>testClimat</title>
 </head>
 
 <body>
@@ -106,94 +15,76 @@ if ($hémisphère == 'Nord') {
     <?php include('navigation/nav.php'); ?>
     <main>
         <section class="section_intro">
-            <h1>Climat</h1>
-            <table>
-                <colgroup>
-                    <col span="1" class="Nom de la sation">
-                    <col span="1" class="Nom générique">
-                    <col span="1" class="DATEcollecte">
-                    <col span="1" class="DATEentre">
-                    <col span="1" class="POSITIONx">
-                    <col span="1" class="POSITIONy">
-                    <col span="1" class="POSITIONz">
-                </colgroup>
-                <tr>
-                    <th scope="col">
-                        <label for="Nom de la sation">Nom de la sation</label>
-                    </th>
-                    <th scope="col">
-                        <label for="Nom générique">Nom générique</label>
-                    </th>
-                    <th scope="col">
-                        <label for="DATEcollecte">DATEcollecte</label>
-                    </th>
-                    <th scope="col">
-                        <label for="DATEentre">DATEentre</label>
-                    </th>
-                    <th scope="col">
-                        <label for="POSITIONx">POSITIONx</label>
-                    </th>
-                    <th scope="col">
-                        <label for="POSITIONy">POSITIONy</label>
-                    </th>
-                    <th scope="col">
-                        <label for="POSITIONz">POSITIONz</label>
-                    </th>
-                </tr>
-                <?php
-                echo '
-                <tr>
-                    <th class="' . $Nom . '">' . $Nom . '</th>
-                    <td class="' . $NOMgenerique . '">' . $NOMgenerique . '</td>
-                    <td class="' . $DATE_collecte . '">' . $DATE_collecte . '</td>
-                    <td class="' . $DATE_entre . '">' . $DATE_entre . '</td>
-                    <td class="' . $Px[0] . '">' . $Px[0] . '</td>
-                    <td class="' . $Py[0] . '">' . $Py[0] . '</td>
-                    <td class="' . $Pz[0] . '">' . $Pz[0] . '</td>
-                </tr>';
-                ?>
-            </table>
+            <h1>Bienvenue chez TestClimat !</h1>
+            <?php
+            //echo $LienVersTraitementDesClimats . '<br />';
+            //echo $_SESSION['nom'] . '<br />';
+            //echo $_COOKIE['logged'] . '<br />';
+            ?>
+            <p>Pour vous connecter ou pvous inscrire merci d'aller sur la <a href="userThingsLogin.php">page de connection et d'inscription</a></p>
+            <p>
+                TestClimat est un outil gratuit pour déterminer le climat (selon la classification de <a href="https://fr.wikipedia.org/wiki/Classification_de_K%C3%B6ppen">Köppen-Geiger</a>) d'un lieu donné à partir de données climatiques.
+            </p>
         </section>
         <section class="section_milieu">
-            <form>
-                <legend>Les valeurs ont était récolté dans l'hémisphère :</legend>
-                <div>
-                    <input type="radio" id="Nord" name="hémisphère" value="Nord" checked>
-                    <label for="Nord">Nord</label>
-                </div>
-                <div>
-                    <input type="radio" id="Sud" name="hémisphère" value="Sud">
-                    <label for="Sud">Sud</label>
-                </div>
-                <table>
-                    <colgroup>
-                        <col span="1" class="month">
-                        <col span="1" class="ValeurTempérature">
-                        <col span="1" class="ValeurPrécipitation">
-                    </colgroup>
-                    <tr>
-                        <th class="month" scope="col">/</th>
-                        <th scope="col">Température (°C)</th>
-                        <th scope="col">Précipitation (mm)</th>
-                    </tr>
-                    <?php
-                    for ($i = 0; $i < 12; $i++) {
-                        echo '
-                        <tr>
-                            <th class="month" scope="row">' . $month[$i] . '</th>
-                            <td><input type="number" placeholder="0" step="0.01" id="TM' . $i . '" name="TM' . $i . '" maxlength="5" size="4" required value="' . $Te[$i] . '"></td>
-                            <td><input type="number" placeholder="0" step="0.01" id="PM' . $i . '" name="PM' . $i . '" maxlength="5" size="4" required value="' . $Pr[$i] . '"></td>
-                        </tr>';
-                    }
-                    ?>
-                </table>
-                <input type="submit" value="Envoyer">
-            </form>
 
-
-            </form>
         </section>
         <section class="section_fin">
+            <p>
+            <h2>Ou dans les cadres ci-dessous : </h2>
+            Le premier cadre est pour les températures, le second pour les précipitations.
+            <br />Remplacer TM1 pour la valeur des températures de janvier, TM2 pour celles de février etc. De même pour les précipitations dans le deuxième cadre.
+            <br />Les valeurs doivent être séparés par des virgules, merci d'écrire les valeurs décimals avec des points (Pour en savoir plus voir la rubrique <a href="testClimatAide.php">Aide</a>).
+            </p>
+            <form method='post' action="<?php echo $LienVersTraitementDesClimats; ?>" enctype='multipart/form-data'>
+                <legend>*Les valeurs ont était récolté dans l'hémisphère :</legend>
+                <div class="boiteHémisphère">
+                    <div class="">
+                        <input type="radio" id="Nord" name="hémisphère" value="Nord" checked>
+                        <label for="Nord">Nord</label>
+                    </div>
+                    <div class="">
+                        <input type="radio" id="Sud" name="hémisphère" value="Sud">
+                        <label for="Sud">Sud</label>
+                    </div>
+                    <div class="">
+                        <input type="text" placeholder="NOMlieux-dit,communes,département,..." id="NGc" name="NGc">
+                    </div>
+                    <div class="">
+                        <input type="text" placeholder="NOMstation" id="NSc" name="NSc">
+                    </div>
+                    <div class="">
+                        <input type="text" placeholder="*TM1,TM2,TM3,..." id="Tec" name="Tec" required>
+                    </div>
+                    <div class="">
+                        <input type="text" placeholder="*PM1,PM2,PM3,..." id="Prc" name="Prc" required>
+                    </div>
+                    <div class="">
+                        <input type="text" placeholder="NORMALEclimatique3" id="NC3c" name="NC3c">
+                    </div>
+                    <div class="">
+                        <input type="text" placeholder="NORMALEclimatique4" id="NC4c" name="NC4c">
+                    </div>
+                    <div class="">
+                        <input type="text" placeholder="NORMALEclimatique5" id="NC5c" name="NC5c">
+                    </div>
+                    <div class="">
+                        <input type="text" placeholder="POSITIONlongitude(x)-WGS 84" id="PXc" name="PXc">
+                    </div>
+                    <div class="">
+                        <input type="text" placeholder="POSITIONlattitude(y)-WGS 84" id="PYc" name="PYc">
+                    </div>
+                    <div class="">
+                        <input type="text" placeholder="POSITIONaltitude(z)-WGS 84" id="PZc" name="PZc">
+                    </div>
+                    <div class="">
+                        <input type="text" placeholder="ANNEE" id="TPc" name="TPc" minlength="4" maxlength="4">
+                    </div>
+                    <div class="box huit">
+                        <input type="submit" value="Envoyer">
+                    </div>
+                </div>
+            </form>
         </section>
     </main>
     <footer>

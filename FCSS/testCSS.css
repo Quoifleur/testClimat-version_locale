@@ -308,6 +308,7 @@ src {
 
     footer {
         background-color: rgba(91, 196, 154);
+        border: solid 1px rgba(114, 255, 198, 1);
         border-radius: 40px;
         padding: 1%;
         max-width: 60em;
@@ -331,9 +332,25 @@ src {
 
 @media (max-width: 1000px) {
     header {
-        border-radius: 0px 0px 0px 0px;
+        background: rgb(91, 196, 154);
+        font-family: 'Merriweather', serif;
+        font-style: italic;
+        font-size: 2.5em;
+        text-align: center;
+        color: rgb(255, 225, 106);
+        padding: 2%;
         margin-top: 0px;
+        left: 25%;
         max-width: 60em;
+    }
+
+    nav {
+        padding: 0%;
+        width: 100%;
+        border-radius: 0px;
+        background-color: rgb(52, 154, 115);
+        border-bottom: solid 1px rgba(114, 255, 198, 1);
+
     }
 
     main {
@@ -345,13 +362,13 @@ src {
         flex: 1;
     }
 
-    nav {
-        padding: 0%;
-        width: 100%;
-        border-radius: 0px;
+
+    footer {
+        height: max-content;
+        max-width: 60em;
+        border-radius: 0%;
         background-color: rgb(52, 154, 115);
-        border-bottom: solid;
-        border-bottom-color: rgb(255, 225, 106);
+        border-top: solid 1px rgba(114, 255, 198, 1);
     }
 
     .menu {
@@ -389,14 +406,7 @@ src {
         display: none;
     }
 
-    footer {
-        height: max-content;
-        max-width: 60em;
-        border-radius: 0%;
-        background-color: rgb(52, 154, 115);
-        border-top: solid;
-        border-top-color: rgb(255, 225, 106);
-    }
+
 
 
     /*body{

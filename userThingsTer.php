@@ -185,7 +185,7 @@ if (isset($user)) {
 						<td><code>' . $LettreClimat[$i] . '</code></td>
 						<td><code>' . $hémisphère[$i] . '</code></td>
 						<td><form id="Save" name="Voir" method="get" action="testClimatResultatTerTer.php"> <input type="submit" name="Voir" value="Observer climat ' . $id[$i] . '" /></form></td>
-						<td><form id="nommer" name="nommer" method="get" action="userThingsTer.php"><input type="text" placeholder="" id="nom' . $id[$i] . '" name="nom' . $id[$i] . '" required><input type="submit" value="Nommer' . $id[$i] . '" /></form></td>
+						<td><form id="modifier" name="modifier" method="get" action="testClimatModificationClimat.php"><input type="submit" value="modifier' . $id[$i] . '" /></form></td>
 					  </tr>
 				    ';
                             $i++;
