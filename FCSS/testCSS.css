@@ -5,32 +5,9 @@ body {
     font-family: 'Ubuntu', sans-serif;
     background: linear-gradient(333deg, rgba(17, 122, 78, 1) 0%, rgb(6, 105, 100) 20%, rgb(37, 115, 178) 66%, rgba(104, 104, 235, 1) 100%);
     background-size: 100%;
-}
-
-header {
-    background: rgb(91, 196, 154);
-    /*background: linear-gradient(180deg, rgb(24, 99, 68) 0%, rgb(91, 196, 154) 87%); */
-    font-family: 'Merriweather', serif;
-    font-style: italic;
-    font-size: 2.5em;
-    text-align: center;
-    color: rgb(255, 225, 106);
-    border-radius: 40px 40px 0px 0px;
-    padding: 2%;
-    margin-top: 2%;
-    left: 25%;
-    max-width: 24em;
-}
-
-nav {
-    max-width: 60em;
-    background: rgb(91, 196, 154);
-    text-align: justify;
-    border-radius: 0px 0px 40px 40px;
-    padding: 2%;
-    position: sticky;
-    top: 0px;
-    z-index: 1;
+    color: #5BC49A;
+    font-size: 1em;
+    font-weight: 100;
 }
 
 a {
@@ -113,22 +90,6 @@ a:visited:hover {
     color: rgba(14, 112, 77);
 }
 
-.section_intro,
-.section_milieu,
-.section_fin,
-.section_legende {
-    background-color: rgba(159, 183, 180, 0.7);
-    padding: 1em;
-}
-
-.section_intro {
-    border-radius: 40px 40px 0px 0px;
-}
-
-.section_fin {
-    border-radius: 0px 0px 40px 40px;
-}
-
 .attention {
     border-top: solid 2px rgb(204, 125, 156);
     border-bottom: solid 2px rgb(204, 125, 156);
@@ -173,19 +134,19 @@ a:visited:hover {
 }
 
 h1 {
-    color: rgb(47, 102, 76);
+    color: #72FFC6;
     font-size: 2em;
     font-weight: bold;
 }
 
 h2 {
-    color: rgb(47, 102, 76);
+    color: #72FFC6;
     font-size: 1.5em;
     font-weight: bold;
 }
 
 h3 {
-    color: rgb(47, 102, 76);
+    color: #72FFC6;
     font-size: 1em;
     font-weight: bold;
 }
@@ -208,6 +169,7 @@ td {
     background-color: white;
     border-collapse: collapse;
     text-align: left;
+    color: black;
 }
 
 table,
@@ -299,28 +261,56 @@ src {
 
 
 @media (min-width: 1000px) {
-
-    ul {
-        font-weight: normal;
-        list-style: none;
-        overflow: auto;
-        background-color: rgba(14, 112, 77, 0.5);
-        border-radius: 40px;
-        margin: 2%;
+    header {
+        background: rgb(91, 196, 154);
+        font-family: 'Merriweather', serif;
+        font-style: italic;
+        font-size: 2.5em;
+        text-align: center;
+        color: rgb(255, 225, 106);
+        border-radius: 40px 40px 0px 0px;
+        border-top: solid 1px rgba(114, 255, 198, 1);
+        border-right: solid 1px rgba(114, 255, 198, 1);
+        border-left: solid 1px rgba(114, 255, 198, 1);
+        padding: 2%;
+        margin-top: 2%;
+        left: 25%;
+        max-width: 24em;
     }
 
-    aside {
-        list-style: none;
-        max-width: 15em;
-        padding: 1%;
+    nav {
+        max-width: 60em;
         background: rgb(91, 196, 154);
-        text-align: left;
-        border-radius: 40px;
-        float: right;
+        border-bottom: solid 1px rgba(114, 255, 198, 1);
+        border-right: solid 1px rgba(114, 255, 198, 1);
+        border-left: solid 1px rgba(114, 255, 198, 1);
+        text-align: justify;
+        border-radius: 0px 0px 40px 40px;
+        padding: 2%;
         position: sticky;
-        top: 150px;
+        top: 0px;
         z-index: 1;
-        flex: 0 2;
+    }
+
+    main {
+        background: rgba(52, 154, 115, 0.5);
+        -webkit-backdrop-filter: blur(30px);
+        backdrop-filter: blur(30px);
+        border-radius: 40px;
+        border: solid 1px rgba(114, 255, 198, 1);
+        text-align: left;
+        padding: 1em;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        max-width: 60em;
+        flex: 1;
+    }
+
+    footer {
+        background-color: rgba(91, 196, 154);
+        border-radius: 40px;
+        padding: 1%;
+        max-width: 60em;
     }
 
     .longueur {
@@ -336,24 +326,7 @@ src {
         height: 500px;
     }
 
-    main {
-        backdrop-filter: blur(500px);
-        background-color: rgba(52, 154, 115, 0.5);
-        border-radius: 40px;
-        text-align: justify;
-        padding: 1em;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        max-width: 60em;
-        flex: 1;
-    }
 
-    footer {
-        background-color: rgba(91, 196, 154);
-        border-radius: 40px;
-        padding: 1%;
-        max-width: 60em;
-    }
 }
 
 @media (max-width: 1000px) {
@@ -412,25 +385,6 @@ src {
         margin: 3px;
     }
 
-    .section_intro,
-    .section_milieu,
-    .section_fin,
-    .section_legende {
-        padding: 1em;
-    }
-
-    .section_intro {
-        border-radius: 0px;
-    }
-
-    .section_fin {
-        border-radius: 0px;
-    }
-
-    .section_milieu {
-        border-radius: 0px;
-    }
-
     .longueur {
         display: none;
     }
@@ -444,10 +398,6 @@ src {
         border-top-color: rgb(255, 225, 106);
     }
 
-    ul {
-        text-align: left;
-        list-style: none;
-    }
 
     /*body{
         width: max-content;
