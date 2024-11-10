@@ -185,51 +185,55 @@ if (isset($user)) {
         </section>
         <section class="section_milieu">
             <h3>Modifier un climat</h3>
-            <form id="modifier" method='get' action='userThingsTer.php'>
-                <label for="climat-select">Climat</label>
-                <select name="climat-select" id="climat-select" required>
-                    <option class="bouton" value="">--</option>
-                    <?php
-                    if (isset($NbRowInTable)) {
-                        $i = 0;
-                        while ($i < $NbRowInTable) {
-                            echo '<option class="bouton" value="' . $id[$i] . '-' . $Nom[$i] . '">Climat' . $id[$i] . '-' . $Nom[$i] . '</option>';
-                            $i++;
-                        }
-                    } else {
-                        echo '<br />Utilisez <a href="index.php">TestClimat</a> pour modifier des données.';
-                    } ?>
-                </select>
-                <label for="climat-variable">Variable</label>
-                <select name="climat-variable" id="climat-variable" required>
-                    <option class="bouton" value="">--</option>
-                    <?php
-                    for ($i = 0; $i < 14; $i++) {
-                        echo '<option class="bouton" value="' . $VariablestC[$i][0] . '">' . $VariablestC[$i][0] . '</option>';
-                    } ?>
-                </select>
-                <label for="climat-valeur">Valeur</label>
-                <input type="text" name="climat-valeur" id="climat-valeur" size="5" required>
-                <input id="modifier" type="submit" name="modifier" value="modifier" onClick="doModifie()">
+            <form id="modifier" method='get' action='userThingsTer.php' class="formulaire">
+                <div class="boiteformulaire">
+                    <label for="climat-select">Climat</label>
+                    <select name="climat-select" id="climat-select" required>
+                        <option class="bouton" value="">--</option>
+                        <?php
+                        if (isset($NbRowInTable)) {
+                            $i = 0;
+                            while ($i < $NbRowInTable) {
+                                echo '<option class="bouton" value="' . $id[$i] . '-' . $Nom[$i] . '">Climat' . $id[$i] . '-' . $Nom[$i] . '</option>';
+                                $i++;
+                            }
+                        } else {
+                            echo '<br />Utilisez <a href="index.php">TestClimat</a> pour modifier des données.';
+                        } ?>
+                    </select>
+                    <label for="climat-variable">Variable</label>
+                    <select name="climat-variable" id="climat-variable" required>
+                        <option class="bouton" value="">--</option>
+                        <?php
+                        for ($i = 0; $i < 14; $i++) {
+                            echo '<option class="bouton" value="' . $VariablestC[$i][0] . '">' . $VariablestC[$i][0] . '</option>';
+                        } ?>
+                    </select>
+                    <label for="climat-valeur">Valeur</label>
+                    <input type="text" name="climat-valeur" id="climat-valeur" size="5" required>
+                    <input id="modifier" type="submit" name="modifier" value="modifier" onClick="doModifie()">
+                </div>
+
             </form>
             <h3>Téléchargement</h3>
-            <form id="Télécharger" method='get' action='userThingsTer.php'>
-                <label for="climat-select">Climat(s)</label>
-                <select name="climat-select" id="climat-select" required>
-                    <option class="bouton" value="">--</option>
-                    <option class="bouton" value="0-all">Tout</option>
-                    <?php
-                    if (isset($NbRowInTable)) {
-                        $i = 0;
-                        while ($i < $NbRowInTable) {
-                            echo '<option class="bouton" value="' . $id[$i] . '-' . $Nom[$i] . '">Climat' . $id[$i] . '-' . $Nom[$i] . '</option>';
-                            $i++;
-                        }
-                    } else {
-                        echo '<br />Utilisez <a href="index.php">TestClimat</a> pour télécharger des données.';
-                    } ?>
-                </select>
-                <!--<label for="version">version</label>
+            <form id="Télécharger" method='get' action='userThingsTer.php' class="formulaire">
+                <div class="boiteformulaire">
+                    <label for="climat-select">Climat(s)</label>
+                    <select name="climat-select" id="climat-select" required>
+                        <option class="bouton" value="">--</option>
+                        <option class="bouton" value="0-all">Tout</option>
+                        <?php
+                        if (isset($NbRowInTable)) {
+                            $i = 0;
+                            while ($i < $NbRowInTable) {
+                                echo '<option class="bouton" value="' . $id[$i] . '-' . $Nom[$i] . '">Climat' . $id[$i] . '-' . $Nom[$i] . '</option>';
+                                $i++;
+                            }
+                        } else {
+                            echo '<br />Utilisez <a href="index.php">TestClimat</a> pour télécharger des données.';
+                        } ?>
+                    </select>
+                    <!--<label for="version">version</label>
                 <select name="version" id="version" required>
                     <option class="bouton" value="">--</option>
                     <option class="bouton" value="compact_colonne">compact_colonne</option>
@@ -243,9 +247,9 @@ if (isset($user)) {
 					<option class="bouton" value="CSV">CSV</option>
 					<option class="bouton" value="PDF">PDF</option>
 				</select>-->
-                <input id="Télécharger" type="submit" name="Télécharger" value="Télécharger" onClick="doModifie()">
+                    <input id="Télécharger" type="submit" name="Télécharger" value="Télécharger" onClick="doModifie()">
             </form>
-
+            </div>
         </section>
         <section class="section_fin">
             <table>
@@ -287,7 +291,9 @@ if (isset($user)) {
             </table><br />
         </section>
     </main>
-    <?php include('navigation/footer.php'); ?>
+    <footer>
+        <?php include('navigation/footer.php'); ?>
+    </footer>
 </body>
 
 

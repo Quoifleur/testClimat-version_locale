@@ -246,45 +246,46 @@ $JsonHémisphère = json_encode($hémisphère);
                 <br /><br /><b>Ce climat a été enregistré automatiquement</b>, pour retrouver tous vos anciens climats recherchés, rendez-vous sur la page <a href="userThingsTer.php">compte</a>.
             </p>
             <table>
-                <colgroup>
-                    <col span="1" class="Nom de la sation">
-                    <col span="1" class="Nom générique">
-                    <col span="1" class="DATEcollecte">
-                    <col span="1" class="DATEentre">
-                    <col span="1" class="POSITIONx">
-                    <col span="1" class="POSITIONy">
-                    <col span="1" class="POSITIONz">
-                </colgroup>
+                <caption>Informations sur le climat</caption>
                 <tr>
-                    <th scope="col">
+                    <th>
                         <label for="Nom de la sation">Nom de la sation</label>
                     </th>
-                    <th scope="col">
+                    <th>
                         <label for="Nom générique">Nom générique</label>
                     </th>
-                    <th scope="col">
+                    <th>
                         <label for="DATEcollecte">DATEcollecte</label>
                     </th>
-                    <th scope="col">
+                    <th>
                         <label for="DATEentre">DATEentre</label>
                     </th>
-                    <th scope="col">
-                        <label for="POSITIONx">POSITIONx</label>
+                </tr>
+                <?php
+                echo '<tr>
+                    <td class="' . $Nom . '">' . $Nom . '</td>
+                    <td class="' . $NOMgenerique . '">' . $NOMgenerique . '</td>
+                    <td class="' . $DATE_collecte . '">' . $DATE_collecte . '</td>
+                    <td class="' . $DATE_entre . '">' . $DATE_entre . '</td>
+                    </tr>';
+                ?>
+                <tr>
+                    <th>
+                        <label for="POSITIONhemisphere">Hémisphere</label>
+                    <th>
+                        <label for="POSITIONx">Longitude (x)</label>
                     </th>
-                    <th scope="col">
-                        <label for="POSITIONy">POSITIONy</label>
+                    <th>
+                        <label for="POSITIONy">Lattitude (y)</label>
                     </th>
-                    <th scope="col">
-                        <label for="POSITIONz">POSITIONz</label>
+                    <th>
+                        <label for="POSITIONz">Altitude (z)</label>
                     </th>
                 </tr>
                 <?php
                 echo '
                 <tr>
-                    <th class="' . $Nom . '">' . $Nom . '</th>
-                    <td class="' . $NOMgenerique . '">' . $NOMgenerique . '</td>
-                    <td class="' . $DATE_collecte . '">' . $DATE_collecte . '</td>
-                    <td class="' . $DATE_entre . '">' . $DATE_entre . '</td>
+                    <td class="' . $hémisphère . '">' . $hémisphère . '</td>
                     <td class="' . $Px[0] . '">' . $Px[0] . '</td>
                     <td class="' . $Py[0] . '">' . $Py[0] . '</td>
                     <td class="' . $Pz[0] . '">' . $Pz[0] . '</td>
@@ -298,6 +299,7 @@ $JsonHémisphère = json_encode($hémisphère);
             </div>
             <p>Appuyer sur une des listes déroulantes pour classer une des variable par ordre croissant ou décroissant, puis appuyer sur le bouton Ordonner. Appuyez une nouvelle fois sur celui-ci pour réinitialier l'ordre du tableau.</p>
             <table>
+                <caption>Tableau des valeurs</caption>
                 <colgroup>
                     <col span="1" class="month">
                     <col span="1" class="ValeurTempérature">

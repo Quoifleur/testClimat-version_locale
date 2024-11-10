@@ -6,39 +6,7 @@ include('connexion/bdconnexion.php');
 include('fonctions/function_tC.php');
 $user = strip_tags($_COOKIE['logged']);
 $visibilite = 0;
-/*
-$sqlQuery = 'CREATE TABLE IF NOT EXISTS ' . $user . '(
-    `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `COMPTEclef` varchar(64) DEFAULT NULL,
-    `COMPTEvisibilite` tinyint(1) DEFAULT \'0\',
-    `AC` varchar(32) DEFAULT NULL,
-    `SAVE` int(1) DEFAULT NULL,
-    `RAM` int(16) DEFAULT NULL,
-    `DATEcollecte` date DEFAULT NULL,
-    `DATEentre` date DEFAULT NULL,
-    `TEMPORALITEperiode` varchar(9) DEFAULT NULL,
-    `TEMPORALITEmois` varchar(128) DEFAULT NULL,
-    `TEMPORALITEsaison` varchar(24) DEFAULT NULL,
-    `NOMlocalisation` varchar(32) DEFAULT NULL,
-    `NOMgenerique` varchar(32) DEFAULT NULL,
-    `POSITIONhemisphere` varchar(8) DEFAULT NULL,
-    `POSITIONx` decimal(20,20) DEFAULT NULL,
-    `POSITIONy` decimal(20,20) DEFAULT NULL,
-    `POSITIONz` decimal(20,20) DEFAULT NULL,
-    `NORMALEte` varchar(256) DEFAULT NULL,
-    `NORMALEpr` varchar(256) DEFAULT NULL,
-    `NORMALE2` varchar(256) DEFAULT NULL,
-    `NORMALE3` varchar(256) DEFAULT NULL,
-    `NORMALE4` varchar(256) DEFAULT NULL,
-    `RESULTATkoge` varchar(256) DEFAULT NULL,
-    `RESULTATgaus` varchar(256) DEFAULT NULL,
-    `RESULTATmart` varchar(256) DEFAULT NULL
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-  ';
 
-$statement = $db->prepare($sqlQuery);
-$statement->execute([]);
-*/
 //Tableau des mois 
 $month = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 //Récupération des valeurs.

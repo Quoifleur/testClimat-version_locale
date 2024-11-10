@@ -71,10 +71,10 @@
 					<li>145.987</li>
 					<li>1243.001</li>
 				</ul>
-				<li>Types de saisi possible via la seconde méthode</li>
+				<li>Pour la seconde méthode la saisi doit se faire ous cette forme (12 valeurs numérique attendues)</li>
 				<ul>
-					<li>-2.6,-2.0,2.3,8.3,12.7,17.2,21.1,21.1,17.1,12.0,5.3,0.1</li>
-					<li>41.4,92.4,89.9,63.0,64.9,42.4,14.1,6.7,41.0,56.6,63.6,58.0</li>
+					<li>-2.6,-2.0,2.3,8.3,12.7, etc...</li>
+					<li>41.4,92.4,89.9,63.0,64.9, etc...</li>
 					<li>(Notez l'usage de virgules pour séparer les valeurs)</li>
 				</ul>
 				<br />

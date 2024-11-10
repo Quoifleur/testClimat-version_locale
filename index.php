@@ -38,20 +38,21 @@ if (isset($_COOKIE['logged'])) {
 					<legend>Les valeurs ont était récolté dans l'hémisphère :</legend>
 					<div>
 						<input type="radio" id="Nord" name="hémisphère" value="Nord" checked>
-						<label for="Nord">Nord</label>
+						<label for="Nord">Hémisphère Nord</label>
 					</div>
 					<div>
 						<input type="radio" id="Sud" name="hémisphère" value="Sud">
-						<label for="Sud">Sud</label>
+						<label for="Sud">Hémisphère Sud</label>
 					</div>
 					<table>
+						<caption>Saisie des données climatiques</caption>
 						<colgroup>
 							<col span="1" class="month">
 							<col span="1" class="ValeurTempérature">
 							<col span="1" class="ValeurPrécipitation">
 						</colgroup>
 						<tr>
-							<th class="month" scope="col">/</th>
+							<th class="month" scope="col">Mois</th>
 							<th scope="col">Température (°C)</th>
 							<th scope="col">Précipitation (mm)</th>
 						</tr>
@@ -115,10 +116,17 @@ if (isset($_COOKIE['logged'])) {
 							<td><input type="number" placeholder="0" step="0.01" id="TM12" name="TM12" maxlength="5" size="4" required></td>
 							<td><input type="number" placeholder="0" step="0.01" id="PM12" name="PM12" maxlength="5" size="4" required></td>
 						</tr>
+						<tr class="ligneSansRapportTableau">
+							<th>Hémisphère</th>
+							<td colspan="2"><select name="hémisphère" id="hémisphère">
+									<option value="Nord">Nord</option>
+									<option value="Sud">Sud</option>
+								</select></td>
+						</tr>
+						<tr>
+							<td colspan="3"><input type="submit" value="Envoyer"></td>
+						</tr>
 					</table>
-					<div>
-						<input type="submit" value="Envoyer">
-					</div>
 				</form>
 			</div>
 		</section>
@@ -129,55 +137,55 @@ if (isset($_COOKIE['logged'])) {
 			<br />Remplacer TM1 pour la valeur des températures de janvier, TM2 pour celles de février etc. De même pour les précipitations dans le deuxième cadre.
 			<br />Les valeurs doivent être séparés par des virgules, merci d'écrire les valeurs décimals avec des points (Pour en savoir plus voir la rubrique <a href="testClimatAide.php">Aide</a>).
 			</p>
-			<form method='post' action="<?php echo $LienVersTraitementDesClimats; ?>" enctype='multipart/form-data'>
-				<legend>*Les valeurs ont était récolté dans l'hémisphère :</legend>
-				<div class="boiteHémisphère">
-					<div class="">
-						<input type="radio" id="Nord" name="hémisphère" value="Nord" checked>
-						<label for="Nord">Nord</label>
+			<div class="formulaire">
+				<form method='post' action="<?php echo $LienVersTraitementDesClimats; ?>" enctype='multipart/form-data'>
+					<legend>*Les valeurs ont était récolté dans l'hémisphère :</legend>
+					<div class="boiteformulaire">
+						<div class="">
+							<select name="hémisphère" id="hémisphère">
+								<option value="Nord">Nord</option>
+								<option value="Sud">Sud</option>
+							</select>
+						</div>
+						<div class="">
+							<input type="text" placeholder="NOMlieux-dit,communes,département,..." id="NGc" name="NGc">
+						</div>
+						<div class="">
+							<input type="text" placeholder="NOMstation" id="NSc" name="NSc">
+						</div>
+						<div class="">
+							<input type="text" placeholder="*TM1,TM2,TM3,..." id="Tec" name="Tec" required>
+						</div>
+						<div class="">
+							<input type="text" placeholder="*PM1,PM2,PM3,..." id="Prc" name="Prc" required>
+						</div>
+						<div class="">
+							<input type="text" placeholder="NORMALEclimatique3" id="NC3c" name="NC3c">
+						</div>
+						<div class="">
+							<input type="text" placeholder="NORMALEclimatique4" id="NC4c" name="NC4c">
+						</div>
+						<div class="">
+							<input type="text" placeholder="NORMALEclimatique5" id="NC5c" name="NC5c">
+						</div>
+						<div class="">
+							<input type="text" placeholder="POSITIONlongitude(x)-WGS 84" id="PXc" name="PXc">
+						</div>
+						<div class="">
+							<input type="text" placeholder="POSITIONlattitude(y)-WGS 84" id="PYc" name="PYc">
+						</div>
+						<div class="">
+							<input type="text" placeholder="POSITIONaltitude(z)-WGS 84" id="PZc" name="PZc">
+						</div>
+						<div class="">
+							<input type="text" placeholder="ANNEE" id="TPc" name="TPc" minlength="4" maxlength="4">
+						</div>
+						<div class="box huit">
+							<input type="submit" value="Envoyer">
+						</div>
 					</div>
-					<div class="">
-						<input type="radio" id="Sud" name="hémisphère" value="Sud">
-						<label for="Sud">Sud</label>
-					</div>
-					<div class="">
-						<input type="text" placeholder="NOMlieux-dit,communes,département,..." id="NGc" name="NGc">
-					</div>
-					<div class="">
-						<input type="text" placeholder="NOMstation" id="NSc" name="NSc">
-					</div>
-					<div class="">
-						<input type="text" placeholder="*TM1,TM2,TM3,..." id="Tec" name="Tec" required>
-					</div>
-					<div class="">
-						<input type="text" placeholder="*PM1,PM2,PM3,..." id="Prc" name="Prc" required>
-					</div>
-					<div class="">
-						<input type="text" placeholder="NORMALEclimatique3" id="NC3c" name="NC3c">
-					</div>
-					<div class="">
-						<input type="text" placeholder="NORMALEclimatique4" id="NC4c" name="NC4c">
-					</div>
-					<div class="">
-						<input type="text" placeholder="NORMALEclimatique5" id="NC5c" name="NC5c">
-					</div>
-					<div class="">
-						<input type="text" placeholder="POSITIONlongitude(x)-WGS 84" id="PXc" name="PXc">
-					</div>
-					<div class="">
-						<input type="text" placeholder="POSITIONlattitude(y)-WGS 84" id="PYc" name="PYc">
-					</div>
-					<div class="">
-						<input type="text" placeholder="POSITIONaltitude(z)-WGS 84" id="PZc" name="PZc">
-					</div>
-					<div class="">
-						<input type="text" placeholder="ANNEE" id="TPc" name="TPc" minlength="4" maxlength="4">
-					</div>
-					<div class="box huit">
-						<input type="submit" value="Envoyer">
-					</div>
-				</div>
-			</form>
+				</form>
+			</div>
 			<h3>Exemple</h3>
 			<p>
 				Exemple des normales climatique pour la ville de Lyon. Climat associé : Cfb.
