@@ -100,31 +100,3 @@ if ($climatAtelecharger != null && $instruction != null) {
     unlink($downloadNom);
     exit;
 }
-/* Pour un affichage moins compacts. Mise en page différntes. (pas tout à fait satisfaisant)
-        for ($i = 0; $i < $NbRowInTable; $i++) {
-            $ligne = ''; // Initialiser une chaîne vide pour chaque ligne
-            for ($y = 0; $y < 12; $y++) {
-                // Accumuler les valeurs dans la chaîne $ligne
-                $ligne .= ($id[$i] ?? 'n/a') . ',' .
-                    ($ADATEcollecte[$i][$i] ?? 'n/a') . ',' .
-                    ($ADATEentre[$i][$i] ?? 'n/a') . ',' .
-                    ($ATEMPORALITEperiode[$i][$y] ?? 'n/a') . ',' .
-                    ($mois[$i][$y] ?? 'n/a') . ',' .
-                    ($ANOMlocalisation[$i][$y] ?? 'n/a') . ',' .
-                    ($ANOMgenerique[$i][$y] ?? 'n/a') . ',' .
-                    ($hémisphère[$i] ?? 'n/a') . ',' .
-                    ($APOSITIONx[$i][$y] ?? 'n/a') . ',' .
-                    ($APOSITIONy[$i][$y] ?? 'n/a') . ',' .
-                    ($APOSITIONz[$i][$y] ?? 'n/a') . ',' .
-                    ($ASAISON[$i][$y] ?? 'n/a') . ',' .
-                    ($Te[$i][$y] ?? 'n/a') . ',' .
-                    ($Pr[$i][$y] ?? 'n/a') . ',' .
-                    ($ANORMALE2[$i][$y] ?? 'n/a') . ',' .
-                    ($ANORMALE3[$i][$y] ?? 'n/a') . ',' .
-                    ($ANORMALE4[$i][$y] ?? 'n/a') . ',' .
-                    ($Ikg[$i][$i] ?? 'n/a') . ',' .
-                    ($Ar[$i][$y] ?? 'n/a') . ',' .
-                    ($Im[$i][$y] ?? 'n/a') . "\n"; // Ajouter un saut de ligne à la fin de chaque itération interne
-            }
-            $ecriture[$i] = $ligne; // Ajouter la chaîne accumulée à $ecriture[$i]
-        }*/

@@ -90,6 +90,28 @@ if (isset($user)) {
                 $LettreClimat[$i] = $LettrePlusNomClimat[$i][0];
                 $NomClimat[$i] = $LettrePlusNomClimat[$i][1];
             }
+            $VariablestC = [
+                'DATEcollecte' => $ADATEcollecte,
+                'DATEentre' => $ADATEentre,
+                'TEMPORALITEperiode' => $ATEMPORALITEperiode,
+                'mois' => $mois,
+                'NOMlocalisation' => $ANOMlocalisation,
+                'NOMgenerique' => $ANOMgenerique,
+                'hémisphère' => $hémisphère,
+                'POSITIONx' => $APOSITIONx,
+                'POSITIONy' => $APOSITIONy,
+                'POSITIONz' => $APOSITIONz,
+                'SAISON' => $ASAISON,
+                'Te' => $Te,
+                'Pr' => $Pr,
+                'NORMALE2' => $ANORMALE2,
+                'NORMALE3' => $ANORMALE3,
+                'NORMALE4' => $ANORMALE4,
+                'Ikg' => $Ikg,
+                'Ar' => $Ar,
+                'Im' => $Im,
+                'NomClimat' => $NomClimat
+            ];
         }
     }
     $Voir = $_GET['Voir'] ?? null;
@@ -184,9 +206,12 @@ if (isset($user)) {
 						<td><code>' . $NomClimat[$i] . '</code></td>
 						<td><code>' . $LettreClimat[$i] . '</code></td>
 						<td><code>' . $hémisphère[$i] . '</code></td>
-						<td><form id="Save" name="Voir" method="get" action="testClimatResultatTerTer.php"> <input type="submit" name="Voir" value="Observer climat ' . $id[$i] . '" /></form></td>
-						<td><form id="modifier" name="modifier" method="get" action="testClimatModificationClimat.php"><input type="submit" value="modifier' . $id[$i] . '" /></form></td>
-					  </tr>
+						                        <td>
+                            <form id="Save" name="Voir" method="get" action="testClimatResultatTerTer.php">
+                                <input type="hidden" name="id" value="' . $id[$i] . '" />
+                                <input type="submit" name="Voir" value="Observer climat ' . $id[$i] . '" />
+                            </form>
+                        </td>
 				    ';
                             $i++;
                         }
@@ -196,8 +221,35 @@ if (isset($user)) {
             </table><br />
         </section>
         <section class="section_fin">
+            <h3>Modifier un climat</h3>
+            <form id="modifier" method='get' action='userThingsTer.php'>
+                <label for="climat-select">Climat</label>
+                <select name="climat-select" id="climat-select" required>
+                    <option class="bouton" value="">--</option>
+                    <?php
+                    if (isset($NbRowInTable)) {
+                        $i = 0;
+                        while ($i < $NbRowInTable) {
+                            echo '<option class="bouton" value="' . $id[$i] . '-' . $Nom[$i] . '">Climat' . $id[$i] . '-' . $Nom[$i] . '</option>';
+                            $i++;
+                        }
+                    } else {
+                        echo '<br />Utilisez <a href="index.php">TestClimat</a> pour modifier des données.';
+                    } ?>
+                </select>
+                <label for="climat-variable">Climat</label>
+                <select name="climat-variable" id="climat-variable" required>
+                    <option class="bouton" value="">--</option>
+                    <?php
+                    $NbRowInVariabletC = count($VariablestC);
+                    for ($i = 0; $i < $NbRowInVariabletC; $i++) {
+                        $cle = array_search($VariablestC[$i], $variablestC);
+                        echo '<option class="bouton" value="' . $cle . '">Climat' . $cle . '</option>';
+                    } ?>
+                </select>
+                <input id="modifier" type="submit" name="modifier" value="modifier" onClick="doModifie()">
+            </form>
             <h3>Téléchargement</h3>
-            <p>
             <form id="Télécharger" method='get' action='userThingsTer.php'>
                 <label for="climat-select">Climat(s)</label>
                 <select name="climat-select" id="climat-select" required>
@@ -230,7 +282,6 @@ if (isset($user)) {
 				</select>-->
                 <input id="Télécharger" type="submit" name="Télécharger" value="Télécharger" onClick="doModifie()">
             </form>
-            </p>
         </section>
     </main>
     <?php include('navigation/footer.php'); ?>

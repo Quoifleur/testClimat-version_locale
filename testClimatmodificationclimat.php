@@ -1,9 +1,11 @@
 <?php
 session_start();
-
+include('fonctions/function_tC.php');
+$ClimataMofifier = '';
+$ClimataMofifier = NettoyageString($_GET['modifier']);
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
     <?php include('navigation/head.php'); ?>
@@ -17,9 +19,7 @@ session_start();
         <section class="section_intro">
             <h1>Bienvenue chez TestClimat !</h1>
             <?php
-            //echo $LienVersTraitementDesClimats . '<br />';
-            //echo $_SESSION['nom'] . '<br />';
-            //echo $_COOKIE['logged'] . '<br />';
+            echo $ClimataMofifier . '<br />';
             ?>
             <p>Pour vous connecter ou pvous inscrire merci d'aller sur la <a href="userThingsLogin.php">page de connection et d'inscription</a></p>
             <p>

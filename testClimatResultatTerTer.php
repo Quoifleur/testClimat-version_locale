@@ -158,7 +158,7 @@ $JsonPz = isset($Pz[$climatSelected]) ? json_encode($Pz[$climatSelected]) : null
 $JsonHémisphère = json_encode($hémisphère);
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
