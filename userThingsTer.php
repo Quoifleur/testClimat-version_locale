@@ -90,35 +90,38 @@ if (isset($user)) {
                 $LettreClimat[$i] = $LettrePlusNomClimat[$i][0];
                 $NomClimat[$i] = $LettrePlusNomClimat[$i][1];
             }
-            $VariablestC = [
-                'DATEcollecte' => $ADATEcollecte,
-                'DATEentre' => $ADATEentre,
-                'TEMPORALITEperiode' => $ATEMPORALITEperiode,
-                'mois' => $mois,
-                'NOMlocalisation' => $ANOMlocalisation,
-                'NOMgenerique' => $ANOMgenerique,
-                'hémisphère' => $hémisphère,
-                'POSITIONx' => $APOSITIONx,
-                'POSITIONy' => $APOSITIONy,
-                'POSITIONz' => $APOSITIONz,
-                'SAISON' => $ASAISON,
-                'Te' => $Te,
-                'Pr' => $Pr,
-                'NORMALE2' => $ANORMALE2,
-                'NORMALE3' => $ANORMALE3,
-                'NORMALE4' => $ANORMALE4,
-                'Ikg' => $Ikg,
-                'Ar' => $Ar,
-                'Im' => $Im,
-                'NomClimat' => $NomClimat
-            ];
         }
+        $VariablestC = [
+            0 => ['DATEcollecte', $ADATEcollecte],
+            1 => ['TEMPORALITEperiode', $ATEMPORALITEperiode],
+            2 => ['mois', $mois],
+            3 => ['NOMlocalisation', $ANOMlocalisation],
+            4 => ['NOMgenerique', $ANOMgenerique],
+            5 => ['hémisphère', $hémisphère],
+            6 => ['POSITIONx', $APOSITIONx],
+            7 => ['POSITIONy', $APOSITIONy],
+            8 => ['POSITIONz', $APOSITIONz],
+            9 => ['Te', $Te],
+            10 => ['Pr', $Pr],
+            11 => ['NORMALE2', $ANORMALE2],
+            12 => ['NORMALE3', $ANORMALE3],
+            13 => ['NORMALE4', $ANORMALE4],
+            14 => ['DATEentre', $ADATEentre],
+            15 => ['SAISON', $ASAISON],
+            16 => ['Ikg', $Ikg],
+            17 => ['Ar', $Ar],
+            18 => ['Im', $Im]
+        ];
+        //print_r($VariablestC);
     }
+
     $Voir = $_GET['Voir'] ?? null;
     $nommé = false;
     if (!isset($NbRowInTable)) {
         $NbRowInTable = 0;
     }
+    //pour télécharger les climats
+    include('outils/download_Climat.php');
     /* Pour nommer les climats
     echo $user;
     $a = 0;
@@ -181,46 +184,6 @@ if (isset($user)) {
             </p>
         </section>
         <section class="section_milieu">
-            <table>
-                <caption>
-                    Climats sauvegardés :
-                </caption>
-                <tbody>
-                    <tr>
-                        <th scope="col">Nb</th>
-                        <th scope="col">Nom</th>
-                        <th scope="col">Climat</th>
-                        <th scope="col">Code</th>
-                        <th scope="col">hémisphère</th>
-                        <th scope="col">Voir</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    <?php
-                    if (isset($NbRowInTable)) {
-                        $i = 0;
-                        while ($i < $NbRowInTable) {
-                            echo '
-					<tr>
-						<th scope="row">' . $id[$i] . '</th>
-						<td><code>' . $Nom[$i] . '</code></td>
-						<td><code>' . $NomClimat[$i] . '</code></td>
-						<td><code>' . $LettreClimat[$i] . '</code></td>
-						<td><code>' . $hémisphère[$i] . '</code></td>
-						                        <td>
-                            <form id="Save" name="Voir" method="get" action="testClimatResultatTerTer.php">
-                                <input type="hidden" name="id" value="' . $id[$i] . '" />
-                                <input type="submit" name="Voir" value="Observer climat ' . $id[$i] . '" />
-                            </form>
-                        </td>
-				    ';
-                            $i++;
-                        }
-                    }
-                    ?>
-                </tbody>
-            </table><br />
-        </section>
-        <section class="section_fin">
             <h3>Modifier un climat</h3>
             <form id="modifier" method='get' action='userThingsTer.php'>
                 <label for="climat-select">Climat</label>
@@ -237,16 +200,16 @@ if (isset($user)) {
                         echo '<br />Utilisez <a href="index.php">TestClimat</a> pour modifier des données.';
                     } ?>
                 </select>
-                <label for="climat-variable">Climat</label>
+                <label for="climat-variable">Variable</label>
                 <select name="climat-variable" id="climat-variable" required>
                     <option class="bouton" value="">--</option>
                     <?php
-                    $NbRowInVariabletC = count($VariablestC);
-                    for ($i = 0; $i < $NbRowInVariabletC; $i++) {
-                        $cle = array_search($VariablestC[$i], $variablestC);
-                        echo '<option class="bouton" value="' . $cle . '">Climat' . $cle . '</option>';
+                    for ($i = 0; $i < 14; $i++) {
+                        echo '<option class="bouton" value="' . $VariablestC[$i][0] . '">' . $VariablestC[$i][0] . '</option>';
                     } ?>
                 </select>
+                <label for="climat-valeur">Valeur</label>
+                <input type="text" name="climat-valeur" id="climat-valeur" size="5" required>
                 <input id="modifier" type="submit" name="modifier" value="modifier" onClick="doModifie()">
             </form>
             <h3>Téléchargement</h3>
@@ -282,6 +245,46 @@ if (isset($user)) {
 				</select>-->
                 <input id="Télécharger" type="submit" name="Télécharger" value="Télécharger" onClick="doModifie()">
             </form>
+
+        </section>
+        <section class="section_fin">
+            <table>
+                <caption>
+                    Climats sauvegardés :
+                </caption>
+                <tbody>
+                    <tr>
+                        <th scope="col">Nb</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Climat</th>
+                        <th scope="col">Code</th>
+                        <th scope="col">hémisphère</th>
+                        <th scope="col">Voir</th>
+                    </tr>
+                    <?php
+                    if (isset($NbRowInTable)) {
+                        $i = 0;
+                        while ($i < $NbRowInTable) {
+                            echo '
+					<tr>
+						<th scope="row">' . $id[$i] . '</th>
+						<td><code>' . $Nom[$i] . '</code></td>
+						<td><code>' . $NomClimat[$i] . '</code></td>
+						<td><code>' . $LettreClimat[$i] . '</code></td>
+						<td><code>' . $hémisphère[$i] . '</code></td>
+						                        <td>
+                            <form id="Save" name="Voir" method="get" action="testClimatResultatTerTer.php">
+                                <input type="hidden" name="id" value="' . $id[$i] . '" />
+                                <input type="submit" name="Voir" value="Observer climat ' . $id[$i] . '" />
+                            </form>
+                        </td>
+				    ';
+                            $i++;
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table><br />
         </section>
     </main>
     <?php include('navigation/footer.php'); ?>
