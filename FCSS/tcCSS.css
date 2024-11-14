@@ -203,30 +203,6 @@ table {
     font-style: italic;
 }
 
-/*
-.trois {
-    grid-column: 1/4;
-    grid-row: 2;
-
-}
-
-.quatre {
-    grid-column: 1/4;
-    grid-row: 3;
-}
-
-.cinq,
-.six,
-.sept {
-    grid-column: 1/4;
-    grid-row: 1;
-
-}
-
-.bouton {
-    background-color: rgb(52, 154, 116);
-}*/
-
 input[type=submit] {
     width: 95%;
     height: 30px;
@@ -417,6 +393,12 @@ src {
         border: 1px solid rgba(52, 154, 115, 0.325);
         border-radius: 40px;
         padding: 1em;
+        box-shadow:
+            13.1px 3.6px 7.2px rgba(0, 0, 0, 0.049),
+            25.4px 7px 12.6px rgba(0, 0, 0, 0.075),
+            40.4px 11.1px 18.1px rgba(0, 0, 0, 0.096),
+            63.9px 17.6px 26.4px rgba(0, 0, 0, 0.115),
+            127px 35px 50px rgba(0, 0, 0, 0.13);
     }
 
 
@@ -514,6 +496,12 @@ src {
         border: 1px solid rgba(52, 154, 115, 0.325);
         border-radius: 40px;
         padding: 1em;
+        box-shadow:
+            13.1px 3.6px 7.2px rgba(0, 0, 0, 0.049),
+            25.4px 7px 12.6px rgba(0, 0, 0, 0.075),
+            40.4px 11.1px 18.1px rgba(0, 0, 0, 0.096),
+            63.9px 17.6px 26.4px rgba(0, 0, 0, 0.115),
+            127px 35px 50px rgba(0, 0, 0, 0.13);
     }
 
     .boiteformulaire {
@@ -530,23 +518,6 @@ src {
         background-color: rgb(52, 154, 115);
         border-bottom: solid;
         border-bottom-color: rgb(255, 225, 106);
-    }
-
-    .SousMenu {
-        margin: 3px;
-        background-color: rgba(14, 112, 77, 0);
-    }
-
-    .SousMenuG {
-        background-color: rgba(14, 112, 77, 0);
-        border-radius: 0px 0px 0px 0px;
-        margin: 3px;
-    }
-
-    .SousMenuD {
-        background-color: rgba(14, 112, 77, 0);
-        border-radius: 0px 0px 0px 0px;
-        margin: 3px;
     }
 
     .longueur {

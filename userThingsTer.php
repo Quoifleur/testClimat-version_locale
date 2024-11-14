@@ -248,10 +248,11 @@ if (isset($user)) {
 					<option class="bouton" value="PDF">PDF</option>
 				</select>-->
                     <input id="Télécharger" type="submit" name="Télécharger" value="Télécharger" onClick="doModifie()">
+                </div>
             </form>
-            </div>
         </section>
         <section class="section_fin">
+            <br />
             <table>
                 <caption>
                     Climats sauvegardés :
