@@ -38,3 +38,11 @@ function SUPER_gestionErreur($array)
         echo 'array non définie <br />';
     }
 }
+function random_string($length)
+{
+    $str = random_bytes($length);
+    $str = base64_encode($str);
+    $str = str_replace(["+", "/", "="], "", $str);
+    $str = substr($str, 0, $length);
+    return $str;
+}

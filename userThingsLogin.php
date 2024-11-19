@@ -1,17 +1,10 @@
 <?php session_start();
 include('connexion/bdconnexion.php');
-function random_string($length)
-{
-    $str = random_bytes($length);
-    $str = base64_encode($str);
-    $str = str_replace(["+", "/", "="], "", $str);
-    $str = substr($str, 0, $length);
-    return $str;
-}
+include('fonctions/function_tC.php');
 // Déconnexion
 include('connexion/deconnexion.php');
 
-$newUser = false;
+$newUser = true;
 $dateInscription = date('Y-m-d H:i:s');
 if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
     // Préparation des variables
@@ -47,6 +40,7 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
                     }
                     $newUser = false;
                     header('Location: userThingsTer.php');
+                    //echo 'balise1';
                     exit();
                 } else {
                     $newUser = false;
@@ -56,14 +50,48 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
             }
         }
     }
-    $newUser = true;
     if ($newUser) {
         $query = $db->prepare('INSERT INTO user (clef, mail, password, dateInscription) VALUES (:clef, :mail, :password, :dateInscription)');
         $query->execute(['clef' => $clef, 'mail' => $email, 'password' => $password, 'dateInscription' => $dateInscription]);
         $user = $query->fetch();
+        $query = $db->prepare('SELECT * FROM user');
+        $query->execute();
+        $users = $query->fetchALL();
+        foreach ($users as $value) {
+            $USERSid[] = $value['id'];
+            $USERSclef[] = $value['clef'];
+            $USERSmail[] = $value['mail'];
+            $USERSpassword[] = $value['password'];
+            $USERSmailverif[] = $value['mailVerifie'];
+        }
+        if (isset($USERSid[0]) && !empty($USERSid[0])) {
+            $NbRowInTable = count($USERSid);
+            for ($i = 0; $i < $NbRowInTable; $i++) {
+                if ($USERSmail[$i] === $email) {
+                    if ($USERSmail[$i] === $email && password_verify($passwordAverifier, $USERSpassword[$i])) {
+                        $newUser = false;
+                        if (isset($_POST['SIGcheckbox'])) {
+                            setcookie('logged', $USERSclef[$i], time() + 3600 * 24 * 365, '/', null, true, true);
+                        } else {
+                            setcookie('logged', $USERSclef[$i], time() + 3600 * 24, '/', null, true, true);
+                        }
+                        $newUser = false;
+                        header('Location: userThingsTer.php');
+                        //echo 'balise3';
+                        exit();
+                    } else {
+                        $newUser = false;
+                        echo '<b> Mauvais mot de passe </b><br /> Pour retourner à la page précédente, <a href="userThingsLogin.php">cliquez ici</a> <br /> Pour retourner à la page d\'accueil, <a href="index.php">cliquez ici</a>';
+                        exit();
+                    }
+                }
+            }
+        }
+        /*print_r($user);
+        echo $user['clef'];
         if (isset($_POST['SIGcheckbox'])) {
-            echo 'cookie';
-            echo $clef;
+            //echo 'cookie';
+            //echo $clef;
             setcookie('logged', $user['clef'], time() + 3600 * 24 * 365, '/', null, true, true);
         } else {
             setcookie('logged', $user['clef'], time() + 3600 * 24, '/', null, true, true);
@@ -71,8 +99,9 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
         if (!isset($_COOKIE['user'])) {
             $_COOKIE['user'] = $_COOKIE['logged'];
         }
+        echo 'balise2';
         //header('Location: userThingsTer.php');
-        exit();
+        //exit();*/
     }
 }
 
@@ -102,7 +131,7 @@ if (isset($_POST['SIGemail']) && isset($_POST['SIGpassword'])) {
                 include('connexion/formulaireDeconnexion.php');
             } else {
                 include('connexion/formulaireLogin.php');
-                echo 'Mot de passe oublié ? <a href="userThingsLoginMAIL.php">Cliquez ici</a>';
+                echo '<br />Mot de passe oublié ? <a href="userThingsLoginMAIL.php">Cliquez ici</a>';
             }
             ?>
         </section>
