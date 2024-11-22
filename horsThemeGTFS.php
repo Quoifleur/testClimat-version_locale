@@ -1,15 +1,15 @@
 <?php
-include('mapHP/function_drawing.php');
-include('mapHP/function_super.php');
-include('mapHP/function_geojson.php');
-include('mapHP/function_other.php');
+include('fonctions/function_drawing.php');
+include('fonctions/function_super.php');
+include('fonctions/function_geojson.php');
+include('fonctions/function_other.php');
 if (isset($_FILES['file'])) {
-    include('ZIPtoTXT.php');
+    require('outils/ZIPtoTXT.php');
 } else {
     $fichierChargé = false;
     $erreur = false;
 }
-include('cartoGTFS.php');
+include('outils/cartoGTFS.php');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -71,7 +71,7 @@ include('cartoGTFS.php');
             ?>
         </section>
         <section class="section_milieu">
-            <h2><?php echo $Nomfichier[0] ?? 'Bienvenue dans la liseuse de fichier GTFS'; ?></h2>
+            <h2><?= $Nomfichier[0] ?? 'Bienvenue dans la liseuse de fichier GTFS'; ?></h2>
             <?php if ($fichierChargé) {
                 echo '<div class="A_noter">
                 <div class="A_noter_titre">A noter</div>
@@ -92,7 +92,7 @@ include('cartoGTFS.php');
                 <li><a href="#trips">Trajets</a></li>
             </ul>
             <h3 id="agency">Agences</h3>
-            <p>Information sur l'organisme ayant fournit les données GTFS chargées ici. Les données affichées ici sont issus de <a href=<?php echo $fichierChargé == true ? '"upload/extract/' . $fichier . '/agency.txt"' : ''; ?>>agency.txt</a>.</p>
+            <p>Information sur l'organisme ayant fournit les données GTFS chargées ici. Les données affichées ici sont issus de <a href=<?= $fichierChargé == true ? '"upload/extract/' . $fichier . '/agency.txt"' : ''; ?>>agency.txt</a>.</p>
             <table>
                 <tr>
                     <th>agency_id</th>

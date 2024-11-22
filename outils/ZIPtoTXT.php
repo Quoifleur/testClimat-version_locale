@@ -1,4 +1,5 @@
 <?php
+require('fonctions/function_tC.php');
 $fichierChargé = false;
 $erreur = false;
 $dossier = 'upload/';
@@ -24,8 +25,7 @@ if (!$erreur) //S'il n'y a pas d'erreur, on upload
         'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy'
     );
     $fichier = preg_replace('/([^.a-z0-9]+)/i', '-', $fichier);
-    if (move_uploaded_file($_FILES['file']['tmp_name'], $dossier . $fichier)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
-    {
+    if (move_uploaded_file($_FILES['file']['tmp_name'], $dossier . $fichier)) {
         $fichierChargé = true;
         //setcookie('userGTFS', $fichier, time() + 3600 * 6, null, null, false, true);
     } else //Sinon (la fonction renvoie FALSE).
@@ -39,14 +39,16 @@ if (!$erreur) //S'il n'y a pas d'erreur, on upload
 // On extrait le fichier
 if (!$erreur && $fichierChargé) {
     $Nomfichier = explode('.', $fichier);
-    if (!file_exists('upload/extract' . $fichier)) {
-        mkdir('upload/extract' . $fichier, 0777, true);
+    $lienVersFichier = 'upload/extract' . $fichier;
+    if (!file_exists($lienVersFichier)) {
+        mkdir($lienVersFichier, 0777, true);
     }
     $ZipGTFS = new ZipArchive;
     if ($ZipGTFS->open('upload/' . $fichier) === TRUE) {
-        $ZipGTFS->extractTo('upload/extract/' . $fichier);
+        $ZipGTFS->extractTo($lienVersFichier);
         $ZipGTFS->close();
     } else {
         $erreur = true;
     }
+    $Nbfichier = count_files($lienVersFichier, '.txt', 1);
 }
