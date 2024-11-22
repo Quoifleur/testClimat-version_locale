@@ -1,18 +1,6 @@
 <?php session_start();
-try {
-    $db = new PDO('mysql:host=testcljclimat.mysql.db;dbname=testcljclimat;charset=utf8', 'testcljclimat', 'jG9JE9UJpT');
-} catch (Exception $e) {
-    echo 'Erreur: ' . $e->getMessage();
-    die();
-}
-function random_string($length)
-{
-    $str = random_bytes($length);
-    $str = base64_encode($str);
-    $str = str_replace(["+", "/", "="], "", $str);
-    $str = substr($str, 0, $length);
-    return $str;
-}
+include('connexion/bdconnexion.php');
+include('fonctions/function_tC.php');
 $SENDmail = false;
 if (isset($_POST['FORemail'])) {
     $FORemail = strip_tags($_POST['FORemail']);

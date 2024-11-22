@@ -248,6 +248,26 @@ input[type=number] {
     margin: 0 auto;
 }
 
+input[type=email] {
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+    background-color: #FFF9DF;
+    color: #6F6951;
+    margin: 0 auto;
+}
+
+input[type=password] {
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+    background-color: #FFF9DF;
+    color: #6F6951;
+    margin: 0 auto;
+}
+
 select {
     width: 95%;
     height: 30px;

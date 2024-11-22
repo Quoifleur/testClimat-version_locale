@@ -25,7 +25,7 @@ if (isset($user)) {
             //echo 'balise 2 <br />';
             foreach ($climatCherche as $value) {
                 $id[] = $value['id'];
-                $Save[] = $value['SAVE'];
+                $Save[] = $value['USERclimatID'];
                 $DATEcollecte[] = $value['DATEcollecte'];
                 $DATEentre[] = $value['DATEentre'];
                 $TEMPORALITEperiode[] = $value['TEMPORALITEperiode'];
