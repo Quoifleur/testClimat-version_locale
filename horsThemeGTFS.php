@@ -1,8 +1,8 @@
 <?php
-include('fonctions/function_drawing.php');
-include('fonctions/function_super.php');
-include('fonctions/function_geojson.php');
-include('fonctions/function_other.php');
+include('src/function_drawing.php');
+include('src/function_super.php');
+include('src/function_geojson.php');
+include('src/function_other.php');
 if (isset($_FILES['file'])) {
     require('outils/ZIPtoTXT.php');
 } else {
@@ -91,6 +91,15 @@ include('outils/cartoGTFS.php');
                 <li><a href="#calendar">Calendrier</a></li>
                 <li><a href="#trips">Trajets</a></li>
             </ul>
+            <h3>Informations</h3>
+            <table>
+                <tr>
+                    <th>Fichier</th>
+                    <th>Présence</th>
+                    <th>Présence</th>
+                </tr>
+                <?php require('template/table_presence_fichierGTFS.php'); ?>
+            </table>
             <h3 id="agency">Agences</h3>
             <p>Information sur l'organisme ayant fournit les données GTFS chargées ici. Les données affichées ici sont issus de <a href=<?= $fichierChargé == true ? '"upload/extract/' . $fichier . '/agency.txt"' : ''; ?>>agency.txt</a>.</p>
             <table>

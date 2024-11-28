@@ -1,5 +1,5 @@
 <?php
-require('fonctions/function_tC.php');
+require('src/function_tC.php');
 $fichierChargé = false;
 $erreur = false;
 $dossier = 'upload/';
@@ -51,4 +51,42 @@ if (!$erreur && $fichierChargé) {
         $erreur = true;
     }
     $Nbfichier = count_files($lienVersFichier, '.txt', 1);
+    $ListeFichierGTFSprésent = [
+        ['agency.txt', false, 'required', null],
+        ['stops.txt', false, 'conditionally required', 'locations.geojson'], // Dépend de locations.geojson si des zones réactives sont définies.
+        ['routes.txt', false, 'required', null],
+        ['trips.txt', false, 'required', null],
+        ['stop_times.txt', false, 'required', null],
+        ['calendar.txt', false, 'conditionally required', 'calendar_dates.txt'], // Nécessite calendar_dates.txt si non défini.
+        ['calendar_dates.txt', false, 'conditionally required', 'calendar.txt'], // Nécessite calendar.txt si non défini.
+        ['fare_attributes.txt', false, 'optional', null],
+        ['fare_rules.txt', false, 'optional', null],
+        ['timeframes.txt', false, 'optional', null],
+        ['fare_media.txt', false, 'optional', null],
+        ['fare_products.txt', false, 'optional', null],
+        ['fare_leg_rules.txt', false, 'optional', null],
+        ['fare_transfer_rules.txt', false, 'optional', null],
+        ['areas.txt', false, 'optional', null],
+        ['stop_areas.txt', false, 'optional', null],
+        ['networks.txt', false, 'conditionally forbidden', 'routes.txt'], // Interdit si network_id existe dans routes.txt.
+        ['route_networks.txt', false, 'conditionally forbidden', 'routes.txt'], // Interdit si network_id existe dans routes.txt.
+        ['shapes.txt', false, 'optional', null],
+        ['frequencies.txt', false, 'optional', null],
+        ['transfers.txt', false, 'optional', null],
+        ['pathways.txt', false, 'optional', null],
+        ['levels.txt', false, 'conditionally required', 'pathways.txt'], // Nécessaire pour pathway_mode=5 (ascenseurs).
+        ['location_groups.txt', false, 'optional', null],
+        ['location_group_stops.txt', false, 'optional', null],
+        ['locations.geojson', false, 'optional', null],
+        ['booking_rules.txt', false, 'optional', null],
+        ['translations.txt', false, 'optional', null],
+        ['feed_info.txt', false, 'conditionally required', 'translations.txt'], // Nécessaire si translations.txt est fourni.
+        ['attributions.txt', false, 'optional', null]
+    ];
+    $Nbfichierthéorique = count($ListeFichierGTFSprésent);
+    for ($i = 0; $i < $Nbfichierthéorique; $i++) {
+        if (file_exists($lienVersFichier . '/' . $ListeFichierGTFSprésent[$i][0])) {
+            $ListeFichierGTFSprésent[$i][1] = true;
+        }
+    }
 }
