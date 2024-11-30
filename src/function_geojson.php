@@ -1,4 +1,21 @@
 <?php
+function baricentre($array)
+{
+    $lat = 0;
+    $long = 0;
+    $somme = 0;
+    $n = count($array);
+    for ($i = 0; $i < $n; $i++) {
+        $somme += floatval($array[$i][4]);
+    }
+    $lat = $somme / $n;
+    $somme = 0;
+    for ($i = 0; $i < $n; $i++) {
+        $somme += floatval($array[$i][5]);
+    }
+    $long = $somme / $n;
+    return $lat . ',' . $long;
+}
 function centroide($array)
 {
     $lat = 0;

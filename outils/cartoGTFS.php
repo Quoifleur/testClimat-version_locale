@@ -1,21 +1,9 @@
 <?php
-function baricentre($array)
-{
-    $lat = 0;
-    $long = 0;
-    $somme = 0;
-    $n = count($array);
-    for ($i = 0; $i < $n; $i++) {
-        $somme += floatval($array[$i][4]);
-    }
-    $lat = $somme / $n;
-    $somme = 0;
-    for ($i = 0; $i < $n; $i++) {
-        $somme += floatval($array[$i][5]);
-    }
-    $long = $somme / $n;
-    return $lat . ',' . $long;
-}
+// Afficher toutes les erreurs
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+require('src/function_geojson.php');
 if ($fichierChargé) {
     $fichierStops = file('upload/extract/' . $fichier . '/stops.txt');
     $Nbligne = count($fichierStops);
@@ -25,7 +13,7 @@ if ($fichierChargé) {
         $stop[$i]['x'] = $Info[$i][4];
         $stop[$i]['y'] = $Info[$i][5];
     }
-    /*baricentre
+    //baricentre
     $coordo = explode(',', baricentre($Info));
     //echo $coordo[0] . ',' . $coordo[1];
     $lat = json_encode($coordo[0]);
@@ -70,5 +58,5 @@ if ($fichierChargé) {
     }
     fwrite($fichierGEOJSON, "]},");
     fwrite($fichierGEOJSON, "\r\n\"properties\": {\"name\": \"" . $id . "\"}");
-    fwrite($fichierGEOJSON, "}]}");*/
+    fwrite($fichierGEOJSON, "}]}");
 }

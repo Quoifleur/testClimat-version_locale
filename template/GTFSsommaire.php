@@ -1,4 +1,5 @@
 <?php
+echo '<h3 id="sommaire">Sommaire</h3>';
 echo '<ul>';
 for ($i = 0; $i < $Nbfichierthéorique; $i++) {
     if ($ListeFichierGTFSprésent[$i][1] == 1) {

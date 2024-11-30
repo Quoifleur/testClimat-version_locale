@@ -1,4 +1,7 @@
 <?
+require('src/function_drawing.php');
+require('src/function_super.php');
+require('src/function_geojson.php');
 
 $url = 'upload/extract/' . $fichier . '/shapes.geojson';
 $GLOBALcouleur = ['ligne' => [0, 0, 255], 'point' => [255, 255, 255], 'surface' => [50, 50, 255], 'autre' => [100, 100, 255]];

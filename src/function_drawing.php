@@ -10,8 +10,8 @@ function dessin_croix($array)
         $couleur = $GLOBALcouleur == false ? $array[$i]['couleur'] : $couleur;
         $x = $array[$i]['x'];
         $y = $array[$i]['y'];
-        imageline($image, $x - 5, $y, $x + 5, $y, $couleur);
-        imageline($image, $x, $y - 5, $x, $y + 5, $couleur);
+        imageline($image, $x - 3, $y, $x + 3, $y, $couleur);
+        imageline($image, $x, $y - 3, $x, $y + 3, $couleur);
     }
 }
 function dessin_ligne($array)

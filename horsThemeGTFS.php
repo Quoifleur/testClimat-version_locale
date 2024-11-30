@@ -4,10 +4,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-include('src/function_drawing.php');
-include('src/function_super.php');
-include('src/function_geojson.php');
-include('src/function_other.php');
+
+require('src/function_other.php');
 if (isset($_FILES['file'])) {
     require('outils/ZIPtoTXT.php');
 } else {
@@ -41,7 +39,7 @@ include('outils/cartoGTFS.php');
                 <li>repository de google relatif au GTFS et GTFS Realtime<a href="https://github.com/google/transit">github.com/google/transit</a></li>
             </ul>
             <h2>Fichier à visualiser</h2>
-            <?php require('template/chargementFichierGTFS.php');
+            <?php require('template/GTFSchargementFichier.php');
             ?>
         </section>
         <section class="section_milieu">
@@ -56,21 +54,9 @@ include('outils/cartoGTFS.php');
                 </p>
             </div>';
             }
-            ?>
-            <h3 id="sommaire">Sommaire</h3>
-            <?php require('template/GTFSsommaire.php'); ?>
-            <h3>Informations</h3>
-            <table>
-                <caption>Informations sur le fichier chargé</caption>
-                <tr>
-                    <th>Fichier</th>
-                    <th>Présence</th>
-                    <th>Présence</th>
-                </tr>
-                <?php require('template/table_presence_fichierGTFS.php'); ?>
-            </table>
-            <?php
             if ($fichierChargé) {
+                require('template/GTFSsommaire.php');
+                require('template/GTFStable_presence_fichier.php');
                 require('template/GTFSfichierExplicite.php');
             }
             ?>
@@ -79,13 +65,13 @@ include('outils/cartoGTFS.php');
             <?php
             //include('cartodessinGTFS.php');
             ?>
-            <img src="carte.png" alt="Carte">
-            <!--<button id="toggleStops">Afficher/Masquer les arrêts</button>
+            <!--<img src="carte.png" alt="Carte">-->
+            <button id="toggleStops">Afficher/Masquer les arrêts</button>
             <div id="map" style="width: 100%; height: 600px;"></div>
             <script type="text/javascript">
                 document.addEventListener('DOMContentLoaded', function() {
-                    var Px = <?php echo $lat ?? 44.841; ?>;
-                    var Py = <?php echo $long ?? -0.587; ?>;
+                    var Px = <?php echo json_encode($lat ?? 44.841); ?>;
+                    var Py = <?php echo json_encode($long ?? -0.587); ?>;
 
                     var map = L.map("map").setView([Px, Py], 13);
                     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -111,7 +97,7 @@ include('outils/cartoGTFS.php');
                         }
                     });
                 });
-            </script>-->
+            </script>
         </section>
     </main>
 </body>
