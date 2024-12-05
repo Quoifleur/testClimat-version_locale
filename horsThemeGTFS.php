@@ -21,13 +21,13 @@ if (isset($_FILES['file'])) {
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-    <?php include('navigation/head.php'); ?>
+    <?php require('navigation/head.php'); ?>
     <title>Visonneuse GTFS</title>
 </head>
 
 <body>
-    <?php include('navigation/header.php'); ?>
-    <?php include('navigation/nav.php'); ?>
+    <?php require('navigation/header.php'); ?>
+    <?php require('navigation/nav.php'); ?>
 
     <main>
         <section class="section_intro">
@@ -67,7 +67,7 @@ if (isset($_FILES['file'])) {
                 <h1>Carte</h1>
                 <?php require('template/GTFSmap.php');
                 echo '<pre>';
-                print_r($MessageErreur);
+                print_r($MessageErreur ?? '');
                 echo '</pre>';
                 echo $ShapesPresent;
                 ?>
@@ -86,14 +86,48 @@ if (isset($_FILES['file'])) {
                     // Initialiser le groupe de clusters
                     var markers = L.markerClusterGroup();
 
+                    // create a start
                     // create a stop
                     <?php
-                    for ($i = 1; $i < $Nbpoints; $i++) {
-                        echo 'var marker = L.marker([' . json_encode($StopsPositionXY[$i][0]) . ', ' . json_encode($StopsPositionXY[$i][1]) . ']).addTo(markers);';
+                    if (isset($StopsPositionXY) && isset($Nbpoints) && is_array($StopsPositionXY) && is_int($Nbpoints)) {
+                        for ($i = 1; $i < $Nbpoints; $i++) {
+                            if (isset($StopsPositionXY[$i]) && is_array($StopsPositionXY[$i]) && count($StopsPositionXY[$i]) == 2) {
+                                echo 'var marker = L.marker([' . json_encode($StopsPositionXY[$i][0]) . ', ' . json_encode($StopsPositionXY[$i][1]) . ']).addTo(markers);';
+                            } else {
+                                echo 'console.log("Erreur : Coordonnées manquantes ou invalides pour l\'index ' . $i . '");';
+                            }
+                        }
+                    } else {
+                        echo 'console.log("Erreur : $StopsPositionXY ou $Nbpoints non définis ou invalides");';
                     }
                     ?>
                     map.addLayer(markers);
+
                     // createshape
+                    <?php if (isset($Nbshapes) && is_int($Nbshapes) && $Nbshapes > 0): ?>
+                        var polyline = L.polyline([
+                            <?php
+                            if (isset($ShapesPositionXY) && is_array($ShapesPositionXY)) {
+                                for ($i = 1; $i < $Nbshapes; $i++) {
+                                    if (isset($ShapesPositionXY[$i]) && is_array($ShapesPositionXY[$i]) && count($ShapesPositionXY[$i]) == 2) {
+                                        echo '[' . json_encode(floatval($ShapesPositionXY[$i][0])) . ', ' . json_encode(floatval($ShapesPositionXY[$i][1])) . ']';
+                                        if ($i < $Nbshapes - 1) {
+                                            echo ',';
+                                        }
+                                    } else {
+                                        echo 'console.log("Erreur : Coordonnées de shape manquantes ou invalides pour l\'index ' . $i . '");';
+                                    }
+                                }
+                            } else {
+                                echo 'console.log("Erreur : $ShapesPositionXY non défini ou invalide");';
+                            }
+                            ?>
+                        ]).addTo(map);
+                        // zoom the map to the polyline
+                        map.fitBounds(polyline.getBounds());
+                    <?php else: ?>
+                        console.log("Aucune shape à afficher");
+                    <?php endif; ?>
                 </script>
             </div>
 

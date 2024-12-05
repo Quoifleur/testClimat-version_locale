@@ -45,18 +45,18 @@ if ($handle) {
 $baricentre = explode(',', baricentrebis($StopsPositionXY));
 //print_r($baricentre);
 
-$ShapesPresent = 0;
+$ShapesPresent = false;
 $filePath = 'upload/extract' . $fichier . '/shapes.txt';
 if (IS_FILE($filePath)) {
     $handle = new SplFileObject($filePath, 'r');
-    $ShapesPresent = 1;
+    $ShapesPresent = true;
 }
 
-if ($handle && $ShapesPresent == 1) {
+if ($handle && $ShapesPresent) {
     $handle->setFlags(SplFileObject::READ_CSV);
     $legende = $handle->fgetcsv();
-    $Xkey = array_search('stop_lat', $legende);
-    $Ykey = array_search('stop_lon', $legende);
+    $Xkey = array_search('shape_pt_lat', $legende);
+    $Ykey = array_search('shape_pt_lon', $legende);
     $Nbcolonnes = count($legende);
     $Nbshapes = 0;
     $ShapesPositionXY = [];
