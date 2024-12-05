@@ -56,7 +56,7 @@ $climatCherche = $climatStatement->fetchAll();
 $id = array();
 foreach ($climatCherche as $value) {
     $id[] = $value['id'];
-    $Save[] = $value['SAVE'];
+    // $Save[] = $value['SAVE'];
     $DATEcollecte[] = $value['DATEcollecte'];
     $DATEentre[] = $value['DATEentre'];
     $TEMPORALITEperiode[] = $value['TEMPORALITEperiode'];

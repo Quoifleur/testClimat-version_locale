@@ -1,8 +1,8 @@
 <?php session_start();
-include('connexion/bdconnexion.php');
-include('fonctions/function_tC.php');
+require('connexion/bdconnexion.php');
+require('src/function_tC.php');
 // Déconnexion
-include('connexion/deconnexion.php');
+require('connexion/deconnexion.php');
 
 $newUser = true;
 $dateInscription = date('Y-m-d H:i:s');

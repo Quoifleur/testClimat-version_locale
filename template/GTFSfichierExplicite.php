@@ -6,7 +6,7 @@ ini_set('display_startup_errors', 1);
 
 for ($i = 0; $i < $Nbfichierthéorique; $i++) {
     if ($ListeFichierGTFSprésent[$i][1] == 1) {
-        $filePath = 'upload/extract/' . $fichier . '/' . $ListeFichierGTFSprésent[$i][0];
+        $filePath = 'upload/extract' . $fichier . '/' . $ListeFichierGTFSprésent[$i][0];
         $handle = fopen($filePath, 'r');
         if ($handle) {
             $Legende = fgetcsv($handle);

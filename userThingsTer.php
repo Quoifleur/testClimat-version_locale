@@ -1,9 +1,9 @@
 <?php
 session_start();
-include('connexion/bdconnexion.php');
+require('connexion/bdconnexion.php');
 $compteActif = false;
 // Déconnexion
-include('connexion/deconnexion.php');
+require('connexion/deconnexion.php');
 
 if (isset($_COOKIE['logged'])) {
     $user = strip_tags($_COOKIE['logged']);

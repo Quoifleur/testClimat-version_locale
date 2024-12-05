@@ -4,7 +4,6 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-
 require('src/function_other.php');
 if (isset($_FILES['file'])) {
     require('outils/ZIPtoTXT.php');
@@ -12,7 +11,7 @@ if (isset($_FILES['file'])) {
     $fichierChargé = false;
     $erreur = false;
 }
-include('outils/cartoGTFS.php');
+//include('outils/cartoGTFS.php');
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -20,6 +19,8 @@ include('outils/cartoGTFS.php');
 <head>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <?php include('navigation/head.php'); ?>
     <title>Visonneuse GTFS</title>
 </head>
@@ -62,42 +63,40 @@ include('outils/cartoGTFS.php');
             ?>
         </section>
         <section class="section_fin">
-            <?php
-            //include('cartodessinGTFS.php');
-            ?>
-            <!--<img src="carte.png" alt="Carte">-->
-            <button id="toggleStops">Afficher/Masquer les arrêts</button>
-            <div id="map" style="width: 100%; height: 600px;"></div>
-            <script type="text/javascript">
-                document.addEventListener('DOMContentLoaded', function() {
-                    var Px = <?php echo json_encode($lat ?? 44.841); ?>;
-                    var Py = <?php echo json_encode($long ?? -0.587); ?>;
-
+            <div class="map-containeur">
+                <h1>Carte</h1>
+                <?php require('template/GTFSmap.php');
+                echo '<pre>';
+                print_r($MessageErreur);
+                echo '</pre>';
+                echo $ShapesPresent;
+                ?>
+                <div id="map" style="width: 100%; height: 600px;"></div>
+                <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+                <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+                <script type="text/javascript">
+                    var Px = <?= json_encode($baricentre[0]); ?>;
+                    var Py = <?= json_encode($baricentre[1]); ?>;
                     var map = L.map("map").setView([Px, Py], 13);
-                    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         maxZoom: 19,
-                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     }).addTo(map);
 
-                    var stopsLayer = L.layerGroup();
+                    // Initialiser le groupe de clusters
+                    var markers = L.markerClusterGroup();
+
+                    // create a stop
                     <?php
-                    for ($i = 1; $i < $NbStops ?? 2; $i++) {
-                        echo 'L.marker([' . json_encode($stop[$i][1]) . ', ' . json_encode($stop[$i][2]) . ']).addTo(stopsLayer).bindPopup(' . json_encode($stop[$i][0]) . ');';
+                    for ($i = 1; $i < $Nbpoints; $i++) {
+                        echo 'var marker = L.marker([' . json_encode($StopsPositionXY[$i][0]) . ', ' . json_encode($StopsPositionXY[$i][1]) . ']).addTo(markers);';
                     }
                     ?>
-                    stopsLayer.addTo(map);
+                    map.addLayer(markers);
+                    // createshape
+                </script>
+            </div>
 
-                    var geoJsonLayer = L.geoJSON(<?php echo json_encode($lienFichier); ?>).addTo(map);
-
-                    document.getElementById('toggleStops').addEventListener('click', function() {
-                        if (map.hasLayer(stopsLayer)) {
-                            map.removeLayer(stopsLayer);
-                        } else {
-                            map.addLayer(stopsLayer);
-                        }
-                    });
-                });
-            </script>
         </section>
     </main>
 </body>

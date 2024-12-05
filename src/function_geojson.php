@@ -6,14 +6,14 @@ function baricentre($array)
     $somme = 0;
     $n = count($array);
     for ($i = 0; $i < $n; $i++) {
-        $somme += floatval($array[$i][4]);
+        $somme += floatval($array[$i][0]);
     }
-    $lat = $somme / $n;
+    $lat = round($somme / $n, 3);
     $somme = 0;
     for ($i = 0; $i < $n; $i++) {
-        $somme += floatval($array[$i][5]);
+        $somme += floatval($array[$i][1]);
     }
-    $long = $somme / $n;
+    $long = round($somme / $n, 3);
     return $lat . ',' . $long;
 }
 function centroide($array)
