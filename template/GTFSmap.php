@@ -26,7 +26,8 @@ echo $ShapesPresent;
     if (isset($StopsPositionXY) && isset($Nbpoints) && is_array($StopsPositionXY) && is_int($Nbpoints)) {
         for ($i = 1; $i < $Nbpoints; $i++) {
             if (isset($StopsPositionXY[$i]) && is_array($StopsPositionXY[$i]) && count($StopsPositionXY[$i]) == 2) {
-                echo 'var marker = L.marker([' . json_encode($StopsPositionXY[$i][0]) . ', ' . json_encode($StopsPositionXY[$i][1]) . ']).addTo(markers);';
+                echo 'var marker = L.marker([' . json_encode($StopsPositionXY[$i][0]) . ', ' . json_encode($StopsPositionXY[$i][1]) . ']).addTo(markers)';
+                echo '.bindPopup "<b>' . $stopsInfo[$i]['stop_name'] . '</b><br>' . $stopsInfo[$i]['stop_desc'] . '<br>' . $stopsInfo[$i]['stop_id'] . ');';
             } else {
                 echo 'console.log("Erreur : Coordonnées manquantes ou invalides pour l\'index ' . $i . '");';
             }

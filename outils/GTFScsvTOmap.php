@@ -47,15 +47,20 @@ if ($handle) {
     for ($i = 0; $i < $NbstopsVariables; $i++) {
         $stops[array_keys($stops)[$i]] = array_search(array_keys($stops)[$i], $legende);
     }
+
     $Nbpoints = 0;
     if (isset($stops['stop_lat']) && isset($stops['stop_lon'])) {
         while (($data = fgetcsv($handle)) !== false) {
+            for ($i = 0; $i < $NbstopsVariables; $i++) {
+                $stopsInfo[$Nbpoints][array_keys($stops)[$i]] = $data[$stops[array_keys($stops)[$i]]];
+            }
             //print_r($legende);
             //print_r($data);
             $StopsPositionXY[$Nbpoints] = [$data[$stops['stop_lat']], $data[$stops['stop_lon']]];
             $Nbpoints++;
         }
         echo $Nbpoints;
+        //print_r($stopsInfo);
         //print_r($PositionXY);
         fclose($handle);
     } else {
