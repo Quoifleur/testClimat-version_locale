@@ -67,6 +67,7 @@ if (isset($_FILES['file'])) {
                 <h1>Carte</h1>
                 <?php
                 if ($fichierChargé) {
+                    echo '<p> fichier chargé</p>';
                     require('template/GTFSmap.php');
                 } else {
                     echo '<p>Aucun fichier n\'a pas été chargé</p>';
