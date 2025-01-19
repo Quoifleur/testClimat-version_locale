@@ -9,6 +9,7 @@ echo $ShapesPresent;
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 <script type="text/javascript">
+    console.log("Info : Script de carte chargé");
     var Px = <?= json_encode($baricentre[0]); ?>;
     var Py = <?= json_encode($baricentre[1]); ?>;
     var map = L.map("map").setView([Px, Py], 13);
@@ -26,8 +27,7 @@ echo $ShapesPresent;
     if (isset($StopsPositionXY) && isset($Nbpoints) && is_array($StopsPositionXY) && is_int($Nbpoints)) {
         for ($i = 1; $i < $Nbpoints; $i++) {
             if (isset($StopsPositionXY[$i]) && is_array($StopsPositionXY[$i]) && count($StopsPositionXY[$i]) == 2) {
-                echo 'var marker = L.marker([' . json_encode($StopsPositionXY[$i][0]) . ', ' . json_encode($StopsPositionXY[$i][1]) . ']).addTo(markers)';
-                echo '.bindPopup "<b>' . $stopsInfo[$i]['stop_name'] . '</b><br>' . $stopsInfo[$i]['stop_desc'] . '<br>' . $stopsInfo[$i]['stop_id'] . ');';
+                echo 'var marker = L.marker([' . json_encode($StopsPositionXY[$i][0]) . ', ' . json_encode($StopsPositionXY[$i][1]) . ']).addTo(markers);';
             } else {
                 echo 'console.log("Erreur : Coordonnées manquantes ou invalides pour l\'index ' . $i . '");';
             }
@@ -35,11 +35,12 @@ echo $ShapesPresent;
     } else {
         echo 'console.log("Erreur : $StopsPositionXY ou $Nbpoints non définis ou invalides");';
     }
+
     ?>
     map.addLayer(markers);
-
     // createshape
-    <?php if (isset($Nbshapes) && is_int($Nbshapes) && $Nbshapes > 0): ?>
+    var Nbshapes = <?= json_encode($Nbshapes) ?? null; ?>;
+    if (typeof Nbshapes !== 'undefined' && Number.isInteger(Nbshapes) && Nbshapes > 0) {
         var polyline = L.polyline([
             <?php
             if (isset($ShapesPositionXY) && is_array($ShapesPositionXY)) {
@@ -60,7 +61,7 @@ echo $ShapesPresent;
         ]).addTo(map);
         // zoom the map to the polyline
         map.fitBounds(polyline.getBounds());
-    <?php else: ?>
+    } else {
         console.log("Aucune shape à afficher");
-    <?php endif; ?>
+    }
 </script>

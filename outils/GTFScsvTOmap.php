@@ -68,20 +68,23 @@ if ($handle) {
         $MessageErreur[1] = 'Arrêt du processus.';
     }
 } else {
-    echo 'Erreur : Impossible d\'ouvrir le fichier ' . $filePath;
+    echo 'Info : Impossible d\'ouvrir le fichier ' . $filePath;
 }
 
 $baricentre = explode(',', baricentrebis($StopsPositionXY ?? [0, 0]));
 //print_r($baricentre);
 
+clearstatcache();
 $ShapesPresent = false;
 $filePath = 'upload/extract' . $fichier . '/shapes.txt';
-if (IS_FILE($filePath)) {
-    $handle = new SplFileObject($filePath, 'r');
-    $ShapesPresent = true;
+if (file_exists($filePath) == true) {
+    $handle = new SplFileObject($filePath, 'r') ?? null;
+    $ShapesPresent = true ?? false;
 }
 
-if ($handle && $ShapesPresent) {
+//echo isset($handle) ? 'true' : 'false';
+//echo isset($ShapesPresent) ? 'true' : 'false';
+if ($handle == true && $ShapesPresent == true) {
     $handle->setFlags(SplFileObject::READ_CSV);
     $legende = $handle->fgetcsv();
     $Xkey = array_search('shape_pt_lat', $legende);
@@ -89,15 +92,15 @@ if ($handle && $ShapesPresent) {
     $Nbcolonnes = count($legende);
     $Nbshapes = 0;
     $ShapesPositionXY = [];
-    $memoryLimit = 128 * 1024 * 1024; // 128 MB
+    $memoryLimit = 128 * 1024 * 1024 - 10; // 128 MB
 
     while (!$handle->eof()) {
         $data = $handle->fgetcsv();
         if ($data && count($data) > 2) {
             // Vérifier l'utilisation de la mémoire
             if (memory_get_usage() > $memoryLimit) {
-                $MessageErreur[0] = 'Processus arrêté : utilisation de la mémoire trop élevée. <br />';
-                $MessageErreur[1] = 'Nombre de shapes : ' . $Nbshapes . '<br />';
+                $MessageErreur[] = 'Processus arrêté : utilisation de la mémoire trop élevée. <br />';
+                $MessageErreur[] = 'Nombre de shapes : ' . $Nbshapes . '<br />';
                 break;
             }
             $ShapesPositionXY[$Nbshapes] = [$data[$Xkey], $data[$Ykey]];
@@ -106,5 +109,5 @@ if ($handle && $ShapesPresent) {
     }
     //print_r($ShapesPositionXY);
 } else {
-    echo 'Erreur : Impossible d\'ouvrir le fichier ' . $filePath;
+    $MessageErreur[] =  '<br>Info : Impossible d\'ouvrir le fichier ' . $filePath;
 }

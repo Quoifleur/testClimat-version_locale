@@ -67,7 +67,11 @@ if (isset($_FILES['file'])) {
                 <h1>Carte</h1>
                 <?php
                 if ($fichierChargé) {
-                    require('template/GTFSmap.php');
+                    if ($ListeFichierGTFSprésent[1][1] == true || $ListeFichierGTFSprésent[18][1] == true) {
+                        require('outils/GTFScsvTOmap.php');
+                    } else {
+                        echo '<p>Aucun fichier(s) téléchargeable(s) (stops.txt et/ou shapes.txt) n\'a pas été trouvé</p>';
+                    }
                 } else {
                     echo '<p>Aucun fichier n\'a pas été chargé</p>';
                 }
