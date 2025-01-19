@@ -2,6 +2,11 @@
 echo '<pre>';
 print_r($MessageErreur ?? '');
 print_r($stops);
+print_r($dico_shapes_id);
+//print_r($ShapesPositionXY);
+echo $ShapesPositionXY[1][1] . ' ' . $ShapesPositionXY[1][2] . '<br>';
+echo $ShapesPositionXY[3][1] . ' ' .  $ShapesPositionXY[3][2] . '<br>';
+echo $ShapesPositionXY[0][1] . ' ' .  $ShapesPositionXY[0][2] . '<br>';
 echo '</pre>';
 echo $ShapesPresent;
 ?>
@@ -44,12 +49,14 @@ echo $ShapesPresent;
         var polyline = L.polyline([
             <?php
             if (isset($ShapesPositionXY) && is_array($ShapesPositionXY)) {
+                $first = true;
                 for ($i = 1; $i < $Nbshapes; $i++) {
-                    if (isset($ShapesPositionXY[$i]) && is_array($ShapesPositionXY[$i]) && count($ShapesPositionXY[$i]) == 2) {
-                        echo '[' . json_encode(floatval($ShapesPositionXY[$i][0])) . ', ' . json_encode(floatval($ShapesPositionXY[$i][1])) . ']';
-                        if ($i < $Nbshapes - 1) {
+                    if (isset($ShapesPositionXY[$i]) && is_array($ShapesPositionXY[$i]) && count($ShapesPositionXY[$i]) == 3) {
+                        if (!$first) {
                             echo ',';
                         }
+                        echo '[' . json_encode(floatval($ShapesPositionXY[$i][1])) . ', ' . json_encode(floatval($ShapesPositionXY[$i][2])) . ']';
+                        $first = false;
                     } else {
                         echo 'console.log("Erreur : Coordonnées de shape manquantes ou invalides pour l\'index ' . $i . '");';
                     }

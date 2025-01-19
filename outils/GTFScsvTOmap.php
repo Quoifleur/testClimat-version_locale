@@ -91,7 +91,17 @@ if ($handle == true && $ShapesPresent == true) {
     $Ykey = array_search('shape_pt_lon', $legende);
     $Nbcolonnes = count($legende);
     $Nbshapes = 0;
+    $NbligneParShape = 0;
     $ShapesPositionXY = [];
+    $dico_shapes_id = [
+        'Nb_shape_id' => 0,
+        'shape_names' => [
+            'name' => null,
+            'Nb_ligne' => 0,
+        ]
+    ];
+    $shape_id = '';
+    $memoryLimit = 128 * 1024 * 1024; // 128 MB
     $memoryLimit = 128 * 1024 * 1024 - 10; // 128 MB
 
     while (!$handle->eof()) {
@@ -101,12 +111,30 @@ if ($handle == true && $ShapesPresent == true) {
             if (memory_get_usage() > $memoryLimit) {
                 $MessageErreur[] = 'Processus arrêté : utilisation de la mémoire trop élevée. <br />';
                 $MessageErreur[] = 'Nombre de shapes : ' . $Nbshapes . '<br />';
+                $MessageErreur[] = 'Processus arrêté : utilisation de la mémoire trop élevée. <br />';
+                $MessageErreur[] = 'Nombre de shapes : ' . $Nbshapes . '<br />';
                 break;
             }
-            $ShapesPositionXY[$Nbshapes] = [$data[$Xkey], $data[$Ykey]];
+            if ($shape_id != $data[0]) {
+                $shape_id = $data[0];
+                $dico_shapes_id['Nb_shape_id']++;
+                $dico_shapes_id['shape_names'][] = [
+                    'name' => $shape_id,
+                    'Nb_ligne' => $NbligneParShape,
+                ];
+                $NbligneParShape = 0;
+            }
+            $ShapesPositionXY[$Nbshapes] = [$shape_id, $data[$Xkey], $data[$Ykey]];
             $Nbshapes++;
+            if ($shape_id = $data[0]) {
+                $NbligneParShape++;
+            }
         }
     }
+    //$dico_shapes_id['shape_names'][0] = [
+    //   'name' => $dico_shapes_id['shape_names'][0]['name'],
+    //   'Nb_ligne' => $Nbshapes - array_sum(array_column($dico_shapes_id['shape_names'], 'Nb_ligne')),
+    //];
     //print_r($ShapesPositionXY);
 } else {
     $MessageErreur[] =  '<br>Info : Impossible d\'ouvrir le fichier ' . $filePath;

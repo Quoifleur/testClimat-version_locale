@@ -4,7 +4,7 @@ $fichierChargé = false;
 $erreur = false;
 $dossier = 'upload/';
 $fichier = basename($_FILES['file']['name']);
-$taille_maxi = 9000000;
+$taille_maxi = 90000000000;
 $taille = filesize($_FILES['file']['tmp_name']);
 $extensions = array('.zip', '.rar');
 $extension = strrchr($_FILES['file']['name'], '.');
@@ -13,9 +13,9 @@ if (!in_array($extension, $extensions)) //Si l'extension n'est pas dans le table
 {
     $erreur = true;
 }
-if ($taille > $taille_maxi) {
-    $erreur = true;
-}
+//if ($taille > $taille_maxi) {
+//  $erreur = true;
+//}
 if (!$erreur) //S'il n'y a pas d'erreur, on upload
 {
     //On formate le nom du fichier ici...
