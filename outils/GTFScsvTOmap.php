@@ -109,10 +109,8 @@ if ($handle == true && $ShapesPresent == true) {
         if ($data && count($data) > 2) {
             // Vérifier l'utilisation de la mémoire
             if (memory_get_usage() > $memoryLimit) {
-                $MessageErreur[] = 'Processus arrêté : utilisation de la mémoire trop élevée. <br />';
-                $MessageErreur[] = 'Nombre de shapes : ' . $Nbshapes . '<br />';
-                $MessageErreur[] = 'Processus arrêté : utilisation de la mémoire trop élevée. <br />';
-                $MessageErreur[] = 'Nombre de shapes : ' . $Nbshapes . '<br />';
+                $MessageErreur[] = 'ERREUR : Processus arrêté : utilisation de la mémoire trop élevée. <br />';
+                $MessageErreur[] = 'Info : Nombre de shapes : ' . $Nbshapes . '<br />';
                 break;
             }
             if ($shape_id != $data[0]) {
@@ -126,16 +124,27 @@ if ($handle == true && $ShapesPresent == true) {
             }
             $ShapesPositionXY[$Nbshapes] = [$shape_id, $data[$Xkey], $data[$Ykey]];
             $Nbshapes++;
-            if ($shape_id = $data[0]) {
+            if ($shape_id == $ShapesPositionXY[$Nbshapes - 1][0] && $Nbshapes > 0) {
                 $NbligneParShape++;
+            } else {
+                $NbligneParShape = 1;
             }
         }
     }
-    //$dico_shapes_id['shape_names'][0] = [
-    //   'name' => $dico_shapes_id['shape_names'][0]['name'],
-    //   'Nb_ligne' => $Nbshapes - array_sum(array_column($dico_shapes_id['shape_names'], 'Nb_ligne')),
-    //];
-    //print_r($ShapesPositionXY);
+    $lastshape = $dico_shapes_id['Nb_shape_id'];
+    for ($i = 0; $i < $lastshape; $i++) {
+        if (isset($dico_shapes_id['shape_names'][$i + 1]['Nb_ligne'])) {
+            $dico_shapes_id['shape_names'][$i] = [
+                'name' => $dico_shapes_id['shape_names'][$i]['name'],
+                'Nb_ligne' => $dico_shapes_id['shape_names'][$i + 1]['Nb_ligne']
+            ];
+        } else {
+            $dico_shapes_id['shape_names'][$lastshape - 1] = [
+                'name' => $dico_shapes_id['shape_names'][$lastshape - 1]['name'],
+                'Nb_ligne' => $NbligneParShape,
+            ];
+        }
+    }
 } else {
     $MessageErreur[] =  '<br>Info : Impossible d\'ouvrir le fichier ' . $filePath;
 }

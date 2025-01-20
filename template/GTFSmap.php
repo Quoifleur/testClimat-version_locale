@@ -1,14 +1,26 @@
 <?php require('outils/GTFScsvTOmap.php');
 echo '<pre>';
-print_r($MessageErreur ?? '');
-print_r($stops);
-print_r($dico_shapes_id);
+/*
+$fichierLOG = strval('upload/extract' . $fichier . '/log.html');
+$LOG = fopen($fichierLOG, 'w');
+fwrite($LOG, '<pre>');
+fwrite($LOG, $MessageErreur ?? '');
+$arraystring = print_r($stops);
+fwrite($LOG, $arraystring);
+$arraystring = print_r($dico_shapes_id);
+fwrite($LOG, $arraystring);
+fwrite($LOG, '</pre>');
+fclose($LOG);*/
+//print_r($MessageErreur ?? '');
+//print_r($stops);
+//print_r($dico_shapes_id);
 //print_r($ShapesPositionXY);
-echo $ShapesPositionXY[1][1] . ' ' . $ShapesPositionXY[1][2] . '<br>';
-echo $ShapesPositionXY[3][1] . ' ' .  $ShapesPositionXY[3][2] . '<br>';
-echo $ShapesPositionXY[0][1] . ' ' .  $ShapesPositionXY[0][2] . '<br>';
+//echo $ShapesPresent;
+echo $dico_shapes_id['Nb_shape_id'] . '<br>';
+echo $NbligneParShape . 'nbligne<br>';
+echo $Nbshapes . ' shapes<br>';
+echo array_sum(array_column($dico_shapes_id['shape_names'], 'Nb_ligne'));
 echo '</pre>';
-echo $ShapesPresent;
 ?>
 <div id="map" style="width: 100%; height: 600px;"></div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -44,31 +56,46 @@ echo $ShapesPresent;
     ?>
     map.addLayer(markers);
     // createshape
+    var temoin = 0;
     var Nbshapes = <?= json_encode($Nbshapes) ?? null; ?>;
     if (typeof Nbshapes !== 'undefined' && Number.isInteger(Nbshapes) && Nbshapes > 0) {
-        var polyline = L.polyline([
-            <?php
-            if (isset($ShapesPositionXY) && is_array($ShapesPositionXY)) {
-                $first = true;
-                for ($i = 1; $i < $Nbshapes; $i++) {
-                    if (isset($ShapesPositionXY[$i]) && is_array($ShapesPositionXY[$i]) && count($ShapesPositionXY[$i]) == 3) {
-                        if (!$first) {
-                            echo ',';
+        <?php for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) { ?>
+            var latlngs = [
+                <?php
+                if (isset($ShapesPositionXY) && is_array($ShapesPositionXY)) {
+                    $first = true;
+                    for ($i = 1; $i < $dico_shapes_id['shape_names'][$index]['Nb_ligne']; $i++) {
+                        if (isset($ShapesPositionXY[$i]) && is_array($ShapesPositionXY[$i]) && count($ShapesPositionXY[$i]) == 3) {
+                            if (!$first) {
+                                echo ',';
+                            }
+                            echo '[' . json_encode(floatval($ShapesPositionXY[$i][1])) . ', ' . json_encode(floatval($ShapesPositionXY[$i][2])) . ']';
+                            $first = false;
+                        } else {
+                            echo 'console.log("Erreur : Coordonnées de shape manquantes ou invalides pour l\'index ' . $i . '");';
                         }
-                        echo '[' . json_encode(floatval($ShapesPositionXY[$i][1])) . ', ' . json_encode(floatval($ShapesPositionXY[$i][2])) . ']';
-                        $first = false;
-                    } else {
-                        echo 'console.log("Erreur : Coordonnées de shape manquantes ou invalides pour l\'index ' . $i . '");';
                     }
+                    $debug[$index][] = $i;
+                } else {
+                    echo 'console.log("Erreur : $ShapesPositionXY non défini ou invalide");';
                 }
-            } else {
-                echo 'console.log("Erreur : $ShapesPositionXY non défini ou invalide");';
-            }
-            ?>
-        ]).addTo(map);
+                ?>
+            ];
+            var polyline = L.polyline(latlngs, {
+                color: 'red',
+            }).addTo(map);
+            temoin++;
+        <?php } ?>
+        console.log("Info : Shape ajoutée");
+        console.log(temoin);
         // zoom the map to the polyline
         map.fitBounds(polyline.getBounds());
     } else {
         console.log("Aucune shape à afficher");
     }
 </script>
+<?php
+echo '<pre>';
+print_r($debug);
+echo '</pre>';
+?>
