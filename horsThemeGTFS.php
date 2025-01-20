@@ -56,6 +56,7 @@ if (isset($_FILES['file'])) {
             </div>';
             }
             if ($fichierChargé) {
+                require('outils/GTFScsvTOmap.php');
                 require('template/GTFSsommaire.php');
                 require('template/GTFStable_presence_fichier.php');
                 require('template/GTFSfichierExplicite.php');

@@ -30,6 +30,28 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
             }
             echo '</table>';
             echo '<br />';
+            if ($ListeFichierGTFSprésent[$i][0] == 'shapes.txt') {
+                echo '<table>';
+                echo '<caption>Liste des id dans le fichier shape et nombre de points</caption>';
+                echo '<tr>';
+                echo '<th>shape_id</th>';
+                echo '<th>Nombre de points</th>';
+                echo '</tr>';
+                for ($j = 0; $j < $dico_shapes_id['Nb_shape_id']; $j++) {
+                    echo '<tr>';
+                    echo '<td>' . $dico_shapes_id['shape_names'][$j]['name'] . '</td>';
+                    echo '<td>' . $dico_shapes_id['shape_names'][$j]['Nb_ligne'] . '</td>';
+                    echo '</tr>';
+                }
+                echo '<tr>';
+                echo '<td><b>Total Id</b></td>';
+                echo '<td><b>Total shapes</b></td>';
+                echo '</tr>';
+                echo '<tr>';
+                echo '<td>' . $dico_shapes_id['Nb_shape_id'] . '</td>';
+                echo '<td>' . $Nbshapes . '</td>';
+                echo '</table>';
+            }
             fclose($handle);
         } else {
             echo 'Erreur : Impossible d\'ouvrir le fichier ' . $filePath;

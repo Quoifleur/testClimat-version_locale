@@ -1,4 +1,5 @@
-<?php require('outils/GTFScsvTOmap.php');
+<?php
+//require('outils/GTFScsvTOmap.php');
 echo '<pre>';
 /*
 $fichierLOG = strval('upload/extract' . $fichier . '/log.html');
@@ -34,7 +35,15 @@ echo '</pre>';
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
-
+    // Fonction pour générer une couleur aléatoire
+    function getRandomColor() {
+        var letters = '3456789ABC';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 10)];
+        }
+        return color;
+    }
     // Initialiser le groupe de clusters
     var markers = L.markerClusterGroup();
 
@@ -59,17 +68,22 @@ echo '</pre>';
     var temoin = 0;
     var Nbshapes = <?= json_encode($Nbshapes) ?? null; ?>;
     if (typeof Nbshapes !== 'undefined' && Number.isInteger(Nbshapes) && Nbshapes > 0) {
-        <?php for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) { ?>
+        <?php
+        $debug = [];
+        $y = 1;
+        for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) { ?>
+            var shape_id = <?= json_encode($dico_shapes_id['shape_names'][$index]['name']) ?? null; ?>;
             var latlngs = [
                 <?php
                 if (isset($ShapesPositionXY) && is_array($ShapesPositionXY)) {
                     $first = true;
                     for ($i = 1; $i < $dico_shapes_id['shape_names'][$index]['Nb_ligne']; $i++) {
-                        if (isset($ShapesPositionXY[$i]) && is_array($ShapesPositionXY[$i]) && count($ShapesPositionXY[$i]) == 3) {
+                        if (isset($ShapesPositionXY[$y]) && is_array($ShapesPositionXY[$y]) && count($ShapesPositionXY[$y]) == 3) {
                             if (!$first) {
                                 echo ',';
                             }
-                            echo '[' . json_encode(floatval($ShapesPositionXY[$i][1])) . ', ' . json_encode(floatval($ShapesPositionXY[$i][2])) . ']';
+                            echo '[' . json_encode(floatval($ShapesPositionXY[$y][1])) . ', ' . json_encode(floatval($ShapesPositionXY[$y][2])) . ']';
+                            $y++;
                             $first = false;
                         } else {
                             echo 'console.log("Erreur : Coordonnées de shape manquantes ou invalides pour l\'index ' . $i . '");';
@@ -82,8 +96,8 @@ echo '</pre>';
                 ?>
             ];
             var polyline = L.polyline(latlngs, {
-                color: 'red',
-            }).addTo(map);
+                color: getRandomColor(),
+            }).addTo(map).bindPopup(shape_id);
             temoin++;
         <?php } ?>
         console.log("Info : Shape ajoutée");
@@ -95,7 +109,7 @@ echo '</pre>';
     }
 </script>
 <?php
-echo '<pre>';
+/*echo '<pre>';
 print_r($debug);
-echo '</pre>';
+echo '</pre>';*/
 ?>
