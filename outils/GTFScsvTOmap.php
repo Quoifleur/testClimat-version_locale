@@ -20,6 +20,7 @@ function baricentrebis($array)
     $long = round($somme / $n, 3);
     return $lat . ',' . $long;
 }
+$stops_id = '';
 $stops = [
     "stop_id" => null,
     "stop_code" => null,
@@ -102,7 +103,7 @@ if ($handle == true && $ShapesPresent == true) {
     ];
     $shape_id = '';
     $memoryLimit = 128 * 1024 * 1024; // 128 MB
-    $memoryLimit = 128 * 1024 * 1024 - 10; // 128 MB
+    $memoryLimit = 128 * 1024 * 1024 - 10;
 
     while (!$handle->eof()) {
         $data = $handle->fgetcsv();

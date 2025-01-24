@@ -1,7 +1,7 @@
 <?php
-//require('outils/GTFScsvTOmap.php');
+/*Débug
+/require('outils/GTFScsvTOmap.php');
 echo '<pre>';
-/*
 $fichierLOG = strval('upload/extract' . $fichier . '/log.html');
 $LOG = fopen($fichierLOG, 'w');
 fwrite($LOG, '<pre>');
@@ -11,7 +11,7 @@ fwrite($LOG, $arraystring);
 $arraystring = print_r($dico_shapes_id);
 fwrite($LOG, $arraystring);
 fwrite($LOG, '</pre>');
-fclose($LOG);*/
+fclose($LOG);
 //print_r($MessageErreur ?? '');
 //print_r($stops);
 //print_r($dico_shapes_id);
@@ -20,8 +20,11 @@ fclose($LOG);*/
 echo $dico_shapes_id['Nb_shape_id'] . '<br>';
 echo $NbligneParShape . 'nbligne<br>';
 echo $Nbshapes . ' shapes<br>';
-echo array_sum(array_column($dico_shapes_id['shape_names'], 'Nb_ligne'));
-echo '</pre>';
+//echo array_sum(array_column($dico_shapes_id['shape_names'], 'Nb_ligne'));
+echo '</pre>';*/
+//initialisation de différentes variables
+$NbshapesPourJS = $Nbshapes ?? 0;
+//echo $NbshapesPourJS;
 ?>
 <div id="map" style="width: 100%; height: 600px;"></div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -37,10 +40,10 @@ echo '</pre>';
     }).addTo(map);
     // Fonction pour générer une couleur aléatoire
     function getRandomColor() {
-        var letters = '3456789ABC';
+        var letters = '23456789ABC';
         var color = '#';
         for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 10)];
+            color += letters[Math.floor(Math.random() * 11)];
         }
         return color;
     }
@@ -66,50 +69,46 @@ echo '</pre>';
     map.addLayer(markers);
     // createshape
     var temoin = 0;
-    var Nbshapes = <?= json_encode($Nbshapes) ?? null; ?>;
-    if (typeof Nbshapes !== 'undefined' && Number.isInteger(Nbshapes) && Nbshapes > 0) {
-        <?php
+    <?php
+    if (isset($dico_shapes_id['Nb_shape_id']) && is_int($dico_shapes_id['Nb_shape_id']) && $dico_shapes_id['Nb_shape_id'] > 0) {
+
         $debug = [];
         $y = 1;
         for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) { ?>
             var shape_id = <?= json_encode($dico_shapes_id['shape_names'][$index]['name']) ?? null; ?>;
             var latlngs = [
-                <?php
+            <?php
+            while (($ShapesPositionXY[$y][0] ?? null) == $dico_shapes_id['shape_names'][$index]['name']) {
                 if (isset($ShapesPositionXY) && is_array($ShapesPositionXY)) {
+                    $firstdot = [0, 0];
                     $first = true;
-                    for ($i = 1; $i < $dico_shapes_id['shape_names'][$index]['Nb_ligne']; $i++) {
-                        if (isset($ShapesPositionXY[$y]) && is_array($ShapesPositionXY[$y]) && count($ShapesPositionXY[$y]) == 3) {
-                            if (!$first) {
-                                echo ',';
-                            }
-                            echo '[' . json_encode(floatval($ShapesPositionXY[$y][1])) . ', ' . json_encode(floatval($ShapesPositionXY[$y][2])) . ']';
-                            $y++;
-                            $first = false;
-                        } else {
-                            echo 'console.log("Erreur : Coordonnées de shape manquantes ou invalides pour l\'index ' . $i . '");';
+
+                    if (isset($ShapesPositionXY[$y][1]) && isset($ShapesPositionXY[$y][2]) && is_array($ShapesPositionXY[$y])) {
+                        if ($first) {
+                            $firstdot = [$ShapesPositionXY[$y][1], $ShapesPositionXY[$y][2]];
                         }
+
+                        $first = false;
+                        echo '[' . json_encode(floatval($ShapesPositionXY[$y][1])) . ', ' . json_encode(floatval($ShapesPositionXY[$y][2])) . '],';
+                        $y++;
+
+
+                        $debug[$index][] = $i;
                     }
-                    $debug[$index][] = $i;
                 } else {
                     echo 'console.log("Erreur : $ShapesPositionXY non défini ou invalide");';
                 }
-                ?>
+            }
+        }
+            ?>
             ];
             var polyline = L.polyline(latlngs, {
                 color: getRandomColor(),
-            }).addTo(map).bindPopup(shape_id);
+            }).addTo(map).bindPopup("id : " + shape_id);
             temoin++;
         <?php } ?>
         console.log("Info : Shape ajoutée");
         console.log(temoin);
         // zoom the map to the polyline
         map.fitBounds(polyline.getBounds());
-    } else {
-        console.log("Aucune shape à afficher");
-    }
 </script>
-<?php
-/*echo '<pre>';
-print_r($debug);
-echo '</pre>';*/
-?>
