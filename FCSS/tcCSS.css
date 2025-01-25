@@ -195,7 +195,7 @@ caption {
     border: 1px solid rgba(255, 255, 255, 0.325);
     border-bottom: none;
     border-radius: 40px 40px 0px 0px;
-    padding: 2%;
+    padding: 2em;
 }
 
 table {
@@ -322,6 +322,60 @@ button {
 src {
     height: auto;
 }
+
+.leaflet-popup {
+    color: #6F6951;
+    border: 1px solid;
+    border-collapse: collapse;
+    text-align: left;
+    border: 0px;
+    border-radius: 40px;
+    background: rgba(255, 255, 255, 0.65);
+    -webkit-backdrop-filter: blur(32px);
+    backdrop-filter: blur(32px);
+    border: 1px solid rgba(255, 255, 255, 0.325);
+    border-top: none;
+    box-shadow:
+        13.1px 3.6px 7.2px rgba(0, 0, 0, 0.049),
+        25.4px 7px 12.6px rgba(0, 0, 0, 0.075),
+        40.4px 11.1px 18.1px rgba(0, 0, 0, 0.096),
+        63.9px 17.6px 26.4px rgba(0, 0, 0, 0.115),
+        127px 35px 50px rgba(0, 0, 0, 0.13);
+}
+
+.popup-content p {
+    color: #6F6951;
+    margin: 0;
+}
+
+.color-box {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
+
+.wheelchair-icon {
+    width: 32px;
+    height: 28px;
+    vertical-align: middle;
+}
+
+.bike-icon {
+    width: 32px;
+    height: 28px;
+    vertical-align: middle;
+}
+
+.table_attention {
+    background: #542038;
+    color: #FF4382;
+}
+
+.table_A_noter {
+    background: #35625F;
+    color: #43FFEC;
+}
+
 
 @media (min-width: 1000px) {
     body {

@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 $routeCouleur = ['route_id', 'route_color', 'route_text_color'];
+
 for ($i = 0; $i < $Nbfichierthéorique; $i++) {
     if ($ListeFichierGTFSprésent[$i][1] == 1) {
         $filePath = 'upload/extract' . $fichier . '/' . $ListeFichierGTFSprésent[$i][0];
@@ -11,7 +12,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
         if ($handle) {
             $Legende = fgetcsv($handle);
             $Nbcolonnes = count($Legende);
-            echo '<h3 id="' . $ListeFichierGTFSprésent[$i][0] . '">' . $ListeFichierGTFSprésent[$i][0] . '</h3>';
+            echo '<h3 id="' . $ListeFichierGTFSprésent[$i][0] . '">' . $ListeFichierGTFSprésent[$i][0] . '</h3><a href="https://gtfs.org/documentation/schedule/reference/#'. str_replace('.', '', $ListeFichierGTFSprésent[$i][0]) .'">Documentation</a>';
             echo '<table>';
             echo '<caption>' . $ListeFichierGTFSprésent[$i][0] . '</caption>';
             echo '<tr>';
@@ -24,21 +25,59 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                 echo '<tr>';
                 for ($y = 0; $y < $Nbcolonnes; $y++) {
                     if ($ListeFichierGTFSprésent[$i][0] == 'routes.txt' && $Legende[$y] == 'route_color' && $Legende[$y + 1] == 'route_text_color') {
-                        $routeCouleur['route_id'][] = $data[$y -  6];
+                        //$routeCouleur['route_id'][] = $data[$y -  6];
                         $routeCouleur['route_color'][] = $data[$y];
                         $routeCouleur['route_text_color'][] = $data[$y + 1];
                         echo '<td style="background:#' . $data[$y] . '; color:#' . $data[$y + 1] . ';">' . $data[$y] . '</td>';
                         $y++;
                         echo '<td style="background:#' . $data[$y - 1] . '; color:#' . $data[$y] . ';">' . $data[$y] . '</td>';
-                    }/* elseif ($ListeFichierGTFSprésent[$i][0] == 'trips.txt' && $Legende[$y] == 'route_id') {
-                        foreach ($routeCouleur['route_id'] as $key => $value) {
-                            if ($value == $data[$y]) {
-                                $route_colo[$y] = $routeCouleur['route_color'][$key];
-                                $data[$y + 1] = $routeCouleur['route_text_color'][$key];
-                            }
+                        if (count($routes) <= 20 && $rowCount == 9) {
+                            $rowCount = 0;
                         }
+                    }elseif ($ListeFichierGTFSprésent[$i][0] == 'agency.txt'){
+                        if ($Legende[$y] == 'agency_url') {
+                            echo '<td><a href="' . $data[$y] . '">'. $data[$y] . '</a></td>';
+                            $y++;
+                        }
+                        echo '<td>' . $data[$y] . '</td>';
+                    }
+                    elseif ($ListeFichierGTFSprésent[$i][0] == 'trips.txt') {
+                        if ($Legende[$y] == 'route_id') {
+                            echo '<td style="background:#' . $routeCouleur['route_color'][$y] . '; color:#' . $routeCouleur['route_text_color'][$y] . ';">' . $data[$y] . '</td>';
+                            $y++;
+                        }
+                        if ($Legende[$y] == 'wheelchair_accessible') {
+                            switch ($data[$y]) {
+                                case 0:
+                                    echo '<td class="table_attention">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_0.png" alt="Accessibilité inconnue"/></td>';
+                                    break;
+                                case 1:
+                                    echo '<td class="table_A_noter">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_1.png" alt="Accessible en fauteuil roulant"/></td>';    
+                                    break;
+                                case 2:
+                                    echo '<td class="table_attention">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_2.png" alt="Non accessible en fauteuil roulant"/></td>';
+                                    break;
+                            }
+                            $y++;
+                        }
+                        if ($Legende[$y] == 'bikes_allowed') {
+                            switch ($data[$y]) {
+                                case 0:
+                                    echo '<td class="table_attention">' . $data[$y] . ' <img class="bike-icon" src="icones/bikes_allowed_0.png" alt="Autorisation des vélos inconnue" />/></td>';
+                                    break;
+                                case 1:
+                                    echo '<td class="table_A_noter">' . $data[$y] . ' <img class="bike-icon" src="icones/bikes_allowed_1.png" alt="Vélos autorisés"/></td>';    
+                                    break;
+                                case 2:
+                                    echo '<td class="table_attention">' . $data[$y] . ' <img class="bike-icon" src="icones/bikes_allowed_2.png" alt="Vélos non autorisés"/></td>';
+                                    break;
+                            }
+                            $y++;
+                            
+                        }
+                        echo '<td>' . $data[$y] . '</td>';
                         //echo '<td style="background:#' . $routeCouleur['route_color'][] . '; color:#' . $routeCouleur['route_text_color'] . ';">' . $data[$y] . '</td>';
-                    }*/ else {
+                    }else {
                         echo '<td>' . $data[$y] . '</td>';
                     }
                 }
@@ -47,60 +86,56 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
             }
             echo '</table>';
             echo '<br />';
+            if ($ListeFichierGTFSprésent[$i][0] == 'trips.txt') {
+                echo '<table>';
+                echo '<caption>Liste des itinéraires</caption>';
+                echo '<tr>';
+                echo '<th>shape_id</th>';
+                echo '<th>Nb points</th>';
+            }
             if ($ListeFichierGTFSprésent[$i][0] == 'shapes.txt') {
+                $Nbcolonnes = ceil($dico_shapes_id['Nb_shape_id'] / 25);
                 echo '<table>';
                 echo '<caption>Liste des id dans le fichier shape et nombre de points</caption>';
                 echo '<tr>';
                 echo '<th>shape_id</th>';
                 echo '<th>Nb points</th>';
-                echo '<th>shape_id</th>';
-                echo '<th>Nb points</th>';
-                echo '</tr>';
-                for ($j = 0; $j < $dico_shapes_id['Nb_shape_id']; $j++) {
-                    if ($dico_shapes_id['Nb_shape_id']  > 100) {
-                        $a = $dico_shapes_id['shape_names'][$j]['Nb_ligne'] ?? '';
-                        $b = $dico_shapes_id['shape_names'][$j + 1]['Nb_ligne'] ?? '';
-                        $c = $dico_shapes_id['shape_names'][$j]['name'] ?? '';
-                        $d = $dico_shapes_id['shape_names'][$j + 1]['name'] ?? '';
-                        $e = $dico_shapes_id['shape_names'][$j + 2]['name'] ?? '';
-                        $f = $dico_shapes_id['shape_names'][$j + 2]['Nb_ligne'] ?? '';
-                        $g = $dico_shapes_id['shape_names'][$j + 3]['name'] ?? '';
-                        $h = $dico_shapes_id['shape_names'][$j + 3]['Nb_ligne'] ?? '';
-                        echo '<tr>';
-                        echo '<td>' . $c . '</td>';
-                        echo '<td>' . $a . '</td>';
-                        echo '<td style="border-left:solid; ">' . $d . '</td>';
-                        echo '<td>' . $b . '</td>';
-                        echo '<td style="border-left:solid; ">' . $e . '</td>';
-                        echo '<td>' . $f . '</td>';
-                        echo '<td style="border-left:solid; ">' . $g . '</td>';
-                        echo '<td>' . $h . '</td>';
-                        echo '</tr>';
-                    } else {
-                        $a = $dico_shapes_id['shape_names'][$j]['Nb_ligne'] ?? '';
-                        $b = $dico_shapes_id['shape_names'][$j + 1]['Nb_ligne'] ?? '';
-                        $c = $dico_shapes_id['shape_names'][$j]['name'] ?? '';
-                        $d = $dico_shapes_id['shape_names'][$j + 1]['name'] ?? '';
-                        echo '<tr>';
-                        echo '<td>' . $c . '</td>';
-                        echo '<td>' . $a . '</td>';
-                        echo '<td  style="border-left:solid; ">' . $d . '</td>';
-                        echo '<td>' . $b . '</td>';
-                        echo '</tr>';
-                    }
+                for ($j = 1; $j < $Nbcolonnes; $j++) {
+                    echo '<th>shape_id</th><th>Nb points</th>';
                 }
+                echo '</tr>';
+            
+                for ($i = 0; $i < 25; $i++) {
+                    echo '<tr>';
+                    for ($j = 0; $j < $Nbcolonnes; $j++) {
+                        $index = $i + ($j * 25);
+                        $a = $dico_shapes_id['shape_names'][$index]['name'] ?? '';
+                        $b = $dico_shapes_id['shape_names'][$index]['Nb_ligne'] ?? '';
+                        echo '<td style="border-left:solid;">' . $a . '</td>';
+                        echo '<td>' . $b . '</td>';
+                    }
+                    echo '</tr>';
+                }
+            
                 echo '<tr>';
-                echo '<td><b>Total Id</b></td>';
-                echo '<td><b>Total shapes</b></td>';
+                echo '<td style="border-top:solid; font-weight:bold;">Total Id</td>';
+                echo '<td style="border-top:solid; font-weight:bold;">Total shapes</td>';
+                for ($j = 1; $j < $Nbcolonnes; $j++) {
+                    echo '<td style="border-top:solid;"></td><td style="border-top:solid;"></td>';
+                }
                 echo '</tr>';
                 echo '<tr>';
                 echo '<td>' . $dico_shapes_id['Nb_shape_id'] . '</td>';
                 echo '<td>' . $Nbshapes . '</td>';
+                for ($j = 1; $j < $Nbcolonnes; $j++) {
+                    echo '<td></td><td></td>';
+                }
+                echo '</tr>';
                 echo '</table>';
             }
             fclose($handle);
         } else {
             echo 'Erreur : Impossible d\'ouvrir le fichier ' . $filePath;
-        }
+        }  
     }
 }

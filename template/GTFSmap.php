@@ -2,15 +2,8 @@
 /*Débug
 /require('outils/GTFScsvTOmap.php');
 echo '<pre>';
-$fichierLOG = strval('upload/extract' . $fichier . '/log.html');
-$LOG = fopen($fichierLOG, 'w');
-fwrite($LOG, '<pre>');
-fwrite($LOG, $MessageErreur ?? '');
 $arraystring = print_r($stops);
-fwrite($LOG, $arraystring);
 $arraystring = print_r($dico_shapes_id);
-fwrite($LOG, $arraystring);
-fwrite($LOG, '</pre>');
 fclose($LOG);
 //print_r($MessageErreur ?? '');
 //print_r($stops);
@@ -67,17 +60,27 @@ $NbshapesPourJS = $Nbshapes ?? 0;
 
     ?>
     map.addLayer(markers);
+
     // createshape
     var temoin = 0;
     <?php
     if (isset($dico_shapes_id['Nb_shape_id']) && is_int($dico_shapes_id['Nb_shape_id']) && $dico_shapes_id['Nb_shape_id'] > 0) {
-
         $debug = [];
         $y = 1;
-        for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) { ?>
+        for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) { 
+        $routeColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_color'] ?? null;
+        $routeTexteColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_text_color'] ?? null
+            ?>
             var shape_id = <?= json_encode($dico_shapes_id['shape_names'][$index]['name']) ?? null; ?>;
-            var latlngs = [
+            var route_id = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_id']) ?? null; ?>;
+            var shape_color = <?= json_encode('#'.$routeColor) ?>;
+            var shape_text_color = <?= json_encode('#'.$routeTexteColor); ?>;
+            if (shape_color == null) {
+                shape_color = getRandomColor();
+                console.log("Info : Couleur non trouvée pour la shape " + shape_id);
+            }
             <?php
+            echo 'var latlngs = [';
             while (($ShapesPositionXY[$y][0] ?? null) == $dico_shapes_id['shape_names'][$index]['name']) {
                 if (isset($ShapesPositionXY) && is_array($ShapesPositionXY)) {
                     $firstdot = [0, 0];
@@ -87,26 +90,36 @@ $NbshapesPourJS = $Nbshapes ?? 0;
                         if ($first) {
                             $firstdot = [$ShapesPositionXY[$y][1], $ShapesPositionXY[$y][2]];
                         }
-
+                        
                         $first = false;
-                        echo '[' . json_encode(floatval($ShapesPositionXY[$y][1])) . ', ' . json_encode(floatval($ShapesPositionXY[$y][2])) . '],';
+                        echo '[' . json_encode(floatval($ShapesPositionXY[$y][1])) . ', ' . json_encode(floatval($ShapesPositionXY[$y][2])) . ']';
                         $y++;
-
-
+                        if (($ShapesPositionXY[$y][0] ?? null) !== $dico_shapes_id['shape_names'][$index]['name']) {
+                            echo '];';
+                        } else {
+                            echo ',';
+                        }
                         $debug[$index][] = $i;
+                        
                     }
                 } else {
                     echo 'console.log("Erreur : $ShapesPositionXY non défini ou invalide");';
                 }
-            }
-        }
-            ?>
-            ];
+            }?>
+           var popupContent = `
+                <div class="popup-content">
+                    <p><strong>Shape Id :</strong> ${shape_id}</p>
+                    <p><strong>Route Id :</strong> ${route_id}</p>
+                    <p><strong>Nombre de points :</strong> ${latlngs.length}</p>
+                    <p><strong>Couleur :</strong> <span class="color-box" style="background-color: ${shape_color}; color: ${shape_text_color}"></span>${shape_color}</p>
+                </div>
+            `;
             var polyline = L.polyline(latlngs, {
-                color: getRandomColor(),
-            }).addTo(map).bindPopup("id : " + shape_id);
+                color: shape_color
+            }).addTo(map).bindPopup(popupContent);
             temoin++;
-        <?php } ?>
+            
+        <?php }} ?>
         console.log("Info : Shape ajoutée");
         console.log(temoin);
         // zoom the map to the polyline

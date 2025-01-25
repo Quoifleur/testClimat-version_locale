@@ -60,6 +60,7 @@ if (isset($_FILES['file'])) {
                 require('template/GTFSsommaire.php');
                 require('template/GTFStable_presence_fichier.php');
                 require('template/GTFSfichierExplicite.php');
+                //require('outils/fichierGTFScompletEcriture.php');
             }
             ?>
         </section>
@@ -70,9 +71,12 @@ if (isset($_FILES['file'])) {
                 if ($fichierChargé) {
                     echo '<p> fichier chargé</p>';
                     require('template/GTFSmap.php');
+                    //require('outils/GTFSnettoyage.php');
                 } else {
                     echo '<p>Aucun fichier n\'a pas été chargé</p>';
+                    //require('outils/GTFSnettoyage.php');
                 }
+                
                 ?>
             </div>
 

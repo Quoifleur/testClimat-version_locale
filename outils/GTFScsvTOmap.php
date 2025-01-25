@@ -21,24 +21,60 @@ function baricentrebis($array)
     return $lat . ',' . $long;
 }
 $stops_id = '';
-$stops = [
-    "stop_id" => null,
-    "stop_code" => null,
-    "stop_name" => null,
-    "tts_stop_name" => null,
-    "stop_desc" => null,
-    "stop_lat" => null,
-    "stop_lon" => null,
-    "zone_id" => null,
-    "stop_url" => null,
-    "location_type" => null,
-    "parent_station" => null,
-    "stop_timezone" => null,
-    "wheelchair_boarding" => null,
-    "level_id" => null,
-    "platform_code" => null,
-];
 
+require('GTFSarrays.php');
+
+//trips
+$filePath = 'upload/extract' . $fichier . '/trips.txt';
+$handle = fopen($filePath, 'r');
+if ($handle) {
+    $legende = fgetcsv($handle);
+    $Nbtrips = count($legende);
+    $NbtripsVariables = count($trips);
+    for ($i = 0; $i < $NbtripsVariables; $i++) {
+        $trips[array_keys($trips)[$i]] = array_search(array_keys($trips)[$i], $legende);
+    }
+    $Nbpoints = 0;
+    if (isset($trips['route_id']) && isset($trips['service_id']) && isset($trips['trip_id'])) {
+        while (($data = fgetcsv($handle)) !== false) {
+            for ($i = 0; $i < $NbtripsVariables; $i++) {
+                $TripInfo[$Nbpoints][array_keys($trips)[$i]] = $data[$trips[array_keys($trips)[$i]]];
+            }
+            $Nbpoints++;
+        }
+        echo $Nbpoints;
+        fclose($handle);
+    } else {
+        $MessageErreur[] = 'Erreur : Arrêt du processus trips';
+    }
+}
+//print_r($TripInfo);
+//routes
+$filePath = 'upload/extract' . $fichier . '/routes.txt';
+$handle = fopen($filePath,'r');
+if ($handle) {
+    $legende = fgetcsv($handle);
+    $Nbroutes = count($legende);
+    $NbroutesVariables = count($trips);
+    for ($i = 0; $i < $NbroutesVariables; $i++) {
+        $routes[array_keys($routes)[$i]] = array_search(array_keys($routes)[$i], $legende);
+    }
+    $Nbpoints = 0;
+    if (isset($routes['route_id']) && isset($routes['route_color']) && isset($routes['route_text_color'])) {
+        while (($data = fgetcsv($handle)) !== false) {
+            for ($i = 0; $i < $NbroutesVariables; $i++) {
+                $RouteInfo[$Nbpoints][array_keys($routes)[$i]] = $data[$routes[array_keys($routes)[$i]]];
+            }
+            $Nbpoints++;
+        }
+        echo $Nbpoints;
+        fclose($handle);
+    } else {
+        $MessageErreur[] = 'Erreur : Arrêt du processus routes';
+    }
+}
+//print_r($RouteInfo);
+//stops
 $filePath = 'upload/extract' . $fichier . '/stops.txt';
 $handle = fopen($filePath, 'r');
 if ($handle) {
@@ -55,25 +91,20 @@ if ($handle) {
             for ($i = 0; $i < $NbstopsVariables; $i++) {
                 $stopsInfo[$Nbpoints][array_keys($stops)[$i]] = $data[$stops[array_keys($stops)[$i]]];
             }
-            //print_r($legende);
-            //print_r($data);
             $StopsPositionXY[$Nbpoints] = [$data[$stops['stop_lat']], $data[$stops['stop_lon']]];
             $Nbpoints++;
         }
         echo $Nbpoints;
-        //print_r($stopsInfo);
-        //print_r($PositionXY);
         fclose($handle);
     } else {
-        $MessageErreur[0] = 'Erreur : stop_lat ou stop_lon non trouvés dans le fichier stops.txt. <br />';
-        $MessageErreur[1] = 'Arrêt du processus.';
+        $MessageErreur[] = 'Erreur : stop_lat ou stop_lon non trouvés dans le fichier stops.txt. <br />';
+        $MessageErreur[] = 'Erreur : Arrêt du processus stops';
     }
 } else {
     echo 'Info : Impossible d\'ouvrir le fichier ' . $filePath;
 }
 
 $baricentre = explode(',', baricentrebis($StopsPositionXY ?? [0, 0]));
-//print_r($baricentre);
 
 clearstatcache();
 $ShapesPresent = false;
@@ -83,8 +114,7 @@ if (file_exists($filePath) == true) {
     $ShapesPresent = true ?? false;
 }
 
-//echo isset($handle) ? 'true' : 'false';
-//echo isset($ShapesPresent) ? 'true' : 'false';
+//shapes
 if ($handle == true && $ShapesPresent == true) {
     $handle->setFlags(SplFileObject::READ_CSV);
     $legende = $handle->fgetcsv();
@@ -149,3 +179,23 @@ if ($handle == true && $ShapesPresent == true) {
 } else {
     $MessageErreur[] =  '<br>Info : Impossible d\'ouvrir le fichier ' . $filePath;
 }
+$NbtripsLIGNE = count($TripInfo);
+for ($i = 0; $i < $NbtripsLIGNE; $i++) {
+    $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] = [
+        'trip_id' => $TripInfo[$i]['trip_id'],
+        'route_id' => $TripInfo[$i]['route_id'],
+        'route_color' => null,
+        'route_text_color' => null,
+    ];
+    foreach ($CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] as $key => $value) {
+        if ($key == 'route_id') {
+            foreach ($RouteInfo as $route) {
+                if ($route['route_id'] == $value) {
+                    $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['route_color'] = $route['route_color'];
+                    $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['route_text_color'] = $route['route_text_color'];
+                }
+            }
+        }
+    }
+}
+//print_r($CorrespondanceShapeRoute);
