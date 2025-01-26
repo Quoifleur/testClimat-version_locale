@@ -41,15 +41,34 @@ $NbshapesPourJS = $Nbshapes ?? 0;
         return color;
     }
     // Initialiser le groupe de clusters
-    var markers = L.markerClusterGroup();
 
+    var markers = L.markerClusterGroup();
     // create a start
     // create a stop
     <?php
     if (isset($StopsPositionXY) && isset($Nbpoints) && is_array($StopsPositionXY) && is_int($Nbpoints)) {
         for ($i = 1; $i < $Nbpoints; $i++) {
             if (isset($StopsPositionXY[$i]) && is_array($StopsPositionXY[$i]) && count($StopsPositionXY[$i]) == 2) {
-                echo 'var marker = L.marker([' . json_encode($StopsPositionXY[$i][0]) . ', ' . json_encode($StopsPositionXY[$i][1]) . ']).addTo(markers);';
+                    echo 'var stop_id = '. json_encode($stopsInfo[$i]['stop_id'] ?? null) . ';';
+                    echo 'var stop_name = '. json_encode($stopsInfo[$i]['stop_name'] ?? null). ';';
+                    echo 'var stop_lat = '. json_encode($StopsPositionXY[$i][0] ?? null). ';';
+                    echo 'var stop_long = '. json_encode($StopsPositionXY[$i][1] ?? null). ';';
+                    echo 'var zone_id = '. json_encode($stopsInfo[$i]['zone_id'] ?? null). ';';
+                    echo 'var parent_station = '. json_encode($stopsInfo[$i]['parent_station'] ?? null). ';';
+                    echo 'var wheelchair_boarding = '. json_encode($stopsInfo[$i]['wheelchair_boarding'] ?? null). ';';
+                    echo 'var platform_code = '. json_encode($stopsInfo[$i]['platform_code'] ?? null). ';';
+                    echo 'var popupContent = `
+                            <div class="popup-content">
+                                <p><strong>stop Id :</strong> ${stop_id}</p>
+                                <p><strong>Name :</strong> ${stop_name}</p>
+                                <p><strong>Coordonées :</strong> ${stop_lat},${stop_long}</p>
+                                <p><strong>Zone Id :</strong> ${zone_id}</p>
+                                <p><strong>Parent Station :</strong> ${parent_station}</p>
+                                <p><strong>Wheelchair Boarding :</strong> ${wheelchair_boarding}</p>
+                                <p><strong>Platform Code :</strong> ${platform_code}</p>
+                            </div>
+                        `;';
+                echo 'var marker = L.marker([' . json_encode($StopsPositionXY[$i][0]) . ', ' . json_encode($StopsPositionXY[$i][1]) . ']).bindPopup(popupContent).addTo(markers);';
             } else {
                 echo 'console.log("Erreur : Coordonnées manquantes ou invalides pour l\'index ' . $i . '");';
             }

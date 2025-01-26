@@ -1,5 +1,9 @@
 <?php
-echo '<h3>Informations</h3><table>';
+echo '<h3>Informations et Sommmaire</h3>
+<p>
+Cliquez sur le nom du fichier pour accéder à son contenu.
+</p>
+<table>';
 echo '<caption>Informations sur le fichier chargé</caption>
                 <tr>
                     <th>Fichier</th>

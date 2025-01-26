@@ -1,8 +1,4 @@
 <?php
-// Afficher toutes les erreurs
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 function baricentrebis($array)
 {
     $lat = 0;
@@ -42,7 +38,7 @@ if ($handle) {
             }
             $Nbpoints++;
         }
-        echo $Nbpoints;
+        //echo $Nbpoints;
         fclose($handle);
     } else {
         $MessageErreur[] = 'Erreur : Arrêt du processus trips';
@@ -67,7 +63,7 @@ if ($handle) {
             }
             $Nbpoints++;
         }
-        echo $Nbpoints;
+        //echo $Nbpoints;
         fclose($handle);
     } else {
         $MessageErreur[] = 'Erreur : Arrêt du processus routes';
@@ -94,7 +90,7 @@ if ($handle) {
             $StopsPositionXY[$Nbpoints] = [$data[$stops['stop_lat']], $data[$stops['stop_lon']]];
             $Nbpoints++;
         }
-        echo $Nbpoints;
+        //echo $Nbpoints;
         fclose($handle);
     } else {
         $MessageErreur[] = 'Erreur : stop_lat ou stop_lon non trouvés dans le fichier stops.txt. <br />';
@@ -103,7 +99,7 @@ if ($handle) {
 } else {
     echo 'Info : Impossible d\'ouvrir le fichier ' . $filePath;
 }
-
+//print_r($stopsInfo);
 $baricentre = explode(',', baricentrebis($StopsPositionXY ?? [0, 0]));
 
 clearstatcache();
