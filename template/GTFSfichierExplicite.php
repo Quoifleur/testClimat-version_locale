@@ -1,6 +1,10 @@
 <?php
-$routeCouleur = ['route_id', 'route_color', 'route_text_color'];
-
+for ($i = 0; $i < count($RouteInfo); $i++) {
+$routeCouleur['route_color'][] = $RouteInfo[$i ]['route_color'] ?? 'FFFFFF'; 
+$routeCouleur['route_text_color'][] = $RouteInfo[$i]['route_text_color'] ?? '6F6951';
+}
+//print_r($routeCouleur);
+//print_r($RouteInfo);
 for ($i = 0; $i < $Nbfichierthéorique; $i++) {
     if ($ListeFichierGTFSprésent[$i][1] == 1) {
         $filePath = 'upload/extract' . $fichier . '/' . $ListeFichierGTFSprésent[$i][0];
@@ -18,21 +22,30 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
             echo '</tr>';
             $rowCount = 0;
             $rénitialisation = false;
-            while (($data = fgetcsv($handle)) !== false && $rowCount < 10) {
+            while (($data = fgetcsv($handle)) !== false && $rowCount < 20) {
                 echo '<tr>';
                 for ($y = 0; $y < $Nbcolonnes; $y++) {
-                    if ($ListeFichierGTFSprésent[$i][0] == 'routes.txt' && $Legende[$y] == 'route_color' && $Legende[$y + 1] == 'route_text_color') {
+                    if ($ListeFichierGTFSprésent[$i][0] == 'routes.txt') {
                         //$routeCouleur['route_id'][] = $data[$y -  6];
-                        $routeCouleur['route_color'][] = $data[$y];
-                        $routeCouleur['route_text_color'][] = $data[$y + 1];
-                        echo '<td style="background:#' . $data[$y] . '; color:#' . $data[$y + 1] . ';">' . $data[$y] . '</td>';
-                        $y++;
-                        echo '<td style="background:#' . $data[$y - 1] . '; color:#' . $data[$y] . ';">' . $data[$y] . '</td>';
-                        if (count($routes) <= 20 && $rowCount == 9 && !$rénitialisation) {
+                        
+                        if ($Legende[$y] == 'route_id'){
+                            echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
+                            $y++;
+                        }
+                        if ($Legende[$y] == 'route_color'){
+                            echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
+                            $y++;
+                        }
+                        if ($Legende[$y] == 'route_text_color'){
+                            echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
+                            $y++;
+                        }
+                        echo '<td>' . $data[$y] . '</td>';
+                        /*if (count($routes) <= 20 && $rowCount == 9 && !$rénitialisation) {
                             $rowCount = 0;
                             $rénitialisation = true;
-                        }
-                    }elseif ($ListeFichierGTFSprésent[$i][0] == 'agency.txt'){
+                        }*/
+                    } elseif ($ListeFichierGTFSprésent[$i][0] == 'agency.txt'){
                         if ($Legende[$y] == 'agency_url') {
                             echo '<td><a href="' . $data[$y] . '">'. $data[$y] . '</a></td>';
                             $y++;
@@ -40,7 +53,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                         echo '<td>' . $data[$y] . '</td>';
                     } elseif ($ListeFichierGTFSprésent[$i][0] == 'stops.txt') {
                         if ($Legende[$y] == 'route_id') {
-                            echo '<td style="background:#' . $routeCouleur['route_color'][$y] . '; color:#' . $routeCouleur['route_text_color'][$y] . ';">' . $data[$y] . '</td>';
+                            echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
                             $y++;
                         }
                         if ($Legende[$y] == 'wheelchair_boarding') {
@@ -94,7 +107,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                             $y++;
                             
                         }
-                        echo '<td>' . $data[$y] . '</td>';
+                        echo '<td>' . ($data[$y] ?? null) . '</td>';
                         //echo '<td style="background:#' . $routeCouleur['route_color'][] . '; color:#' . $routeCouleur['route_text_color'] . ';">' . $data[$y] . '</td>';
                     }else {
                         echo '<td>' . $data[$y] . '</td>';

@@ -69,7 +69,7 @@ if (isset($_FILES['file'])) {
                     require('template/GTFSmap.php');
                     require('outils/GTFSnettoyage.php');
                 } else {
-                    echo '<p>Aucun des fichiers stops.txt ou shapes.txt n\'ont pas été chargés et/ou détectés, en l\'absence de donnés cartographiables, la carte ne peut pas s\'afficher.</p>';
+                    echo '<p>Aucun des fichiers stops.txt ou shapes.txt ont été chargés et/ou détectés, en l\'absence de donnés cartographiables, la carte ne peut pas s\'afficher.</p>';
                     require('outils/GTFSnettoyage.php');
                 }
                 
