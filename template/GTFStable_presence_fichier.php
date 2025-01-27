@@ -21,4 +21,21 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
     echo '<td>' . $ListeFichierGTFSprésent[$i][2] . '</td>';
     echo '</tr>';
 }
+$Message = $MessageErreur ?? null;
 echo '</table>';
+/*echo '<h3 id="Informations et erreurs">Informations et erreurs</h3>';
+echo '<table>';
+echo '<caption>Informations et erreurs</caption>';
+if (isset($Message)) {
+    echo '<tr><th>Types</th><th>Messages</th></tr>';
+    for ($i = 0; $i < count($MessageErreur); $i++) {
+        $affichage[$i] = explode(':', $MessageErreur[$i]);
+        echo '<tr>';
+        echo $affichage[$i][0];
+        echo $affichage[$i][1];
+        echo '</tr>';
+    }
+} else {
+    echo '<tr><td>Aucune erreur</td></tr>';
+    echo '<br/>';
+}*/

@@ -47,7 +47,7 @@ if ($handle) {
 //print_r($TripInfo);
 //routes
 $filePath = 'upload/extract' . $fichier . '/routes.txt';
-$handle = fopen($filePath,'r');
+$handle = fopen($filePath, 'r');
 if ($handle) {
     $legende = fgetcsv($handle);
     $Nbroutes = count($legende);
@@ -77,29 +77,40 @@ if ($handle) {
     $legende = fgetcsv($handle);
     $Nbcolonnes = count($legende);
     $NbstopsVariables = count($stops);
-    for ($i = 0; $i < $NbstopsVariables; $i++) {
-        $stops[array_keys($stops)[$i]] = array_search(array_keys($stops)[$i], $legende);
+    for ($i = 0; $i < +$NbstopsVariables; $i++) {
+        $stops[array_keys($stops)[$i]] = array_search(array_keys($stops)[$i], $legende) ?? null;
     }
-
+    //print_r($stops);
     $Nbpoints = 0;
-    if (isset($stops['stop_lat']) && isset($stops['stop_lon'])) {
+    if (isset($stops['stop_id'])) {
         while (($data = fgetcsv($handle)) !== false) {
             for ($i = 0; $i < $NbstopsVariables; $i++) {
-                $stopsInfo[$Nbpoints][array_keys($stops)[$i]] = $data[$stops[array_keys($stops)[$i]]];
+                $key = array_keys($stops)[$i];
+                //echo $key . '<br />';
+                $index = $stops[$key];
+                //echo $index . '<br />';
+                if (is_numeric($index)) {
+                    $stopsInfo[$Nbpoints][$key] = $data[$index];
+                } else {
+                    $stopsInfo[$Nbpoints][$key] = null;
+                }
             }
-            $StopsPositionXY[$Nbpoints] = [$data[$stops['stop_lat']], $data[$stops['stop_lon']]];
+            if (isset($data[$stops['stop_lat']]) && isset($data[$stops['stop_lon']])) {
+                $StopsPositionXY[$Nbpoints] = [$data[$stops['stop_lat']], $data[$stops['stop_lon']]];
+            } else {
+                $StopsPositionXY[$Nbpoints] = [null, null]; // ou des valeurs par défaut
+            }
             $Nbpoints++;
         }
         //echo $Nbpoints;
         fclose($handle);
     } else {
-        $MessageErreur[] = 'Erreur : stop_lat ou stop_lon non trouvés dans le fichier stops.txt. <br />';
+        $MessageErreur[] = 'Erreur : stop_id non trouvés dans le fichier stops.txt. Cette variable est requise.<br />';
         $MessageErreur[] = 'Erreur : Arrêt du processus stops';
     }
 } else {
     echo 'Info : Impossible d\'ouvrir le fichier ' . $filePath;
 }
-//print_r($stopsInfo);
 $baricentre = explode(',', baricentrebis($StopsPositionXY ?? [0, 0]));
 
 clearstatcache();
@@ -173,8 +184,9 @@ if ($handle == true && $ShapesPresent == true) {
         }
     }
 } else {
-    $MessageErreur[] =  '<br>Info : Impossible d\'ouvrir le fichier ' . $filePath;
+    $MessageErreur[] = '<br>Info : Impossible d\'ouvrir le fichier ' . $filePath;
 }
+unset($value);
 $NbtripsLIGNE = count($TripInfo);
 for ($i = 0; $i < $NbtripsLIGNE; $i++) {
     $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] = [
@@ -183,15 +195,18 @@ for ($i = 0; $i < $NbtripsLIGNE; $i++) {
         'route_color' => null,
         'route_text_color' => null,
     ];
-    foreach ($CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] as $key => $value) {
-        if ($key == 'route_id') {
-            foreach ($RouteInfo as $route) {
-                if ($route['route_id'] == $value) {
-                    $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['route_color'] = $route['route_color'];
-                    $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['route_text_color'] = $route['route_text_color'];
+    if (isset($RouteInfo)) {
+        foreach ($CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] as $key => $value) {
+            if ($key == 'route_id') {
+                foreach ($RouteInfo as $route) {
+                    if ($route['route_id'] == $value) {
+                        $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['route_color'] = $route['route_color'];
+                        $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['route_text_color'] = $route['route_text_color'];
+                    }
                 }
             }
         }
     }
 }
 //print_r($CorrespondanceShapeRoute);
+//print_r($MessageErreur);

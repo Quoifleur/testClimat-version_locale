@@ -1,7 +1,7 @@
 <?php
 for ($i = 0; $i < count($RouteInfo); $i++) {
-$routeCouleur['route_color'][] = $RouteInfo[$i ]['route_color'] ?? 'FFFFFF'; 
-$routeCouleur['route_text_color'][] = $RouteInfo[$i]['route_text_color'] ?? '6F6951';
+    $routeCouleur['route_color'][] = $RouteInfo[$i]['route_color'] ?? 'FFFFFF';
+    $routeCouleur['route_text_color'][] = $RouteInfo[$i]['route_text_color'] ?? '6F6951';
 }
 //print_r($routeCouleur);
 //print_r($RouteInfo);
@@ -12,7 +12,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
         if ($handle) {
             $Legende = fgetcsv($handle);
             $Nbcolonnes = count($Legende);
-            echo '<h3 id="' . $ListeFichierGTFSprésent[$i][0] . '">' . $ListeFichierGTFSprésent[$i][0] . '</h3><a href="https://gtfs.org/documentation/schedule/reference/#'. str_replace('.', '', $ListeFichierGTFSprésent[$i][0]) .'" target="_blank">Documentation</a>';
+            echo '<h3 id="' . $ListeFichierGTFSprésent[$i][0] . '">' . $ListeFichierGTFSprésent[$i][0] . '</h3><a href="https://gtfs.org/documentation/schedule/reference/#' . str_replace('.', '', $ListeFichierGTFSprésent[$i][0]) . '" target="_blank">Documentation</a>';
             echo '<table>';
             echo '<caption>' . $ListeFichierGTFSprésent[$i][0] . '</caption>';
             echo '<tr>';
@@ -27,27 +27,34 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                 for ($y = 0; $y < $Nbcolonnes; $y++) {
                     if ($ListeFichierGTFSprésent[$i][0] == 'routes.txt') {
                         //$routeCouleur['route_id'][] = $data[$y -  6];
-                        
-                        if ($Legende[$y] == 'route_id'){
+                        if ($Legende[$y] == 'route_type') {
+                            switch ($data[$y]) {
+                                case 3:
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="bus-icon" src="icones/route_type_3_bus.png" alt="Bus"/></td>';
+                                    break;
+                                default:
+                                    echo '<td>' . $data[$y] . '</td>';
+                            }
+                            $y++;
+                        }
+                        if ($Legende[$y] == 'route_id') {
                             echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
                             $y++;
                         }
-                        if ($Legende[$y] == 'route_color'){
+                        if ($Legende[$y] == 'route_color') {
                             echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
                             $y++;
                         }
-                        if ($Legende[$y] == 'route_text_color'){
+                        if ($Legende[$y] == 'route_text_color') {
                             echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
                             $y++;
                         }
+
                         echo '<td>' . $data[$y] . '</td>';
-                        /*if (count($routes) <= 20 && $rowCount == 9 && !$rénitialisation) {
-                            $rowCount = 0;
-                            $rénitialisation = true;
-                        }*/
-                    } elseif ($ListeFichierGTFSprésent[$i][0] == 'agency.txt'){
+
+                    } elseif ($ListeFichierGTFSprésent[$i][0] == 'agency.txt') {
                         if ($Legende[$y] == 'agency_url') {
-                            echo '<td><a href="' . $data[$y] . '">'. $data[$y] . '</a></td>';
+                            echo '<td><a href="' . $data[$y] . '">' . $data[$y] . '</a></td>';
                             $y++;
                         }
                         echo '<td>' . $data[$y] . '</td>';
@@ -62,18 +69,17 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                                     echo '<td class="table_attention">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_0.png" alt="Accessibilité inconnue"/></td>';
                                     break;
                                 case 1:
-                                    echo '<td class="table_A_noter">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_1.png" alt="Accessible en fauteuil roulant"/></td>';    
+                                    echo '<td class="table_A_noter">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_1.png" alt="Accessible en fauteuil roulant"/></td>';
                                     break;
                                 case 2:
                                     echo '<td class="table_attention">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_2.png" alt="Non accessible en fauteuil roulant"/></td>';
                                     break;
                             }
                             $y++;
-                        } 
-                        echo '<td>'. $data[$y] . '</td>';
-                    }
-                    elseif ($ListeFichierGTFSprésent[$i][0] == 'trips.txt') {
-                        
+                        }
+                        echo '<td>' . $data[$y] . '</td>';
+                    } elseif ($ListeFichierGTFSprésent[$i][0] == 'trips.txt') {
+
                         if ($Legende[$y] == 'route_id') {
                             echo '<td style="background:#' . $routeCouleur['route_color'][$y] . '; color:#' . $routeCouleur['route_text_color'][$y] . ';">' . $data[$y] . '</td>';
                             $y++;
@@ -84,7 +90,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                                     echo '<td class="table_attention">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_0.png" alt="Accessibilité inconnue"/></td>';
                                     break;
                                 case 1:
-                                    echo '<td class="table_A_noter">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_1.png" alt="Accessible en fauteuil roulant"/></td>';    
+                                    echo '<td class="table_A_noter">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_1.png" alt="Accessible en fauteuil roulant"/></td>';
                                     break;
                                 case 2:
                                     echo '<td class="table_attention">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_2.png" alt="Non accessible en fauteuil roulant"/></td>';
@@ -98,21 +104,21 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                                     echo '<td class="table_attention">' . $data[$y] . ' <img class="bike-icon" src="icones/bikes_allowed_0.png" alt="Autorisation des vélos inconnue" /></td>';
                                     break;
                                 case 1:
-                                    echo '<td class="table_A_noter">' . $data[$y] . ' <img class="bike-icon" src="icones/bikes_allowed_1.png" alt="Vélos autorisés"/></td>';    
+                                    echo '<td class="table_A_noter">' . $data[$y] . ' <img class="bike-icon" src="icones/bikes_allowed_1.png" alt="Vélos autorisés"/></td>';
                                     break;
                                 case 2:
                                     echo '<td class="table_attention">' . $data[$y] . ' <img class="bike-icon" src="icones/bikes_allowed_2.png" alt="Vélos non autorisés"/></td>';
                                     break;
                             }
                             $y++;
-                            
+
                         }
                         echo '<td>' . ($data[$y] ?? null) . '</td>';
                         //echo '<td style="background:#' . $routeCouleur['route_color'][] . '; color:#' . $routeCouleur['route_text_color'] . ';">' . $data[$y] . '</td>';
-                    }else {
+                    } else {
                         echo '<td>' . $data[$y] . '</td>';
                     }
-                } 
+                }
                 echo '</tr>';
                 $rowCount++;
             }
@@ -136,7 +142,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                     echo '<th>shape_id</th><th>Nb points</th>';
                 }
                 echo '</tr>';
-            
+
                 for ($i = 0; $i < 25; $i++) {
                     echo '<tr>';
                     for ($j = 0; $j < $Nbcolonnes; $j++) {
@@ -148,7 +154,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                     }
                     echo '</tr>';
                 }
-            
+
                 echo '<tr>';
                 echo '<td style="border-top:solid; font-weight:bold;">Total Id</td>';
                 echo '<td style="border-top:solid; font-weight:bold;">Total shapes</td>';
@@ -168,6 +174,6 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
             fclose($handle);
         } else {
             echo 'Erreur : Impossible d\'ouvrir le fichier ' . $filePath;
-        }  
+        }
     }
 }
