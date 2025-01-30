@@ -18,6 +18,10 @@ if (!in_array($extension, $extensions)) //Si l'extension n'est pas dans le table
 //}
 if (!$erreur) //S'il n'y a pas d'erreur, on upload
 {
+    // Vérifiez si le répertoire existe, sinon créez-le
+    if (!is_dir($dossier)) {
+        mkdir($dossier, 0777, true);
+    }
     //On formate le nom du fichier ici...
     $fichier = strtr(
         $fichier,

@@ -24,7 +24,7 @@ if (isset($_FILES['file'])) {
             color: #6F6951;
         }
 
-        .bus-icon {
+        .mode-icon {
             color: #6F6951;
         }
     </style>

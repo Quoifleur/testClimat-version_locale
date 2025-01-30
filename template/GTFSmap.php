@@ -49,15 +49,15 @@ $NbshapesPourJS = $Nbshapes ?? 0;
     if (isset($StopsPositionXY) && isset($Nbpoints) && is_array($StopsPositionXY) && is_int($Nbpoints)) {
         for ($i = 1; $i < $Nbpoints; $i++) {
             if (isset($StopsPositionXY[$i]) && is_array($StopsPositionXY[$i]) && count($StopsPositionXY[$i]) == 2) {
-                    echo 'var stop_id = '. json_encode($stopsInfo[$i]['stop_id'] ?? null) . ';';
-                    echo 'var stop_name = '. json_encode($stopsInfo[$i]['stop_name'] ?? null). ';';
-                    echo 'var stop_lat = '. json_encode($StopsPositionXY[$i][0] ?? null). ';';
-                    echo 'var stop_long = '. json_encode($StopsPositionXY[$i][1] ?? null). ';';
-                    echo 'var zone_id = '. json_encode($stopsInfo[$i]['zone_id'] ?? null). ';';
-                    echo 'var parent_station = '. json_encode($stopsInfo[$i]['parent_station'] ?? null). ';';
-                    echo 'var wheelchair_boarding = '. json_encode($stopsInfo[$i]['wheelchair_boarding'] ?? null). ';';
-                    echo 'var platform_code = '. json_encode($stopsInfo[$i]['platform_code'] ?? null). ';';
-                    echo 'var popupContent = `
+                echo 'var stop_id = ' . json_encode($stopsInfo[$i]['stop_id'] ?? null) . ';';
+                echo 'var stop_name = ' . json_encode($stopsInfo[$i]['stop_name'] ?? null) . ';';
+                echo 'var stop_lat = ' . json_encode($StopsPositionXY[$i][0] ?? null) . ';';
+                echo 'var stop_long = ' . json_encode($StopsPositionXY[$i][1] ?? null) . ';';
+                echo 'var zone_id = ' . json_encode($stopsInfo[$i]['zone_id'] ?? null) . ';';
+                echo 'var parent_station = ' . json_encode($stopsInfo[$i]['parent_station'] ?? null) . ';';
+                echo 'var wheelchair_boarding = ' . json_encode($stopsInfo[$i]['wheelchair_boarding'] ?? null) . ';';
+                echo 'var platform_code = ' . json_encode($stopsInfo[$i]['platform_code'] ?? null) . ';';
+                echo 'var popupContent = `
                             <div class="popup-content">
                                 <p><strong>stop Id :</strong> ${stop_id}</p>
                                 <p><strong>Name :</strong> ${stop_name}</p>
@@ -86,14 +86,14 @@ $NbshapesPourJS = $Nbshapes ?? 0;
     if (isset($dico_shapes_id['Nb_shape_id']) && is_int($dico_shapes_id['Nb_shape_id']) && $dico_shapes_id['Nb_shape_id'] > 0) {
         $debug = [];
         $y = 1;
-        for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) { 
-        $routeColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_color'] ?? null;
-        $routeTexteColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_text_color'] ?? null
-            ?>
+        for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) {
+            $routeColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_color'] ?? null;
+            $routeTexteColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_text_color'] ?? null
+    ?>
             var shape_id = <?= json_encode($dico_shapes_id['shape_names'][$index]['name']) ?? null; ?>;
             var route_id = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_id']) ?? null; ?>;
-            var shape_color = <?= json_encode('#'.$routeColor) ?>;
-            var shape_text_color = <?= json_encode('#'.$routeTexteColor); ?>;
+            var shape_color = <?= json_encode('#' . $routeColor) ?>;
+            var shape_text_color = <?= json_encode('#' . $routeTexteColor); ?>;
             if (shape_color == null) {
                 shape_color = getRandomColor();
                 console.log("Info : Couleur non trouvée pour la shape " + shape_id);
@@ -109,7 +109,7 @@ $NbshapesPourJS = $Nbshapes ?? 0;
                         if ($first) {
                             $firstdot = [$ShapesPositionXY[$y][1], $ShapesPositionXY[$y][2]];
                         }
-                        
+
                         $first = false;
                         echo '[' . json_encode(floatval($ShapesPositionXY[$y][1])) . ', ' . json_encode(floatval($ShapesPositionXY[$y][2])) . ']';
                         $y++;
@@ -119,13 +119,12 @@ $NbshapesPourJS = $Nbshapes ?? 0;
                             echo ',';
                         }
                         $debug[$index][] = $i;
-                        
                     }
                 } else {
                     echo 'console.log("Erreur : $ShapesPositionXY non défini ou invalide");';
                 }
-            }?>
-           var popupContent = `
+            } ?>
+            var popupContent = `
                 <div class="popup-content">
                     <p><strong>Shape Id :</strong> ${shape_id}</p>
                     <p><strong>Route Id :</strong> ${route_id}</p>
@@ -137,10 +136,11 @@ $NbshapesPourJS = $Nbshapes ?? 0;
                 color: shape_color
             }).addTo(map).bindPopup(popupContent);
             temoin++;
-            
-        <?php }} ?>
-        console.log("Info : Shape ajoutée");
-        console.log(temoin);
-        // zoom the map to the polyline
-        map.fitBounds(polyline.getBounds());
+
+    <?php }
+    } ?>
+    console.log("Info : Shapes ajoutées");
+    console.log(temoin);
+    // zoom the map to the polyline
+    map.fitBounds(polyline.getBounds());
 </script>
