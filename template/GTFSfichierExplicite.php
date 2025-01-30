@@ -29,8 +29,34 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                         //$routeCouleur['route_id'][] = $data[$y -  6];
                         if ($Legende[$y] == 'route_type') {
                             switch ($data[$y]) {
+                                case 0:
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_0_tram.png" alt="Tram"/></td>';
+                                    break;
+                                case 1:
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_1_rail.png" alt="Train"/></td>';
+                                    break;
+                                case 2:
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_2_subway.png" alt="Métro"/></td>';
+                                    break;
                                 case 3:
-                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="bus-icon" src="icones/route_type_3_bus.png" alt="Bus"/></td>';
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mosz-icon" src="icones/route_type_3_bus.png" alt="Bus"/></td>';
+                                    break;
+                                case 4:
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_4_ferry.png" alt="Ferry"/></td>';
+                                    break;
+                                case 5:
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_5_cable_tram.png" alt="Tram à traction par cable"/></td>';
+                                    break;
+                                case 6:
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_6_aerial_lift.png" alt="Téléphérique"/></td>';
+                                    break;
+                                case 7:
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_7_funicular.png" alt="Funiculaire"/></td>';
+                                case 11:
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_11_trolleybus.png" alt="Trolleybus"/></td>';
+                                    break;
+                                case 12:
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_12_monorail.png" alt="Monorail"/></td>';
                                     break;
                                 default:
                                     echo '<td>' . $data[$y] . '</td>';
@@ -51,7 +77,6 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                         }
 
                         echo '<td>' . $data[$y] . '</td>';
-
                     } elseif ($ListeFichierGTFSprésent[$i][0] == 'agency.txt') {
                         if ($Legende[$y] == 'agency_url') {
                             echo '<td><a href="' . $data[$y] . '">' . $data[$y] . '</a></td>';
@@ -111,7 +136,6 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                                     break;
                             }
                             $y++;
-
                         }
                         echo '<td>' . ($data[$y] ?? null) . '</td>';
                         //echo '<td style="background:#' . $routeCouleur['route_color'][] . '; color:#' . $routeCouleur['route_text_color'] . ';">' . $data[$y] . '</td>';
