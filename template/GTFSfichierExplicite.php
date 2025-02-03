@@ -1,9 +1,22 @@
 <?php
-for ($i = 0; $i < count($RouteInfo); $i++) {
-    $routeCouleur['route_color'][] = $RouteInfo[$i]['route_color'] ?? 'FFFFFF';
-    $routeCouleur['route_text_color'][] = $RouteInfo[$i]['route_text_color'] ?? '6F6951';
+function contrasteColor($color)
+{
+    // Convertir la couleur hexadécimale en RGB
+    $r = hexdec(substr($color, 0, 2));
+    $g = hexdec(substr($color, 2, 2));
+    $b = hexdec(substr($color, 4, 2));
+
+    // Calculer la luminance relative
+    $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
+
+    // Retourner noir pour les couleurs claires et blanc pour les couleurs sombres
+    return ($luminance > 0.5) ? '6F6951' : '#fff9df';
 }
-//print_r($routeCouleur);
+for ($i = 0; $i < count($RouteInfo); $i++) {
+    $routeCouleur['route_color'][] = $RouteInfo[$i]['route_color'];
+    $routeCouleur['route_text_color'][] = $RouteInfo[$i]['route_text_color'] ?? contrasteColor($RouteInfo[$i]['route_color']);
+}
+//print_r($routeCouleur);w
 //print_r($RouteInfo);
 for ($i = 0; $i < $Nbfichierthéorique; $i++) {
     if ($ListeFichierGTFSprésent[$i][1] == 1) {
@@ -25,6 +38,9 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
             while (($data = fgetcsv($handle)) !== false && $rowCount < 20) {
                 echo '<tr>';
                 for ($y = 0; $y < $Nbcolonnes; $y++) {
+                    if ($data[$y] == '' || $data[$y] == ' ' || $data[$y] == null) {
+                        $data[$y] = 'n/a';
+                    }
                     if ($ListeFichierGTFSprésent[$i][0] == 'routes.txt') {
                         //$routeCouleur['route_id'][] = $data[$y -  6];
                         if ($Legende[$y] == 'route_type') {
@@ -63,15 +79,15 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                             }
                             $y++;
                         }
-                        if ($Legende[$y] == 'route_id') {
+                        if ($Legende[$y] ?? null == 'route_id') {
                             echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
                             $y++;
                         }
-                        if ($Legende[$y] == 'route_color') {
+                        if ($Legende[$y] ?? null == 'route_color') {
                             echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
                             $y++;
                         }
-                        if ($Legende[$y] == 'route_text_color') {
+                        if ($Legende[$y] ?? null == 'route_text_color') {
                             echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
                             $y++;
                         }

@@ -56,10 +56,19 @@ if ($handle) {
         $routes[array_keys($routes)[$i]] = array_search(array_keys($routes)[$i], $legende);
     }
     $Nbpoints = 0;
-    if (isset($routes['route_id']) && isset($routes['route_color']) && isset($routes['route_text_color'])) {
+    if (isset($routes['route_id'])) {
         while (($data = fgetcsv($handle)) !== false) {
             for ($i = 0; $i < $NbroutesVariables; $i++) {
-                $RouteInfo[$Nbpoints][array_keys($routes)[$i]] = $data[$routes[array_keys($routes)[$i]]];
+                $key = array_keys($routes)[$i];
+                //echo $key . '<br />';
+                $index = $routes[$key];
+                //echo $index . '<br />';
+                if (is_numeric($index)) {
+                    $RouteInfo[$Nbpoints][array_keys($routes)[$i]] = $data[$routes[array_keys($routes)[$i]]];
+                } else {
+                    $RouteInfo[$Nbpoints][array_keys($routes)[$i]] = null;
+                }
+                //$RouteInfo[$Nbpoints][array_keys($routes)[$i]] = $data[$routes[array_keys($routes)[$i]]];
             }
             $Nbpoints++;
         }

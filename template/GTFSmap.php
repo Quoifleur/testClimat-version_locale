@@ -26,11 +26,45 @@ $NbshapesPourJS = $Nbshapes ?? 0;
     console.log("Info : Script de carte chargé");
     var Px = <?= json_encode($baricentre[0]); ?>;
     var Py = <?= json_encode($baricentre[1]); ?>;
-    var map = L.map("map").setView([Px, Py], 13);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //var map = L.map("map").setView([Px, Py], 13);
+    const markers = L.markerClusterGroup();
+    const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
+    });
+
+    const pageBlanche = L.tileLayer('', {
+        maxZoom: 19,
+    });
+
+    const map = L.map('map', {
+        center: [Px, Py],
+        zoom: 10,
+        layers: [osm, markers]
+    });
+
+    const baseLayers = {
+        'OpenStreetMap': osm,
+        'Sans fond de carte': pageBlanche
+    };
+
+    const overlays = {
+        'Stops': markers
+    };
+
+    const layerControl = L.control.layers(baseLayers, overlays).addTo(map);
+
+    const openTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    });
+    layerControl.addBaseLayer(openTopoMap, 'OpenTopoMap');
+    //tuto
+    var latlng = [Px, Py];
+    var tooltip = L.tooltip()
+        .setLatLng(latlng)
+        .setContent('Hello world!<br />This is a nice tooltip.')
+        .addTo(map);
     // Fonction pour générer une couleur aléatoire
     function getRandomColor() {
         var letters = '23456789ABC';
@@ -41,8 +75,6 @@ $NbshapesPourJS = $Nbshapes ?? 0;
         return color;
     }
     // Initialiser le groupe de clusters
-
-    var markers = L.markerClusterGroup();
     // create a start
     // create a stop
     <?php
@@ -82,6 +114,8 @@ $NbshapesPourJS = $Nbshapes ?? 0;
 
     // createshape
     var temoin = 0;
+    var arrayPolyline = [];
+    var shapes = L.layerGroup().addTo(map);
     <?php
     if (isset($dico_shapes_id['Nb_shape_id']) && is_int($dico_shapes_id['Nb_shape_id']) && $dico_shapes_id['Nb_shape_id'] > 0) {
         $debug = [];
@@ -89,12 +123,12 @@ $NbshapesPourJS = $Nbshapes ?? 0;
         for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) {
             $routeColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_color'] ?? null;
             $routeTexteColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_text_color'] ?? null
-    ?>
+                ?>
             var shape_id = <?= json_encode($dico_shapes_id['shape_names'][$index]['name']) ?? null; ?>;
             var route_id = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_id']) ?? null; ?>;
             var shape_color = <?= json_encode('#' . $routeColor) ?>;
             var shape_text_color = <?= json_encode('#' . $routeTexteColor); ?>;
-            if (shape_color == null) {
+            if (shape_color == '#') {
                 shape_color = getRandomColor();
                 console.log("Info : Couleur non trouvée pour la shape " + shape_id);
             }
@@ -124,23 +158,22 @@ $NbshapesPourJS = $Nbshapes ?? 0;
                     echo 'console.log("Erreur : $ShapesPositionXY non défini ou invalide");';
                 }
             } ?>
-            var popupContent = `
-                <div class="popup-content">
-                    <p><strong>Shape Id :</strong> ${shape_id}</p>
-                    <p><strong>Route Id :</strong> ${route_id}</p>
-                    <p><strong>Nombre de points :</strong> ${latlngs.length}</p>
-                    <p><strong>Couleur :</strong> <span class="color-box" style="background-color: ${shape_color}; color: ${shape_text_color}"></span>${shape_color}</p>
-                </div>
-            `;
+            var popupContent = `<div class="popup-content"><p><strong>Shape Id :</strong> ${shape_id}</p><p><strong>Route Id :</strong> ${route_id}</p><p><strong>Nombre de points :</strong> ${latlngs.length}</p><p><strong>Couleur :</strong> <span class="color-box" style="background-color: ${shape_color}; color: ${shape_text_color}"></span>${shape_color}</p></div>`;
             var polyline = L.polyline(latlngs, {
                 color: shape_color
             }).addTo(map).bindPopup(popupContent);
+            shapes.addLayer(polyline);
+            arrayPolyline.push([polyline, shape_id, route_id, shape_color, shape_text_color]);
             temoin++;
 
-    <?php }
+        <?php }
     } ?>
-    console.log("Info : Shapes ajoutées");
-    console.log(temoin);
-    // zoom the map to the polyline
+    console.log("Info : " + temoin + " Shapes ajoutées à la carte");
+    //console.log();
+    layerControl.addOverlay(shapes, 'Shapes');
+    for (var i = 0; i < arrayPolyline.length; i++) {
+        layerControl.addOverlay(arrayPolyline[i][0], 'Shape ' + arrayPolyline[i][1] + ' Route ' + arrayPolyline[i][2]);
+    }
+    // zoom the map to the polyline 
     map.fitBounds(polyline.getBounds());
 </script>
