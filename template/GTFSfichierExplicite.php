@@ -1,16 +1,25 @@
 <?php
 function contrasteColor($color)
 {
-    // Convertir la couleur hexadécimale en RGB
-    $r = hexdec(substr($color, 0, 2));
-    $g = hexdec(substr($color, 2, 2));
-    $b = hexdec(substr($color, 4, 2));
+    if (isset($color) && is_string($color)) {
+        if (strlen($color) === 6) {
+            $color = '#' . $color;
+            // Convertir la couleur hexadécimale en RGB
+            $r = hexdec(substr($color, 0, 2));
+            $g = hexdec(substr($color, 2, 2));
+            $b = hexdec(substr($color, 4, 2));
 
-    // Calculer la luminance relative
-    $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
+            // Calculer la luminance relative
+            $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
 
-    // Retourner noir pour les couleurs claires et blanc pour les couleurs sombres
-    return ($luminance > 0.5) ? '6F6951' : '#fff9df';
+            // Retourner noir pour les couleurs claires et blanc pour les couleurs sombres
+            return ($luminance > 0.5) ? '6F6951' : 'fff9df';
+        } else {
+            return '6F6951';
+        }
+    } else {
+        return '6F6951';
+    }
 }
 for ($i = 0; $i < count($RouteInfo); $i++) {
     $routeCouleur['route_color'][] = $RouteInfo[$i]['route_color'];
@@ -25,9 +34,13 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
         if ($handle) {
             $Legende = fgetcsv($handle);
             $Nbcolonnes = count($Legende);
-            echo '<h3 id="' . $ListeFichierGTFSprésent[$i][0] . '">' . $ListeFichierGTFSprésent[$i][0] . '</h3><a href="https://gtfs.org/documentation/schedule/reference/#' . str_replace('.', '', $ListeFichierGTFSprésent[$i][0]) . '" target="_blank">Documentation</a>';
-            echo '<table>';
-            echo '<caption>' . $ListeFichierGTFSprésent[$i][0] . '</caption>';
+            echo '
+            <div class="texte">
+            <h3 id="' . $ListeFichierGTFSprésent[$i][0] . '">' . $ListeFichierGTFSprésent[$i][0] . '</h3><p>Lien vers la <a href="https://gtfs.org/documentation/schedule/reference/#' . str_replace('.', '', $ListeFichierGTFSprésent[$i][0]) . '" target="_blank">documentation</a>.</p>';
+            echo '
+            <br />
+            <div class="table-container"><table>';
+            //echo '<caption>' . $ListeFichierGTFSprésent[$i][0] . '</caption>';
             echo '<tr>';
             for ($j = 0; $j < $Nbcolonnes; $j++) {
                 echo '<th>' . $Legende[$j] . '</th>';
@@ -49,10 +62,10 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                                     echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_0_tram.png" alt="Tram"/></td>';
                                     break;
                                 case 1:
-                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_1_rail.png" alt="Train"/></td>';
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_1_subway.png" alt="Train"/></td>';
                                     break;
                                 case 2:
-                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_2_subway.png" alt="Métro"/></td>';
+                                    echo '<td class="table_neutre">' . $data[$y] . ' <img class="mode-icon" src="icones/route_type_2_rail.png" alt="Métro"/></td>';
                                     break;
                                 case 3:
                                     echo '<td class="table_neutre">' . $data[$y] . ' <img class="mosz-icon" src="icones/route_type_3_bus.png" alt="Bus"/></td>';
@@ -79,15 +92,15 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                             }
                             $y++;
                         }
-                        if ($Legende[$y] ?? null == 'route_id') {
+                        if ($Legende[$y] == 'route_id') {
                             echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
                             $y++;
                         }
-                        if ($Legende[$y] ?? null == 'route_color') {
+                        if ($Legende[$y] == 'route_color') {
                             echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
                             $y++;
                         }
-                        if ($Legende[$y] ?? null == 'route_text_color') {
+                        if ($Legende[$y] == 'route_text_color') {
                             echo '<td style="background:#' . $routeCouleur['route_color'][$rowCount] . '; color:#' . $routeCouleur['route_text_color'][$rowCount] . ';">' . $data[$y] . '</td>';
                             $y++;
                         }
@@ -162,7 +175,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                 echo '</tr>';
                 $rowCount++;
             }
-            echo '</table>';
+            echo '</table></div>';
             echo '<br />';
             /*if ($ListeFichierGTFSprésent[$i][0] == 'trips.txt') {
                     echo '<table>';
@@ -173,7 +186,8 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                 }*/
             if ($ListeFichierGTFSprésent[$i][0] == 'shapes.txt') {
                 $Nbcolonnes = ceil($dico_shapes_id['Nb_shape_id'] / 25);
-                echo '<table>';
+                echo '<div class="table-container">
+                <table>';
                 echo '<caption>Liste des id dans le fichier shape et nombre de points</caption>';
                 echo '<tr>';
                 echo '<th>shape_id</th>';
@@ -187,6 +201,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                     echo '<tr>';
                     for ($j = 0; $j < $Nbcolonnes; $j++) {
                         $index = $i + ($j * 25);
+
                         $a = $dico_shapes_id['shape_names'][$index]['name'] ?? '';
                         $b = $dico_shapes_id['shape_names'][$index]['Nb_ligne'] ?? '';
                         echo '<td style="border-left:solid;">' . $a . '</td>';
@@ -209,7 +224,9 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                     echo '<td></td><td></td>';
                 }
                 echo '</tr>';
-                echo '</table>';
+                echo '</table></div></div><br/>';
+            } else {
+                echo '</div><br/>';
             }
             fclose($handle);
         } else {

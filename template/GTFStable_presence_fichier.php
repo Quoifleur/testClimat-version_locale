@@ -1,5 +1,7 @@
 <?php
-echo '<h3>Informations et Sommmaire</h3>
+echo '
+<div class="texte">
+<h3 id="recap">Informations et Sommmaire</h3>
 <p>
 Cliquez sur le nom du fichier pour accéder à son contenu.
 </p>
@@ -22,7 +24,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
     echo '</tr>';
 }
 $Message = $MessageErreur ?? null;
-echo '</table>';
+echo '</table></div>';
 /*echo '<h3 id="Informations et erreurs">Informations et erreurs</h3>';
 echo '<table>';
 echo '<caption>Informations et erreurs</caption>';

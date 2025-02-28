@@ -1,4 +1,6 @@
 <?php
+//ini_set('memory_limit', '128M'); // Augmente la limite de mémoire à 256 MB
+
 function baricentrebis($array)
 {
     $lat = 0;
@@ -149,7 +151,7 @@ if ($handle == true && $ShapesPresent == true) {
     ];
     $shape_id = '';
     $memoryLimit = 128 * 1024 * 1024; // 128 MB
-    $memoryLimit = 128 * 1024 * 1024 - 10;
+    $memoryLimit = $memoryLimit - 10;
 
     while (!$handle->eof()) {
         $data = $handle->fgetcsv();
@@ -217,5 +219,6 @@ for ($i = 0; $i < $NbtripsLIGNE; $i++) {
         }
     }
 }
+
 //print_r($CorrespondanceShapeRoute);
 //print_r($MessageErreur);
