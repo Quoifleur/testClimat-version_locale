@@ -21,13 +21,13 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-    <?php require('navigation/head.php'); ?>
+    <?php require('navigation/headGTFS.php'); ?>
     <title>Visonneuse GTFS</title>
     <script>
         function loadContent() {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', 'content.php', true);
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     document.getElementById('content').innerHTML = xhr.responseText;
                 }
@@ -117,28 +117,44 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
             <section class="section_intro">
                 <div class="texte">
                     <h1 id="introduction">Visionneuse GTFS schedule</h1>
-                    <p>testClimat-visionneuse GTFS scheldule v1.1 26/01/2025, <a href="testClimatchangelog.php">changelog</a>
+                    <p>testClimat-visionneuse GTFS scheldule v1.1 26/01/2025, <a
+                            href="testClimatchangelog.php">changelog</a>
                     </p>
                     <h2>Qu'est-ce qu'un fichier GTFS ?</h2>
                     <p>
-                        Le General Transit Feed Specification (GTFS) est un format de fichier qui contient les horaires des transports en commun. Il est utilisé par de nombreuses applications de transport en commun, telles que Google Maps, pour afficher les horaires des bus, des trains et des métros. Le GTFS est un format de fichier simple et facile à utiliser qui permet aux développeurs de créer des applications de transport en commun.
+                        Le General Transit Feed Specification (GTFS) est un format de fichier qui contient les horaires
+                        des transports en commun. Il est utilisé par de nombreuses applications de transport en commun,
+                        telles que Google Maps, pour afficher les horaires des bus, des trains et des métros. Le GTFS
+                        est un format de fichier simple et facile à utiliser qui permet aux développeurs de créer des
+                        applications de transport en commun.
                     </p>
                 </div>
                 <div class="texte">
                     <h3>Documentation et crédit</h3>
                     <ul>
                         <li>Site internet officiel de <a href="https://gtfs.org/fr/" target="_blank">gtfs.org</a></li>
-                        <li>Pour télécharger des fichiers GTFS : <a href="https://mobilitydatabase.org/" target="_blank">mobilitydatabase</a></li>
-                        <li>repository de google relatif au GTFS et GTFS Realtime <a href="https://github.com/google/transit" target="_blank">github.com/google/transit</a></li>
-                        <li>Cette visionneuse GTFS utilise des icônes modifiées et originalement créées par <a href="https://www.streamlinehq.com/icons" rel="nofollow noopener noreferrer" target="_blank">Streamline</a>, sous licence Creative commons license: Attribution 4.0 International (CC BY 4.0).</li>
+                        <li>Pour télécharger des fichiers GTFS : <a href="https://mobilitydatabase.org/"
+                                target="_blank">mobilitydatabase</a></li>
+                        <li>repository de google relatif au GTFS et GTFS Realtime <a
+                                href="https://github.com/google/transit" target="_blank">github.com/google/transit</a>
+                        </li>
+                        <li>Cette visionneuse GTFS utilise des icônes modifiées et originalement créées par <a
+                                href="https://www.streamlinehq.com/icons" rel="nofollow noopener noreferrer"
+                                target="_blank">Streamline</a>, sous licence Creative commons license: Attribution 4.0
+                            International (CC BY 4.0).</li>
                     </ul>
                     <h3>Fonctionnememt de cette visionneuse</h3>
-                    <p>Aucun fichier n'est sauvegardé par TestClimat et sa visionneuse GTFS. Tous les fichiers uploadés sont
-                        immédiatement supprimés du serveur. Les données ne sont sauvegardées dans aucune base de données.
-                        <br /><br />En cas de fichier lourd, le temps de chargement peut être long. Si la carte ne s'affiche
-                        pas correctement, recharger la page peut résoudre le problème. Si le problème persiste, merci de me
+                    <p>Aucun fichier n'est sauvegardé par TestClimat et sa visionneuse GTFS. Tous les fichiers uploadés
+                        sont
+                        immédiatement supprimés du serveur. Les données ne sont sauvegardées dans aucune base de
+                        données.
+                        <br /><br />En cas de fichier lourd, le temps de chargement peut être long. Si la carte ne
+                        s'affiche
+                        pas correctement, recharger la page peut résoudre le problème. Si le problème persiste, merci de
+                        me
                         contacter.
-                        <br />Dans un souci d'optimisation, seuls les 20 premières lignes de chaque fichier sont affichées
+                        <br />Dans un souci d'optimisation, seuls les 20 premières lignes de chaque fichier sont
+                        affichées
                         ici (chargement complet en cours de développement).
                         <br /><br />L'ensemble du code source du site est disponible sur <a
                             href="https://github.com/Quoifleur/testClimat-version_locale">github</a>

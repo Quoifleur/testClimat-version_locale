@@ -198,27 +198,30 @@ if ($handle == true && $ShapesPresent == true) {
     $MessageErreur[] = '<br>Info : Impossible d\'ouvrir le fichier ' . $filePath;
 }
 unset($value);
-$NbtripsLIGNE = count($TripInfo);
-for ($i = 0; $i < $NbtripsLIGNE; $i++) {
-    $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] = [
-        'trip_id' => $TripInfo[$i]['trip_id'],
-        'route_id' => $TripInfo[$i]['route_id'],
-        'route_color' => null,
-        'route_text_color' => null,
-    ];
-    if (isset($RouteInfo)) {
-        foreach ($CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] as $key => $value) {
-            if ($key == 'route_id') {
-                foreach ($RouteInfo as $route) {
-                    if ($route['route_id'] == $value) {
-                        $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['route_color'] = $route['route_color'];
-                        $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['route_text_color'] = $route['route_text_color'];
+if (isset($TripInfo)) {
+    $NbtripsLIGNE = count($TripInfo);
+    for ($i = 0; $i < $NbtripsLIGNE; $i++) {
+        $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] = [
+            'trip_id' => $TripInfo[$i]['trip_id'],
+            'route_id' => $TripInfo[$i]['route_id'],
+            'route_color' => null,
+            'route_text_color' => null,
+        ];
+        if (isset($RouteInfo)) {
+            foreach ($CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] as $key => $value) {
+                if ($key == 'route_id') {
+                    foreach ($RouteInfo as $route) {
+                        if ($route['route_id'] == $value) {
+                            $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['route_color'] = $route['route_color'];
+                            $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['route_text_color'] = $route['route_text_color'];
+                        }
                     }
                 }
             }
         }
     }
 }
+
 
 //print_r($CorrespondanceShapeRoute);
 //print_r($MessageErreur);

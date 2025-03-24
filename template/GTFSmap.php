@@ -19,7 +19,7 @@ echo '</pre>';*/
 $NbshapesPourJS = $Nbshapes ?? 0;
 //echo $NbshapesPourJS;
 ?>
-<div id="map" style="width: 100%; height: 600px;"></div>
+<div id="map" style="width: 100%; aspect-ratio: 1 / 1;"></div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 <div id="legend">
@@ -135,7 +135,7 @@ $NbshapesPourJS = $Nbshapes ?? 0;
         for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) {
             $routeColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_color'] ?? null;
             $routeTexteColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_text_color'] ?? null
-    ?>
+                ?>
             var shape_id = <?= json_encode($dico_shapes_id['shape_names'][$index]['name']) ?? null; ?>;
             var route_id = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_id']) ?? null; ?>;
             var shape_color = <?= json_encode('#' . $routeColor) ?>;
@@ -200,7 +200,7 @@ $NbshapesPourJS = $Nbshapes ?? 0;
                         });
                         document.getElementById('layer-controls').appendChild(control);
                         // Ajouter le groupe de couches au contrôle de couches*/
-    <?php }
+        <?php }
     } ?>
     console.log("Info : " + temoin + " Shapes ajoutées à la carte");
     //layerControl.addOverlay(shapes, 'Shapes');
@@ -229,8 +229,8 @@ $NbshapesPourJS = $Nbshapes ?? 0;
         // Créer les boutons
         var zoomButton = document.createElement('button');
         zoomButton.textContent = 'Zoom';
-        zoomButton.addEventListener('click', (function(polyline) {
-            return function() {
+        zoomButton.addEventListener('click', (function (polyline) {
+            return function () {
                 map.fitBounds(polyline.getBounds());
                 window.location.href = '#carte'; // Redirige vers la section "Carte"
 
@@ -239,8 +239,8 @@ $NbshapesPourJS = $Nbshapes ?? 0;
 
         var toggleButton = document.createElement('button');
         toggleButton.textContent = map.hasLayer(polyline) ? 'Masquer' : 'Afficher';
-        toggleButton.addEventListener('click', (function(polyline, toggleButton) {
-            return function() {
+        toggleButton.addEventListener('click', (function (polyline, toggleButton) {
+            return function () {
                 if (map.hasLayer(polyline)) {
                     map.removeLayer(polyline);
                     toggleButton.textContent = 'Afficher';

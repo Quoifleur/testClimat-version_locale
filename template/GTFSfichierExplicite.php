@@ -21,10 +21,13 @@ function contrasteColor($color)
         return '6F6951';
     }
 }
-for ($i = 0; $i < count($RouteInfo); $i++) {
-    $routeCouleur['route_color'][] = $RouteInfo[$i]['route_color'];
-    $routeCouleur['route_text_color'][] = $RouteInfo[$i]['route_text_color'] ?? contrasteColor($RouteInfo[$i]['route_color']);
+if (isset($RouteInfo)) {
+    for ($i = 0; $i < count($RouteInfo); $i++) {
+        $routeCouleur['route_color'][] = $RouteInfo[$i]['route_color'];
+        $routeCouleur['route_text_color'][] = $RouteInfo[$i]['route_text_color'] ?? contrasteColor($RouteInfo[$i]['route_color']);
+    }
 }
+
 //print_r($routeCouleur);w
 //print_r($RouteInfo);
 for ($i = 0; $i < $Nbfichierthéorique; $i++) {
@@ -48,7 +51,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
             echo '</tr>';
             $rowCount = 0;
             $rénitialisation = false;
-            while (($data = fgetcsv($handle)) !== false && $rowCount < 20) {
+            while (($data = fgetcsv($handle)) !== false && $rowCount < 50) {
                 echo '<tr>';
                 for ($y = 0; $y < $Nbcolonnes; $y++) {
                     if ($data[$y] == '' || $data[$y] == ' ' || $data[$y] == null) {
