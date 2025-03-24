@@ -6,7 +6,8 @@ if (!$fichierChargé) {
 </div><br />';
 }
 ?>
-<form method="POST" action="horsThemeGTFS.php" class="formulaire" enctype="multipart/form-data">
+
+<form method="POST" action="horsThemeGTFS.php" enctype="multipart/form-data">
     <input type="hidden" name="MAX_FILE_SIZE">
     <input type="file" name="file" id="file" accept=".zip">
     <input type="submit" value="Envoyer">

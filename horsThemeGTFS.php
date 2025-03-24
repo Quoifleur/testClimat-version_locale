@@ -116,34 +116,23 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
         <main>
             <section class="section_intro">
                 <div class="texte">
-                    <h1>Visionneuse GTFS schedule</h1>
+                    <h1 id="introduction">Visionneuse GTFS schedule</h1>
                     <p>testClimat-visionneuse GTFS scheldule v1.1 26/01/2025, <a href="testClimatchangelog.php">changelog</a>
                     </p>
-                    <h2>GTFS</h2>
-                    <p>Le General Transit Feed Specification (GTFS) est un format de fichier qui contient les horaires des
-                        transports en commun. Il est utilisé par de nombreuses applications de transport en commun, telles que
-                        Google Maps, pour afficher les horaires des bus, des trains et des métros. Le GTFS est un format de
-                        fichier simple et facile à utiliser qui permet aux développeurs de créer des applications de transport
-                        en commun.</p>
-                    <p> Cette visionneuse GTFS utilise des icônes modifiées et originalement créées par <a
-                            href="https://www.streamlinehq.com/icons" rel="nofollow noopener noreferrer"
-                            target="_blank">Streamline</a>, sous licence Creative commons license: Attribution 4.0 International
-                        (CC BY 4.0).</p>
+                    <h2>Qu'est-ce qu'un fichier GTFS ?</h2>
+                    <p>
+                        Le General Transit Feed Specification (GTFS) est un format de fichier qui contient les horaires des transports en commun. Il est utilisé par de nombreuses applications de transport en commun, telles que Google Maps, pour afficher les horaires des bus, des trains et des métros. Le GTFS est un format de fichier simple et facile à utiliser qui permet aux développeurs de créer des applications de transport en commun.
+                    </p>
                 </div>
-                <br />
                 <div class="texte">
-                    <h3>Documentation</h3>
+                    <h3>Documentation et crédit</h3>
                     <ul>
                         <li>Site internet officiel de <a href="https://gtfs.org/fr/" target="_blank">gtfs.org</a></li>
-                        <li>Pour télécharger des fichiers GTFS : <a href="https://mobilitydatabase.org/"
-                                target="_blank">mobilitydatabase</a></li>
-                        <li>repository de google relatif au GTFS et GTFS Realtime <a href="https://github.com/google/transit"
-                                target="_blank">github.com/google/transit</a></li>
+                        <li>Pour télécharger des fichiers GTFS : <a href="https://mobilitydatabase.org/" target="_blank">mobilitydatabase</a></li>
+                        <li>repository de google relatif au GTFS et GTFS Realtime <a href="https://github.com/google/transit" target="_blank">github.com/google/transit</a></li>
+                        <li>Cette visionneuse GTFS utilise des icônes modifiées et originalement créées par <a href="https://www.streamlinehq.com/icons" rel="nofollow noopener noreferrer" target="_blank">Streamline</a>, sous licence Creative commons license: Attribution 4.0 International (CC BY 4.0).</li>
                     </ul>
-                </div>
-                <br />
-                <div class="A_noter">
-                    <div class="A_noter_titre">A noter</div>
+                    <h3>Fonctionnememt de cette visionneuse</h3>
                     <p>Aucun fichier n'est sauvegardé par TestClimat et sa visionneuse GTFS. Tous les fichiers uploadés sont
                         immédiatement supprimés du serveur. Les données ne sont sauvegardées dans aucune base de données.
                         <br /><br />En cas de fichier lourd, le temps de chargement peut être long. Si la carte ne s'affiche
@@ -155,13 +144,13 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
                             href="https://github.com/Quoifleur/testClimat-version_locale">github</a>
                     </p>
                 </div>
-                <h2 id="chargementFichier">Fichier à visualiser</h2>
-                <?php require('template/GTFSchargementFichier.php');
-                ?>
+                <div class="formulaire">
+                    <h2 id="chargementFichier">Visualiser un fichier</h2>
+                    <?php require('template/GTFSchargementFichier.php');
+                    ?>
+                </div>
             </section>
             <section class="section_milieu">
-                <h2><?= $Nomfichier[0] ?? 'Bienvenue dans la liseuse de fichier GTFS'; ?></h2>
-
                 <?php
                 if ($fichierChargé) {
                     require('outils/GTFScsvTOmap.php');
@@ -169,6 +158,8 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
                     echo '<br />';
                     require('template/GTFSfichierExplicite.php');
                     //require('outils/fichierGTFScompletEcriture.php');
+                } else {
+                    require('template/GTFStexteIntroductif.php');
                 }
                 ?>
             </section>

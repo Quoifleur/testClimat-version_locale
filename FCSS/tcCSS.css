@@ -192,6 +192,8 @@ h3 {
   border-top: none;
   border-radius: 40px;
   padding: 2%;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
   table-layout: auto;
   color: #6f6951;
   box-shadow: 13.1px 3.6px 7.2px rgba(0, 0, 0, 0.049),
@@ -233,66 +235,42 @@ h3 {
 aside > body {
   margin: 0.5rem;
 }*/
-
-th,
-td {
-  overflow: auto;
-  max-width: 15em;
-  max-height: 7em;
-  white-space: pre; /* Empêche le texte de s'étendre sur plusieurs lignes */
-  text-align: left;
-  color: #6f6951;
-  border-bottom: 1px solid #6f6951;
-}
 .table-container {
-  max-width: 100%; /* Limite la largeur maximale de la conteneur du tableau */
+  max-width: 100%; /* Limite la largeur maximale du conteneur du tableau */
   max-height: 50em;
   overflow-x: auto; /* Ajoute un défilement horizontal si nécessaire */
   overflow-y: auto; /* Ajoute un défilement vertical si nécessaire */
 }
+
 .legende-container {
-  max-width: 100%; /* Limite la largeur maximale de la conteneur du tableau */
+  max-width: 100%; /* Limite la largeur maximale du conteneur du tableau */
   max-height: 25em;
   overflow-x: auto; /* Ajoute un défilement horizontal si nécessaire */
   overflow-y: auto; /* Ajoute un défilement vertical si nécessaire */
 }
+
 caption {
   padding: 1.5em;
   width: 100%;
   overflow-x: auto;
   font-weight: bold;
   color: #6f6951;
-  /*background: rgba(
-    255,
-    255,
-    255,
-    0.65
-  ); 
-  -webkit-backdrop-filter: blur(32px);
-  backdrop-filter: blur(32px);
-  border: 1px solid rgba(255, 255, 255, 0.325);
-  border-bottom: none;
-  border-radius: 40px 40px 0px 0px;*/
 }
 
 table {
-  height: 100%;
-  width: 100%;
-  overflow: auto;
-  /*background: rgba(255, 255, 255, 0.65);
-  -webkit-backdrop-filter: blur(32px);
-  backdrop-filter: blur(32px);
-  border: 1px solid rgba(255, 255, 255, 0.325);
-  border-top: none;
-  border-radius: 0px 0px 40px 40px;
-  padding: 2%;
-  table-layout: auto;
+  width: 15em;
+  table-layout: fixed; /* Assure que les colonnes ont la même largeur */
+}
+
+th,
+td {
+  max-height: 7em;
+  overflow: auto; /* Permet le défilement si le contenu dépasse */
+  word-wrap: break-word; /* Permet au texte de s'enrouler */
+  white-space: normal; /* Permet au texte de s'enrouler sur plusieurs lignes */
+  text-align: left;
   color: #6f6951;
-  box-shadow: 13.1px 3.6px 7.2px rgba(0, 0, 0, 0.049),
-    25.4px 7px 12.6px rgba(0, 0, 0, 0.075),
-    40.4px 11.1px 18.1px rgba(0, 0, 0, 0.096),
-    63.9px 17.6px 26.4px rgba(0, 0, 0, 0.115),
-    127px 35px 50px rgba(0, 0, 0, 0.13);*/
+  border-bottom: 1px solid #6f6951;
 }
 
 .ligneSansRapportTableau {
@@ -304,7 +282,7 @@ table {
 }
 
 input[type="submit"] {
-  width: 95%;
+  width: 100%;
   height: 30px;
   font-weight: bold;
   border-radius: 10px;
@@ -313,23 +291,6 @@ input[type="submit"] {
   color: rgb(255, 225, 106);
   position: relative;
   margin: 0 auto;
-}
-input[type="file"] {
-  width: 95%;
-  height: 30px;
-  font-weight: bold;
-  border-radius: 10px;
-  border: solid 1px rgba(114, 255, 198, 1);
-  background-color: rgb(52, 154, 116);
-  color: rgb(255, 225, 106);
-  position: relative;
-  margin: 0 auto;
-}
-input[type="file-upload-button"] {
-  display: none;
-  border: none;
-  background-color: rgba(114, 255, 198, 1);
-  color: #349972;
 }
 
 input[type="submit"]:hover {
@@ -343,6 +304,33 @@ input[type="submit"]:active {
   font-weight: bolder;
   border-style: solid;
   border-color: #349972;
+}
+
+input[type="file"] {
+  width: 100%;
+  height: 30px;
+  font-weight: bold;
+  border-radius: 10px;
+  border: solid 1px rgba(114, 255, 198, 1);
+  background-color: rgb(52, 154, 116);
+  color: rgb(255, 225, 106);
+  position: relative;
+  margin: 2% auto;
+  cursor: pointer;
+}
+input[type="file"]::file-selector-button {
+  margin-right: 8px;
+  border: none;
+  font-weight: bold;
+  background: rgba(114, 255, 198, 1);
+  color: #349972;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+input[type="file"]:hover {
+  background-color: rgba(114, 255, 198, 1);
+  color: rgb(52, 154, 116);
 }
 
 input[type="text"] {
