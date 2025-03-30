@@ -1,4 +1,7 @@
 <?php
+$start_time = 0;
+$end_time = 0;
+$start_time = hrtime(true);
 function contrasteColor($color)
 {
     if (isset($color) && is_string($color)) {
@@ -122,6 +125,9 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                         }
                         if ($Legende[$y] == 'wheelchair_boarding') {
                             switch ($data[$y]) {
+                                case null:
+                                    echo '<td class="table_attention">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_0.png" alt="Accessibilité inconnue"/></td>';
+                                    break;
                                 case 0:
                                     echo '<td class="table_attention">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_0.png" alt="Accessibilité inconnue"/></td>';
                                     break;
@@ -143,6 +149,9 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                         }
                         if ($Legende[$y] == 'wheelchair_accessible') {
                             switch ($data[$y]) {
+                                case null:
+                                    echo '<td class="table_attention">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_0.png" alt="Accessibilité inconnue"/></td>';
+                                    break;
                                 case 0:
                                     echo '<td class="table_attention">' . $data[$y] . ' <img class="wheelchair-icon" src="icones/wheelchair_accessible_0.png" alt="Accessibilité inconnue"/></td>';
                                     break;
@@ -237,3 +246,6 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
         }
     }
 }
+
+$end_time = hrtime(true);
+$execution_time_fichierExplicite = $end_time - $start_time;

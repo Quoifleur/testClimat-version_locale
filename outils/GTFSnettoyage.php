@@ -1,10 +1,5 @@
 <?
 //Ce fichier supprime automatiquement les fichiers GTFS chargés.
-// Afficher toutes les erreurs
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
 $dir = 'upload/extract' . $fichier;
 if (is_dir($dir)) {
     $files = scandir($dir);
@@ -13,7 +8,14 @@ if (is_dir($dir)) {
             unlink($dir . '/' . $file);
         }
     }
-    
+
     rmdir($dir);
 }
-unlink('./upload/'. $fichier);
+unlink('./upload/' . $fichier);
+//verification de la suppression du fichier
+if (is_dir($dir)) {
+    $MessageErreur[] = 'Erreur : Le fichier GTFS chargé n\'a pas pu être supprimé.';
+    $MessageErreur[] = 'ATTENTION : MERCI DE ME CONTACTER (<a href="mailto:victor.maury@testclimat.ovh">victor.maury@testclimat.ovh</a>) POUR QUE JE PUISSE LE FAIRE MANUELLEMENT.';
+} else {
+    $MessageErreur[] = 'Info : Le fichier GTFS chargé a été supprimé avec succès.';
+}

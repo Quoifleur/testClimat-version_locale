@@ -1,6 +1,8 @@
 <?php
 //ini_set('memory_limit', '128M'); // Augmente la limite de mémoire à 256 MB
-
+$start_time = 0;
+$end_time = 0;
+$start_time = hrtime(true);
 function baricentrebis($array)
 {
     $lat = 0;
@@ -222,6 +224,8 @@ if (isset($TripInfo)) {
     }
 }
 
+$end_time = hrtime(true);
+$execution_time_GTFcsvTOmap = $end_time - $start_time;
 
 //print_r($CorrespondanceShapeRoute);
 //print_r($MessageErreur);

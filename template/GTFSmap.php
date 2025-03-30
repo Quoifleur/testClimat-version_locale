@@ -16,8 +16,11 @@ echo $Nbshapes . ' shapes<br>';
 //echo array_sum(array_column($dico_shapes_id['shape_names'], 'Nb_ligne'));
 echo '</pre>';*/
 //initialisation de différentes variables
-$NbshapesPourJS = $Nbshapes ?? 0;
+//$NbshapesPourJS = $Nbshapes ?? 0;
 //echo $NbshapesPourJS;
+$start_time = 0;
+$end_time = 0;
+$start_time = hrtime(true);
 ?>
 <div id="map" style="width: 100%; aspect-ratio: 1 / 1;"></div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -115,11 +118,11 @@ $NbshapesPourJS = $Nbshapes ?? 0;
                         `;';
                 echo 'var marker = L.marker([' . json_encode($StopsPositionXY[$i][0]) . ', ' . json_encode($StopsPositionXY[$i][1]) . ']).bindPopup(popupContent).addTo(markers);';
             } else {
-                echo 'console.log("Erreur : Coordonnées manquantes ou invalides pour l\'index ' . $i . '");';
+                $MessageErreur[] = 'Erreur : Coordonnées manquantes ou invalides pour l\'index ' . $i;
             }
         }
     } else {
-        echo 'console.log("Erreur : $StopsPositionXY ou $Nbpoints non définis ou invalides");';
+        $MessageErreur[] = 'Erreur : $StopsPositionXY ou $Nbpoints non définis ou invalides';
     }
 
     ?>
@@ -276,3 +279,6 @@ $NbshapesPourJS = $Nbshapes ?? 0;
     // zoom the map to the polyline 
     map.fitBounds(polyline.getBounds());
 </script>
+<?php
+$end_time = hrtime(true);
+$execution_time_GTFSmap = $end_time - $start_time;

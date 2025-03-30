@@ -4,18 +4,20 @@ $fichierChargé = false;
 $erreur = false;
 $dossier = 'upload/';
 $fichier = basename($_FILES['file']['name']);
-$taille_maxi = 90000000000;
-$taille = filesize($_FILES['file']['tmp_name']);
+$taille_maxi = 25000000; // 25Mo
+$taille = $_FILES['file']['size'];
 $extensions = array('.zip', '.rar');
 $extension = strrchr($_FILES['file']['name'], '.');
 //Début des vérifications de sécurité...
 if (!in_array($extension, $extensions)) //Si l'extension n'est pas dans le tableau
 {
     $erreur = true;
+    $MessageErreur[] = 'Erreur : le fichier n\'est pas au format .zip ou .rar';
 }
-//if ($taille > $taille_maxi) {
-//  $erreur = true;
-//}
+if ($taille > $taille_maxi) {
+    $erreur = true;
+    $MessageErreur[] = 'Erreur : le fichier est trop volumineux (' . $taille / 1000000 . ' Mo  (max ' . $taille_maxi / 1000000 . ' Mo))';
+}
 if (!$erreur) //S'il n'y a pas d'erreur, on upload
 {
     // Vérifiez si le répertoire existe, sinon créez-le
@@ -35,9 +37,11 @@ if (!$erreur) //S'il n'y a pas d'erreur, on upload
     } else //Sinon (la fonction renvoie FALSE).
     {
         $erreur = true;
+        $MessageErreur[] = 'Erreur : le fichier n\'a pas pu être copié dans le dossier de destination';
     }
 } else {
     $erreur = true;
+    $MessageErreur[] = 'Erreur : une erreur est survenue lors du téléchargement du fichier';
 }
 // Fin des vérifications de sécurité...
 // On extrait le fichier
@@ -53,6 +57,7 @@ if (!$erreur && $fichierChargé) {
         $ZipGTFS->close();
     } else {
         $erreur = true;
+        $MessageErreur[] = 'Erreur : le fichier n\'a pas pu être extrait';
     }
     $Nbfichier = count_files($lienVersFichier, '.txt', 1);
     $ListeFichierGTFSprésent = [

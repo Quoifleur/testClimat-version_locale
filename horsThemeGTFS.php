@@ -1,17 +1,18 @@
 <?php
 session_start();
 require('src/function_other.php');
-
+require('outils/ZIPtoTXT.php');
+/*
 if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
-    require('outils/ZIPtoTXT.php');
+    
     $fichierChargé = true;
-    $MessageErreur[] = 'Info : fichier chargé <br />';
+    $MessageErreur[] = 'Info : fichiers chargés <br />';
 } else {
     $fichierChargé = false;
     $erreur = true;
     $MessageErreur[] = 'Erreur : fichier non chargé <br />';
 }
-//include('outils/cartoGTFS.php');
+//include('outils/cartoGTFS.php');*/
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -170,6 +171,7 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
                 <?php
                 if ($fichierChargé) {
                     require('outils/GTFScsvTOmap.php');
+
                     require('template/GTFStable_presence_fichier.php');
                     echo '<br />';
                     require('template/GTFSfichierExplicite.php');
@@ -195,9 +197,8 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
 
                         ?>
                     </div>
-
                 </div>
-
+                <?php require('template/GTFSdebug.php'); ?>
             </section>
         </main>
     </div>

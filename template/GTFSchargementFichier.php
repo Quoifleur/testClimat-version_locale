@@ -2,13 +2,13 @@
 if (!$fichierChargé) {
     echo '<div class="A_noter">
     <div class="A_noter_titre">A noter</div>
-    <p>Le fichier doit obligatoirement être au format .zip et ne pas dépasser la taille de 29Mo.</p>
+    <p>Le fichier doit obligatoirement être au format .zip et ne pas dépasser la taille de 25Mo.</p>
 </div><br />';
 }
 ?>
 
 <form method="POST" action="horsThemeGTFS.php" enctype="multipart/form-data">
-    <input type="hidden" name="MAX_FILE_SIZE">
+    <!-- <input type="hidden" name="MAX_FILE_SIZE">-->
     <input type="file" name="file" id="file" accept=".zip">
     <input type="submit" value="Envoyer">
 </form>
