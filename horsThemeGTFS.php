@@ -28,7 +28,7 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
         function loadContent() {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', 'content.php', true);
-            xhr.onreadystatechange = function () {
+            xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     document.getElementById('content').innerHTML = xhr.responseText;
                 }
@@ -73,135 +73,127 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
             document.getElementById('dropZone').classList.remove('dragover');
         }
     </script>
-    <style>
-        .table_neutre {
-            background: #FFF9DF;
-            color: #6F6951;
-        }
-
-        .mode-icon {
-            color: #6F6951;
-        }
-
-        #dropZone {
-            color: #6F6951;
-            background-color: #FFF9DF;
-            width: 300px;
-            height: 200px;
-            border: 2px dashed #6F6951;
-            outline: 2px solid #6F6951;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-
-        #dropZone.dragover {
-            background-color: #f0f0f0;
-        }
-    </style>
 </head>
 
 <body>
-    <?php
-    require('navigation/headerGTFS.php');
-    require('navigation/nav.php');
-    ?>
-    <div class="GTFS">
+    <div class="tGTFS_header">
         <?php
-        require('template/GTFSsommaire.php');
+        require('navigation/headerGTFS.php');
+        require('navigation/navGTFS.php');
         ?>
-        <main>
-            <section class="section_intro">
-                <div class="texte">
-                    <h1 id="introduction">Visionneuse GTFS schedule</h1>
-                    <p>testClimat-visionneuse GTFS scheldule v1.1 26/01/2025, <a
-                            href="testClimatchangelog.php">changelog</a>
-                    </p>
-                    <h2>Qu'est-ce qu'un fichier GTFS ?</h2>
-                    <p>
-                        Le General Transit Feed Specification (GTFS) est un format de fichier qui contient les horaires
-                        des transports en commun. Il est utilisé par de nombreuses applications de transport en commun,
-                        telles que Google Maps, pour afficher les horaires des bus, des trains et des métros. Le GTFS
-                        est un format de fichier simple et facile à utiliser qui permet aux développeurs de créer des
-                        applications de transport en commun.
-                    </p>
-                </div>
-                <div class="texte">
-                    <h3>Documentation et crédit</h3>
-                    <ul>
-                        <li>Site internet officiel de <a href="https://gtfs.org/fr/" target="_blank">gtfs.org</a></li>
-                        <li>Pour télécharger des fichiers GTFS : <a href="https://mobilitydatabase.org/"
-                                target="_blank">mobilitydatabase</a></li>
-                        <li>repository de google relatif au GTFS et GTFS Realtime <a
-                                href="https://github.com/google/transit" target="_blank">github.com/google/transit</a>
-                        </li>
-                        <li>Cette visionneuse GTFS utilise des icônes modifiées et originalement créées par <a
-                                href="https://www.streamlinehq.com/icons" rel="nofollow noopener noreferrer"
-                                target="_blank">Streamline</a>, sous licence Creative commons license: Attribution 4.0
-                            International (CC BY 4.0).</li>
-                    </ul>
-                    <h3>Fonctionnememt de cette visionneuse</h3>
-                    <p>Aucun fichier n'est sauvegardé par TestClimat et sa visionneuse GTFS. Tous les fichiers uploadés
-                        sont
-                        immédiatement supprimés du serveur. Les données ne sont sauvegardées dans aucune base de
-                        données.
-                        <br /><br />En cas de fichier lourd, le temps de chargement peut être long. Si la carte ne
-                        s'affiche
-                        pas correctement, recharger la page peut résoudre le problème. Si le problème persiste, merci de
-                        me
-                        contacter.
-                        <br />Dans un souci d'optimisation, seuls les 20 premières lignes de chaque fichier sont
-                        affichées
-                        ici (chargement complet en cours de développement).
-                        <br /><br />L'ensemble du code source du site est disponible sur <a
-                            href="https://github.com/Quoifleur/testClimat-version_locale">github</a>
-                    </p>
-                </div>
-                <div class="formulaire">
-                    <h2 id="chargementFichier">Visualiser un fichier</h2>
-                    <?php require('template/GTFSchargementFichier.php');
-                    ?>
-                </div>
-            </section>
-            <section class="section_milieu">
+    </div>
+    <?php
+    require('template/GTFSsommaire.php');
+    ?>
+    <main class="tGTFS_main">
+        <section class="section_intro">
+            <div class="texte">
+                <h1 id="introduction">Visionneuse GTFS schedule</h1>
+                <p>testClimat-visionneuse GTFS scheldule v1.1 26/01/2025, <a
+                        href="testClimatchangelog.php">changelog</a>
+                </p>
+                <h2>Qu'est-ce qu'un fichier GTFS ?</h2>
+                <p>
+                    Le General Transit Feed Specification (GTFS) est un format de fichier qui contient les horaires
+                    des transports en commun. Il est utilisé par de nombreuses applications de transport en commun,
+                    telles que Google Maps, pour afficher les horaires des bus, des trains et des métros. Le GTFS
+                    est un format de fichier simple et facile à utiliser qui permet aux développeurs de créer des
+                    applications de transport en commun.
+                </p>
+            </div>
+            <div class="texte">
+                <h3>Documentation et crédit</h3>
+                <ul>
+                    <li>Site internet officiel de <a href="https://gtfs.org/fr/" target="_blank">gtfs.org</a></li>
+                    <li>Pour télécharger des fichiers GTFS : <a href="https://mobilitydatabase.org/"
+                            target="_blank">mobilitydatabase</a></li>
+                    <li>repository de google relatif au GTFS et GTFS Realtime <a
+                            href="https://github.com/google/transit" target="_blank">github.com/google/transit</a>
+                    </li>
+                    <li>Cette visionneuse GTFS utilise des icônes modifiées et originalement créées par <a
+                            href="https://www.streamlinehq.com/icons" rel="nofollow noopener noreferrer"
+                            target="_blank">Streamline</a>, sous licence Creative commons license: Attribution 4.0
+                        International (CC BY 4.0).</li>
+                </ul>
+                <h3>Fonctionnememt de cette visionneuse</h3>
+                <p>Aucun fichier n'est sauvegardé par TestClimat et sa visionneuse GTFS. Tous les fichiers uploadés
+                    sont
+                    immédiatement supprimés du serveur. Les données ne sont sauvegardées dans aucune base de
+                    données.
+                    <br /><br />En cas de fichier lourd, le temps de chargement peut être long. Si la carte ne
+                    s'affiche
+                    pas correctement, recharger la page peut résoudre le problème. Si le problème persiste, merci de
+                    me
+                    contacter.
+                    <br />Dans un souci d'optimisation, seuls les 20 premières lignes de chaque fichier sont
+                    affichées
+                    ici (chargement complet en cours de développement).
+                    <br /><br />L'ensemble du code source du site est disponible sur <a
+                        href="https://github.com/Quoifleur/testClimat-version_locale">github</a>
+                </p>
+            </div>
+            <div class="formulaire">
+                <h2 id="chargementFichier">Visualiser un fichier</h2>
+                <?php require('template/GTFSchargementFichier.php'); ?>
+            </div>
+        </section>
+        <section class="sommaire">
+            <?php
+            if ($fichierChargé) {
+                require('outils/GTFScsvTOmap.php');
+                require('template/GTFStable_presence_fichier.php');
+            }
+            ?>
+        </section>
+        <section class="section_legende">
+            <div id="map_legend" class="texte">
+                <h4>Légende</h4>
+                <table id="legend-table" class="table-container">
+                    <thead>
+                        <tr>
+                            <th>Couleur</th>
+                            <th>Shape</th>
+                            <th>Route</th>
+                            <th>Zoomer</th>
+                            <th>Afficher/Masquer</th>
+                        </tr>
+                    </thead>
+                    <tbody id="legend-body">
+                    </tbody>
+                </table>
+        </section>
+        <section class="section_recap">
+            <?php
+            if ($fichierChargé) {
+                require('template/GTFSfichierExplicite.php');
+                //require('outils/fichierGTFScompletEcriture.php');
+            } else {
+                require('template/GTFStexteIntroductif.php');
+            }
+            ?>
+        </section>
+        <section class="section_carte">
+            <div class="texte">
+                <h1 id="carte">Carte</h1>
                 <?php
                 if ($fichierChargé) {
-                    require('outils/GTFScsvTOmap.php');
-
-                    require('template/GTFStable_presence_fichier.php');
-                    echo '<br />';
-                    require('template/GTFSfichierExplicite.php');
-                    //require('outils/fichierGTFScompletEcriture.php');
+                    echo '<p>Le(s) fichier(s) stops.txt et/ou shapes.txt a(ont) été détecté(s). Si la carte ne s\'affiche pas, cela veut dire qu\'un problème et survenu. Tentez de recharger la page. Si le problème persiste merci de me contacter.</p>';
+                    require('template/GTFSmap.php');
+                    //require('template/GTFSformulaireExportCarte.php');
+                    require('outils/GTFSnettoyage.php');
                 } else {
-                    require('template/GTFStexteIntroductif.php');
+                    echo '<p>Aucun des fichiers stops.txt ou shapes.txt ont été chargés et/ou détectés, en l\'absence de donnés cartographiables, la carte ne peut pas s\'afficher.</p>';
                 }
-                ?>
-            </section>
-            <section class="section_fin">
-                <div class="texte">
-                    <div id="legende-container">
-                        <h1 id="carte">Carte</h1>
-                        <?php
-                        if ($fichierChargé) {
-                            echo '<p>Le(s) fichier(s) stops.txt et/ou shapes.txt a(ont) été détecté(s). Si la carte ne s\'affiche pas, cela veut dire qu\'un problème et survenu. Tentez de recharger la page. Si le problème persiste merci de me contacter.</p>';
-                            require('template/GTFSmap.php');
-                            //require('template/GTFSformulaireExportCarte.php');
-                            require('outils/GTFSnettoyage.php');
-                        } else {
-                            echo '<p>Aucun des fichiers stops.txt ou shapes.txt ont été chargés et/ou détectés, en l\'absence de donnés cartographiables, la carte ne peut pas s\'afficher.</p>';
-                        }
 
-                        ?>
-                    </div>
-                </div>
-                <?php require('template/GTFSdebug.php'); ?>
-            </section>
-        </main>
-    </div>
+                ?>
+            </div>
+
+        </section>
+        <section class="section_fin">
+            <?php require('template/GTFSdebug.php'); ?>
+        </section>
+    </main>
+
 </body>
 <footer>
     <?php include('navigation/footer.php'); ?>

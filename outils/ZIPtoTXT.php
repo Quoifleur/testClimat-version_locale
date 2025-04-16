@@ -3,13 +3,23 @@ require('src/function_tC.php');
 $fichierChargé = false;
 $erreur = false;
 $dossier = 'upload/';
-$fichier = basename($_FILES['file']['name']);
 $taille_maxi = 25000000; // 25Mo
-$taille = $_FILES['file']['size'];
-$extensions = array('.zip', '.rar');
-$extension = strrchr($_FILES['file']['name'], '.');
+$extensions_autorisees = array('.zip', '.rar');
+
+if (isset($_FILES['file'])) {
+    $fichier = basename($_FILES['file']['name']);
+    $taille = $_FILES['file']['size'];
+    $extension = strrchr($_FILES['file']['name'], '.');
+} else {
+    $fichier = null;
+    $taille = null;
+    $extension = null;
+    $erreur = true;
+    $MessageErreur[] = 'Erreur : le fichier n\'a pas été téléchargé';
+}
+
 //Début des vérifications de sécurité...
-if (!in_array($extension, $extensions)) //Si l'extension n'est pas dans le tableau
+if (!in_array($extension, $extensions_autorisees)) //Si l'extension n'est pas dans le tableau
 {
     $erreur = true;
     $MessageErreur[] = 'Erreur : le fichier n\'est pas au format .zip ou .rar';

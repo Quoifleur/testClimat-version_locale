@@ -7,10 +7,11 @@ function contrasteColor($color)
     if (isset($color) && is_string($color)) {
         if (strlen($color) === 6) {
             $color = '#' . $color;
-            // Convertir la couleur hexadécimale en RGB
-            $r = hexdec(substr($color, 0, 2));
-            $g = hexdec(substr($color, 2, 2));
-            $b = hexdec(substr($color, 4, 2));
+
+            // Convertir la couleur hexadécimale en RGB manuellement
+            $r = intval(substr($color, 1, 2), 16);
+            $g = intval(substr($color, 3, 2), 16);
+            $b = intval(substr($color, 5, 2), 16);
 
             // Calculer la luminance relative
             $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
@@ -44,8 +45,19 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
             <div class="texte">
             <h3 id="' . $ListeFichierGTFSprésent[$i][0] . '">' . $ListeFichierGTFSprésent[$i][0] . '</h3><p>Lien vers la <a href="https://gtfs.org/documentation/schedule/reference/#' . str_replace('.', '', $ListeFichierGTFSprésent[$i][0]) . '" target="_blank">documentation</a>.</p>';
             echo '
-            <br />
-            <div class="table-container"><table>';
+            <button class="btn" id="btn_' . $ListeFichierGTFSprésent[$i][0] . '">Afficher/Masquer</button>
+            <script>
+            document.getElementById("btn_' . $ListeFichierGTFSprésent[$i][0] . '").addEventListener("click", function() {
+        const tableContainer = document.getElementById("tab_' . $ListeFichierGTFSprésent[$i][0] . '");
+        if (tableContainer.style.display === "none") {
+            tableContainer.style.display = "block"; // Afficher le tableau
+        } else {
+            tableContainer.style.display = "none"; // Masquer le tableau
+        }
+    });
+            </script>
+            <div class="table-container">
+            <table id="tab_' . $ListeFichierGTFSprésent[$i][0] . '" >';
             //echo '<caption>' . $ListeFichierGTFSprésent[$i][0] . '</caption>';
             echo '<tr>';
             for ($j = 0; $j < $Nbcolonnes; $j++) {

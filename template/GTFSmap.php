@@ -25,22 +25,6 @@ $start_time = hrtime(true);
 <div id="map" style="width: 100%; aspect-ratio: 1 / 1;"></div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-<div id="legend">
-    <h4>Légende</h4>
-    <table id="legend-table">
-        <thead>
-            <tr>
-                <th>Couleur</th>
-                <th>Shape</th>
-                <th>Route</th>
-                <th>Zoomer</th>
-                <th>Afficher/Masquer</th>
-            </tr>
-        </thead>
-        <tbody id="legend-body">
-        </tbody>
-    </table>
-</div>
 <script type="text/javascript">
     console.log("Info : Script de carte chargé");
     var Px = <?= json_encode($baricentre[0]); ?>;
@@ -138,7 +122,7 @@ $start_time = hrtime(true);
         for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) {
             $routeColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_color'] ?? null;
             $routeTexteColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_text_color'] ?? null
-                ?>
+    ?>
             var shape_id = <?= json_encode($dico_shapes_id['shape_names'][$index]['name']) ?? null; ?>;
             var route_id = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_id']) ?? null; ?>;
             var shape_color = <?= json_encode('#' . $routeColor) ?>;
@@ -203,7 +187,7 @@ $start_time = hrtime(true);
                         });
                         document.getElementById('layer-controls').appendChild(control);
                         // Ajouter le groupe de couches au contrôle de couches*/
-        <?php }
+    <?php }
     } ?>
     console.log("Info : " + temoin + " Shapes ajoutées à la carte");
     //layerControl.addOverlay(shapes, 'Shapes');
@@ -232,8 +216,8 @@ $start_time = hrtime(true);
         // Créer les boutons
         var zoomButton = document.createElement('button');
         zoomButton.textContent = 'Zoom';
-        zoomButton.addEventListener('click', (function (polyline) {
-            return function () {
+        zoomButton.addEventListener('click', (function(polyline) {
+            return function() {
                 map.fitBounds(polyline.getBounds());
                 window.location.href = '#carte'; // Redirige vers la section "Carte"
 
@@ -242,8 +226,8 @@ $start_time = hrtime(true);
 
         var toggleButton = document.createElement('button');
         toggleButton.textContent = map.hasLayer(polyline) ? 'Masquer' : 'Afficher';
-        toggleButton.addEventListener('click', (function (polyline, toggleButton) {
-            return function () {
+        toggleButton.addEventListener('click', (function(polyline, toggleButton) {
+            return function() {
                 if (map.hasLayer(polyline)) {
                     map.removeLayer(polyline);
                     toggleButton.textContent = 'Afficher';
