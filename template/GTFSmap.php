@@ -215,7 +215,7 @@ $start_time = hrtime(true);
         routeCell.textContent = routeText;
         // Créer les boutons
         var zoomButton = document.createElement('button');
-        zoomButton.textContent = 'Zoom';
+        zoomButton.innerHTML = '<img src="icones/svg/zoom.svg" alt="Zoom" style="width: 20px; height: 20px; align-item: center;">';
         zoomButton.addEventListener('click', (function(polyline) {
             return function() {
                 map.fitBounds(polyline.getBounds());
@@ -225,15 +225,17 @@ $start_time = hrtime(true);
         })(polyline));
 
         var toggleButton = document.createElement('button');
-        toggleButton.textContent = map.hasLayer(polyline) ? 'Masquer' : 'Afficher';
+        toggleButton.innerHTML = map.hasLayer(polyline) ?
+            '<img src="icones/svg/bouton_eyes_open.svg" alt="affiché" style="width: 20px; height: 20px; align-item: center;" >' :
+            '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
         toggleButton.addEventListener('click', (function(polyline, toggleButton) {
             return function() {
                 if (map.hasLayer(polyline)) {
                     map.removeLayer(polyline);
-                    toggleButton.textContent = 'Afficher';
+                    toggleButton.innerHTML = '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
                 } else {
                     map.addLayer(polyline);
-                    toggleButton.textContent = 'Masquer';
+                    toggleButton.innerHTML = '<img src="icones/svg/bouton_eyes_open.svg" alt="affiché" style="width: 20px; height: 20px; align-item: center;">';
                 }
             };
         })(polyline, toggleButton));

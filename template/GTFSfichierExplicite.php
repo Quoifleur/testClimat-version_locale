@@ -42,7 +42,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
             $Legende = fgetcsv($handle);
             $Nbcolonnes = count($Legende);
             echo '
-            <div class="texte">
+            <div class="texte_fichierGTFS">
             <h3 id="' . $ListeFichierGTFSprésent[$i][0] . '">' . $ListeFichierGTFSprésent[$i][0] . '</h3><p>Lien vers la <a href="https://gtfs.org/documentation/schedule/reference/#' . str_replace('.', '', $ListeFichierGTFSprésent[$i][0]) . '" target="_blank">documentation</a>.</p>';
             echo '
             <button class="btn" id="btn_' . $ListeFichierGTFSprésent[$i][0] . '">Afficher/Masquer</button>
@@ -200,7 +200,6 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                 $rowCount++;
             }
             echo '</table></div>';
-            echo '<br />';
             /*if ($ListeFichierGTFSprésent[$i][0] == 'trips.txt') {
                     echo '<table>';
                     echo '<caption>Liste des itinéraires</caption>';
@@ -248,9 +247,9 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                     echo '<td></td><td></td>';
                 }
                 echo '</tr>';
-                echo '</table></div></div><br/>';
+                echo '</table></div></div>';
             } else {
-                echo '</div><br/>';
+                echo '</div>';
             }
             fclose($handle);
         } else {

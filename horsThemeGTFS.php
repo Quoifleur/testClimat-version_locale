@@ -154,8 +154,8 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
                             <th>Couleur</th>
                             <th>Shape</th>
                             <th>Route</th>
-                            <th>Zoomer</th>
-                            <th>Afficher/Masquer</th>
+                            <th>Zoom</th>
+                            <th>visibilité</th>
                         </tr>
                     </thead>
                     <tbody id="legend-body">
