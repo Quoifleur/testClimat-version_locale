@@ -122,9 +122,10 @@ $start_time = hrtime(true);
         for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) {
             $routeColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_color'] ?? null;
             $routeTexteColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_text_color'] ?? null
-    ?>
+                ?>
             var shape_id = <?= json_encode($dico_shapes_id['shape_names'][$index]['name']) ?? null; ?>;
             var route_id = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_id']) ?? null; ?>;
+            var days_of_service = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['days_of_service']) ?? null; ?>;
             var shape_color = <?= json_encode('#' . $routeColor) ?>;
             var shape_text_color = <?= json_encode('#' . $routeTexteColor); ?>;
             if (shape_color == '#') {
@@ -161,6 +162,7 @@ $start_time = hrtime(true);
             <div class="popup-content">
             <p><strong>Shape Id :</strong> ${shape_id}</p>
             <p><strong>Route Id :</strong> ${route_id}</p>
+            <p><strong>Jours de Service :</strong> ${days_of_service}</p>
             <p><strong>Nombre de points :</strong> ${latlngs.length}</p>
             <p><strong>Couleur :</strong> <span class="color-box" style="background-color: ${shape_color}; color: ${shape_text_color}"></span>${shape_color}</p>
             </div>`;
@@ -187,7 +189,7 @@ $start_time = hrtime(true);
                         });
                         document.getElementById('layer-controls').appendChild(control);
                         // Ajouter le groupe de couches au contrôle de couches*/
-    <?php }
+        <?php }
     } ?>
     console.log("Info : " + temoin + " Shapes ajoutées à la carte");
     //layerControl.addOverlay(shapes, 'Shapes');
@@ -216,8 +218,8 @@ $start_time = hrtime(true);
         // Créer les boutons
         var zoomButton = document.createElement('button');
         zoomButton.innerHTML = '<img src="icones/svg/zoom.svg" alt="Zoom" style="width: 20px; height: 20px; align-item: center;">';
-        zoomButton.addEventListener('click', (function(polyline) {
-            return function() {
+        zoomButton.addEventListener('click', (function (polyline) {
+            return function () {
                 map.fitBounds(polyline.getBounds());
                 window.location.href = '#carte'; // Redirige vers la section "Carte"
 
@@ -228,8 +230,8 @@ $start_time = hrtime(true);
         toggleButton.innerHTML = map.hasLayer(polyline) ?
             '<img src="icones/svg/bouton_eyes_open.svg" alt="affiché" style="width: 20px; height: 20px; align-item: center;" >' :
             '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
-        toggleButton.addEventListener('click', (function(polyline, toggleButton) {
-            return function() {
+        toggleButton.addEventListener('click', (function (polyline, toggleButton) {
+            return function () {
                 if (map.hasLayer(polyline)) {
                     map.removeLayer(polyline);
                     toggleButton.innerHTML = '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';

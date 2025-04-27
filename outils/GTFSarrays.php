@@ -44,3 +44,16 @@ $routes = [
     "continuous_drop_off" => null, // Dépose continue (conditionnel).
     "network_id" => null, // Identifie un groupe de routes.
 ];
+
+$calendar = [
+    "service_id" => null, // Identifie un ensemble de dates de service.
+    "monday" => null, // Indique si le service est disponible le lundi.
+    "tuesday" => null, // Indique si le service est disponible le mardi.
+    "wednesday" => null, // Indique si le service est disponible le mercredi.
+    "thursday" => null, // Indique si le service est disponible le jeudi.
+    "friday" => null, // Indique si le service est disponible le vendredi.
+    "saturday" => null, // Indique si le service est disponible le samedi.
+    "sunday" => null, // Indique si le service est disponible le dimanche.
+    "start_date" => null, // Date de début du service (format AAAAMMJJ).
+    "end_date" => null, // Date de fin du service (format AAAAMMJJ).
+];

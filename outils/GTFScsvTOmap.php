@@ -22,8 +22,8 @@ if ($handle) {
     if (isset($trips['route_id']) && isset($trips['service_id']) && isset($trips['trip_id'])) {
         while (($data = fgetcsv($handle)) !== false) {
             $TripInfo[$Nbpoints]['trip_id'] = $data[$trips['trip_id']];
+            $TripInfo[$Nbpoints]['service_id'] = $data[$trips['service_id']];
             $TripInfo[$Nbpoints]['route_id'] = $data[$trips['route_id']];
-            //$TripInfo[$Nbpoints]['service_id'] = $data[$trips['service_id']];
             if (isset($trips['shape_id'])) {
                 $TripInfo[$Nbpoints]['shape_id'] = $data[$trips['shape_id']];
             } else {
@@ -39,6 +39,33 @@ if ($handle) {
 }
 unset($trips, $Nbtrips, $Nbpoints, $legende, $data, $filePath);
 //print_r($TripInfo);
+//calendar_dates
+$filePath = 'upload/extract' . $fichier . '/calendar.txt';
+$handle = fopen($filePath, 'r');
+if ($handle) {
+    $legende = fgetcsv($handle);
+    $NbCalendar = count($legende);
+    $NbCalendarVariables = count($calendar);
+    for ($i = 0; $i < $NbCalendarVariables; $i++) {
+        $calendar[array_keys($calendar)[$i]] = array_search(array_keys($calendar)[$i], $legende);
+    }
+    $Nbpoints = 0;
+    if (isset($calendar['service_id'])) {
+        while (($data = fgetcsv($handle)) !== false) {
+            $CalendarInfo[$Nbpoints]['service_id'] = $data[$calendar['service_id']];
+            for ($i = 0; $i < 7; $i++) {
+                $CalendarInfo[$Nbpoints]['day'][$i] = $data[$calendar['monday'] + $i];
+            }
+            $Nbpoints++;
+        }
+        //echo $Nbpoints;
+        fclose($handle);
+    } else {
+        $MessageErreur[] = 'Erreur : Arrêt du processus trips';
+    }
+}
+unset($Calendar, $NbCalendar, $Nbpoints, $legende, $data, $filePath);
+print_r($CalendarInfo);
 
 //routes
 $filePath = 'upload/extract' . $fichier . '/routes.txt';
@@ -143,22 +170,26 @@ if ($handle && $ShapesPresent) {
         'shape_names' => []
     ];
 
-
     while (!$handle->eof()) {
-        while (($data = $handle->fgetcsv()) !== false && memory_get_usage() < $memoryLimit) {
-            if ($data && count($data) > 2) {
-                if ($shape_id != $data[0]) {
-                    $shape_id = $data[0];
-                    $dico_shapes_id['Nb_shape_id']++;
-                    $dico_shapes_id['shape_names'][] = [
-                        'name' => $shape_id,
-                        'Nb_ligne' => 0,
-                    ];
-                }
-                $ShapesPositionXY[] = [$shape_id, $data[$Xkey], $data[$Ykey]];
-                $dico_shapes_id['shape_names'][$dico_shapes_id['Nb_shape_id'] - 1]['Nb_ligne']++;
-            }
+        if (memory_get_usage() > $memoryLimit) {
+            $handle->fseek(0, SEEK_SET); // Rewind the file pointer to the beginning
+            $handle->fgetcsv(); // Skip the header line
+            break; // Exit the loop if memory limit is reached
         }
+        $data = $handle->fgetcsv();
+        if ($data && count($data) > 2) {
+            if ($shape_id != $data[0]) {
+                $shape_id = $data[0];
+                $dico_shapes_id['Nb_shape_id']++;
+                $dico_shapes_id['shape_names'][] = [
+                    'name' => $shape_id,
+                    'Nb_ligne' => 0,
+                ];
+            }
+            $ShapesPositionXY[] = [$shape_id, $data[$Xkey], $data[$Ykey]];
+            $dico_shapes_id['shape_names'][$dico_shapes_id['Nb_shape_id'] - 1]['Nb_ligne']++;
+        }
+
     }
 } else {
     $messageErreur[] = "Info : Impossible d'ouvrir le fichier $filePath.";
@@ -171,6 +202,7 @@ if (isset($TripInfo)) {
             'route_id' => $TripInfo[$i]['route_id'],
             'route_color' => null,
             'route_text_color' => null,
+            'calendar' => $CalendarInfo[$i]['day']
         ];
         if (isset($RouteInfo)) {
             foreach ($CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] as $key => $value) {
@@ -186,6 +218,7 @@ if (isset($TripInfo)) {
         }
     }
 }
+print_r($CorrespondanceShapeRoute);
 
 $end_time = hrtime(true);
 $execution_time_GTFcsvTOmap = $end_time - $start_time;
