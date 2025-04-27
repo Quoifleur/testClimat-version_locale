@@ -2,29 +2,7 @@
 $start_time = 0;
 $end_time = 0;
 $start_time = hrtime(true);
-function contrasteColor($color)
-{
-    if (isset($color) && is_string($color)) {
-        if (strlen($color) === 6) {
-            $color = '#' . $color;
 
-            // Convertir la couleur hexadécimale en RGB manuellement
-            $r = intval(substr($color, 1, 2), 16);
-            $g = intval(substr($color, 3, 2), 16);
-            $b = intval(substr($color, 5, 2), 16);
-
-            // Calculer la luminance relative
-            $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
-
-            // Retourner noir pour les couleurs claires et blanc pour les couleurs sombres
-            return ($luminance > 0.5) ? '6F6951' : 'fff9df';
-        } else {
-            return '6F6951';
-        }
-    } else {
-        return '6F6951';
-    }
-}
 if (isset($RouteInfo)) {
     for ($i = 0; $i < count($RouteInfo); $i++) {
         $routeCouleur['route_color'][] = $RouteInfo[$i]['route_color'];
@@ -199,6 +177,7 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                 echo '</tr>';
                 $rowCount++;
             }
+            unset($data);
             echo '</table></div>';
             /*if ($ListeFichierGTFSprésent[$i][0] == 'trips.txt') {
                     echo '<table>';

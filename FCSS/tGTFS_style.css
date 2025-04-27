@@ -47,7 +47,6 @@ aside {
 
 .section_legende {
   grid-row: 2 / 3;
-  z-index: 1;
 }
 .section_fin {
   grid-row: 4;
