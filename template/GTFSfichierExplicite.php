@@ -3,13 +3,6 @@ $start_time = 0;
 $end_time = 0;
 $start_time = hrtime(true);
 
-if (isset($RouteInfo)) {
-    for ($i = 0; $i < count($RouteInfo); $i++) {
-        $routeCouleur['route_color'][] = $RouteInfo[$i]['route_color'];
-        $routeCouleur['route_text_color'][] = $RouteInfo[$i]['route_text_color'] ?? contrasteColor($RouteInfo[$i]['route_color']);
-    }
-}
-
 //print_r($routeCouleur);w
 //print_r($RouteInfo);
 for ($i = 0; $i < $Nbfichierthéorique; $i++) {

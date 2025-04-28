@@ -1,48 +1,57 @@
 <?php
-function get1shape($Numligne, $filePath)
+function processShapeData($shape_id, $latitude, $longitude)
 {
-    $handle = new SplFileObject($filePath, 'r');
-    $handle->setFlags(SplFileObject::READ_CSV);
-    $legende = $handle->fgetcsv();
-    $Xkey = array_search('shape_pt_lat', $legende);
-    $Ykey = array_search('shape_pt_lon', $legende);
-    $Nbcolonnes = count($legende);
-    $Nbshapes = 0;
-    $NbligneParShape = 0;
-    $ShapesPositionXY = [];
-    $dico_shapes_id = [
-        'Nb_shape_id' => 0,
-        'shape_names' => []
-    ];
-    while (!$handle->eof()) {
-        if ($handle->key() >= $Numligne) {
-            $data = $handle->fgetcsv();
-        } else {
-            $handle->next();
-            continue;
-        }
-        if ($data && count($data) > 2) {
-            if ($shape_id != $data[0]) {
-                $shape_id = $data[0];
-                $dico_shapes_id['Nb_shape_id']++;
-                $dico_shapes_id['shape_names'][] = [
-                    'name' => $shape_id,
-                    'Nb_ligne' => 0,
-                ];
-            }
-            $ShapesPositionXY[] = [$shape_id, $data[$Xkey], $data[$Ykey]];
-            $dico_shapes_id['shape_names'][$dico_shapes_id['Nb_shape_id'] - 1]['Nb_ligne']++;
-        }
-
+    $tempFile = 'upload/temp_shapes.csv';
+    $handle = fopen($tempFile, 'a'); // Ouvre le fichier en mode ajout
+    if ($handle) {
+        fputcsv($handle, [$shape_id, $latitude, $longitude]); // Écrit les données dans le fichier
+        fclose($handle);
     }
-
-    return [
-        'end' => $handle->eof(),
-        'last_row' => $handle->key(),
-        'ShapesPositionXY' => $ShapesPositionXY,
-        'dico_shapes_id' => $dico_shapes_id,
-    ];
 }
+
+// function get1shape($Numligne, $filePath)
+// {
+//     $handle = new SplFileObject($filePath, 'r');
+//     $handle->setFlags(SplFileObject::READ_CSV);
+//     $legende = $handle->fgetcsv();
+//     $Xkey = array_search('shape_pt_lat', $legende);
+//     $Ykey = array_search('shape_pt_lon', $legende);
+//     $Nbcolonnes = count($legende);
+//     $Nbshapes = 0;
+//     $NbligneParShape = 0;
+//     $ShapesPositionXY = [];
+//     $dico_shapes_id = [
+//         'Nb_shape_id' => 0,
+//         'shape_names' => []
+//     ];
+//     while (!$handle->eof()) {
+//         if ($handle->key() >= $Numligne) {
+//             $data = $handle->fgetcsv();
+//         } else {
+//             $handle->next();
+//             continue;
+//         }
+//         if ($data && count($data) > 2) {
+//             if ($shape_id != $data[0]) {
+//                 $shape_id = $data[0];
+//                 $dico_shapes_id['Nb_shape_id']++;
+//                 $dico_shapes_id['shape_names'][] = [
+//                     'name' => $shape_id,
+//                     'Nb_ligne' => 0,
+//                 ];
+//             }
+//             $ShapesPositionXY[] = [$shape_id, $data[$Xkey], $data[$Ykey]];
+//             $dico_shapes_id['shape_names'][$dico_shapes_id['Nb_shape_id'] - 1]['Nb_ligne']++;
+//         }
+//     }
+
+//     return [
+//         'end' => $handle->eof(),
+//         'last_row' => $handle->key(),
+//         'ShapesPositionXY' => $ShapesPositionXY,
+//         'dico_shapes_id' => $dico_shapes_id,
+//     ];
+// }
 
 function NettoyageString($string)
 {

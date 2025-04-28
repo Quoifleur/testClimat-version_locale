@@ -52,20 +52,25 @@ if ($handle) {
     $Nbpoints = 0;
     if (isset($calendar['service_id'])) {
         while (($data = fgetcsv($handle)) !== false) {
-            $CalendarInfo[$Nbpoints]['service_id'] = $data[$calendar['service_id']];
+            $CalendarInfo[$Nbpoints] = [
+                'service_id' => $data[$calendar['service_id']],
+                $data[$calendar['service_id']] => ''
+            ];
+
             for ($i = 0; $i < 7; $i++) {
-                $CalendarInfo[$Nbpoints]['day'][$i] = $data[$calendar['monday'] + $i];
+                $CalendarInfo[$Nbpoints][$data[$calendar['service_id']]] .= $data[$calendar['monday'] + $i];
+                $CalendarInfo[$Nbpoints][$data[$calendar['service_id']]] .= ($i == 6) ? '' : '-';
             }
+
             $Nbpoints++;
         }
-        //echo $Nbpoints;
-        fclose($handle);
     } else {
         $MessageErreur[] = 'Erreur : Arrêt du processus trips';
     }
+    fclose($handle);
 }
 unset($Calendar, $NbCalendar, $Nbpoints, $legende, $data, $filePath);
-print_r($CalendarInfo);
+//print_r($CalendarInfo);
 
 //routes
 $filePath = 'upload/extract' . $fichier . '/routes.txt';
@@ -159,19 +164,16 @@ $memoryLimit = 127000000; // 128 MB
 if ($handle && $ShapesPresent) {
     $handle->setFlags(SplFileObject::READ_CSV);
     $legende = $handle->fgetcsv();
-    $Xkey = array_search('shape_pt_lat', $legende);
-    $Ykey = array_search('shape_pt_lon', $legende);
     $Nbcolonnes = count($legende);
     $Nbshapes = 0;
     $NbligneParShape = 0;
-    $ShapesPositionXY = [];
     $dico_shapes_id = [
         'Nb_shape_id' => 0,
         'shape_names' => []
     ];
 
     while (!$handle->eof()) {
-        if (memory_get_usage() > $memoryLimit) {
+        if (memory_get_usage() >= $memoryLimit) {
             $handle->fseek(0, SEEK_SET); // Rewind the file pointer to the beginning
             $handle->fgetcsv(); // Skip the header line
             break; // Exit the loop if memory limit is reached
@@ -186,24 +188,32 @@ if ($handle && $ShapesPresent) {
                     'Nb_ligne' => 0,
                 ];
             }
-            $ShapesPositionXY[] = [$shape_id, $data[$Xkey], $data[$Ykey]];
+            $ShapesPositionXY[] = [$shape_id];
             $dico_shapes_id['shape_names'][$dico_shapes_id['Nb_shape_id'] - 1]['Nb_ligne']++;
         }
-
     }
 } else {
     $messageErreur[] = "Info : Impossible d'ouvrir le fichier $filePath.";
 }
+unset($Xkey, $Ykey, $Nbcolonnes, $NbligneParShape, $data, $legende,  $ShapesPositionXY);
 if (isset($TripInfo)) {
     $NbtripsLIGNE = count($TripInfo);
     for ($i = 0; $i < $NbtripsLIGNE; $i++) {
         $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] = [
             'trip_id' => $TripInfo[$i]['trip_id'],
             'route_id' => $TripInfo[$i]['route_id'],
+            'service_id' => $TripInfo[$i]['service_id'],
             'route_color' => null,
             'route_text_color' => null,
-            'calendar' => $CalendarInfo[$i]['day']
+            'calendar' => null
         ];
+        foreach ($CalendarInfo as $key => $value) {
+            if ($TripInfo[$i]['service_id'] == $value['service_id']) {
+                $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['calendar'] = $value[$TripInfo[$i]['service_id']];
+            }
+        }
+        if ($CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['service_id']) {
+        }
         if (isset($RouteInfo)) {
             foreach ($CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']] as $key => $value) {
                 if ($key == 'route_id') {
@@ -218,10 +228,13 @@ if (isset($TripInfo)) {
         }
     }
 }
-print_r($CorrespondanceShapeRoute);
+if (isset($RouteInfo)) {
+    for ($i = 0; $i < count($RouteInfo); $i++) {
+        $routeCouleur['route_color'][] = $RouteInfo[$i]['route_color'];
+        $routeCouleur['route_text_color'][] = $RouteInfo[$i]['route_text_color'] ?? contrasteColor($RouteInfo[$i]['route_color']);
+    }
+}
+unset($TripInfo, $RouteInfo, $CalendarInfo);
 
 $end_time = hrtime(true);
 $execution_time_GTFcsvTOmap = $end_time - $start_time;
-
-//print_r($CorrespondanceShapeRoute);
-//print_r($MessageErreur);
