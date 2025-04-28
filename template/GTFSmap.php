@@ -117,8 +117,6 @@ $start_time = hrtime(true);
     var shapes = L.layerGroup().addTo(map);
     <?php
     if (isset($dico_shapes_id['Nb_shape_id']) && is_int($dico_shapes_id['Nb_shape_id']) && $dico_shapes_id['Nb_shape_id'] > 0) {
-
-
         $filePath = 'upload/extract' . $fichier . '/shapes.txt';
         $handle = new SplFileObject($filePath, 'r');
         $handle->setFlags(SplFileObject::READ_CSV);
@@ -127,12 +125,11 @@ $start_time = hrtime(true);
         $Ykey = array_search('shape_pt_lon', $data) ?? null;
         $Shapes_name = array_search('shape_id', $data) ?? null;
         $data = $handle->fgetcsv();
-        $debug = [];
-        $y = 1;
+
         for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) {
             $routeColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_color'] ?? null;
             $routeTexteColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_text_color'] ?? null
-    ?>
+                ?>
             var shape_id = <?= json_encode($dico_shapes_id['shape_names'][$index]['name']) ?? null; ?>;
             var route_id = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_id']) ?? null; ?>;
             var days_of_service = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['calendar']); ?>;
@@ -143,19 +140,13 @@ $start_time = hrtime(true);
                 console.log("Info : Couleur non trouvée pour la shape " + shape_id);
             }
             <?php
-            // Read the first line of dat
-            // echo 'data*' . $data[$Shapes_name] . '*';
-            // echo 'Xkey*' . $data[$Xkey] . '*';
-            // echo 'dico*' . $dico_shapes_id['shape_names'][$index]['name'] . '*';
             echo 'var latlngs = [';
             while (($data[$Shapes_name] ?? null) == $dico_shapes_id['shape_names'][$index]['name']) {
-                $data = $handle->fgetcsv();
                 if (memory_get_usage() >= $memoryLimit) {
                     $handle->fseek(0, SEEK_SET); // Rewind the file pointer to the beginning
                     $handle->fgetcsv(); // Skip the header line
                     break; // Exit the loop if memory limit is reached
                 }
-
 
                 if (isset($data[$Xkey]) && isset($data[$Ykey])) {
                     $firstdot = [0, 0];
@@ -165,14 +156,14 @@ $start_time = hrtime(true);
                     }
                     $first = false;
                     echo '[' . json_encode(floatval($data[$Xkey])) . ', ' . json_encode(floatval($data[$Ykey])) . ']';
-                    $y++;
+                    $data = $handle->fgetcsv();
                     if (($data[$Shapes_name] ?? null) !== $dico_shapes_id['shape_names'][$index]['name']) {
                         echo '];';
                     } else {
                         echo ',';
                     }
-                    $debug[$index][] = $i;
                 }
+
             } ?>
             var popupContent = `
             <div class="popup-content">
@@ -191,7 +182,7 @@ $start_time = hrtime(true);
             //shapes.addLayer(polyline);
             arrayPolyline.push([polyline, shape_id, route_id, shape_color, shape_text_color]);
             temoin++;
-    <?php }
+        <?php }
     } ?> console.log("Info : " + temoin + " Shapes ajoutées à la carte");
     //layerControl.addOverlay(shapes, 'Shapes');
     var shapesGroup = L.layerGroup();
@@ -219,8 +210,8 @@ $start_time = hrtime(true);
         // Créer les boutons
         var zoomButton = document.createElement('button');
         zoomButton.innerHTML = '<img src="icones/svg/zoom.svg" alt="Zoom" style="width: 20px; height: 20px; align-item: center;">';
-        zoomButton.addEventListener('click', (function(polyline) {
-            return function() {
+        zoomButton.addEventListener('click', (function (polyline) {
+            return function () {
                 map.fitBounds(polyline.getBounds());
                 window.location.href = '#carte'; // Redirige vers la section "Carte"
 
@@ -231,8 +222,8 @@ $start_time = hrtime(true);
         toggleButton.innerHTML = map.hasLayer(polyline) ?
             '<img src="icones/svg/bouton_eyes_open.svg" alt="affiché" style="width: 20px; height: 20px; align-item: center;" >' :
             '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
-        toggleButton.addEventListener('click', (function(polyline, toggleButton) {
-            return function() {
+        toggleButton.addEventListener('click', (function (polyline, toggleButton) {
+            return function () {
                 if (map.hasLayer(polyline)) {
                     map.removeLayer(polyline);
                     toggleButton.innerHTML = '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
