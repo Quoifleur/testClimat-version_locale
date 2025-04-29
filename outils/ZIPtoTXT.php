@@ -5,6 +5,8 @@ $erreur = false;
 $dossier = 'upload/';
 $taille_maxi = 25000000; // 25Mo
 $extensions_autorisees = array('.zip', '.rar');
+$user_name = random_string(5);
+//$expire = time() + 300; // 5 minutes
 
 if (isset($_FILES['file'])) {
     $fichier = basename($_FILES['file']['name']);
@@ -17,17 +19,19 @@ if (isset($_FILES['file'])) {
     $erreur = true;
     $MessageErreur[] = 'Erreur : le fichier n\'a pas été téléchargé';
 }
+if (!$erreur) {
+    //Début des vérifications de sécurité...
+    if (!in_array($extension, $extensions_autorisees)) //Si l'extension n'est pas dans le tableau
+    {
+        $erreur = true;
+        $MessageErreur[] = 'Erreur : le fichier n\'est pas au format .zip ou .rar';
+    }
+    if ($taille > $taille_maxi) {
+        $erreur = true;
+        $MessageErreur[] = 'Erreur : le fichier est trop volumineux (' . $taille / 1000000 . ' Mo  (max ' . $taille_maxi / 1000000 . ' Mo))';
+    }
+}
 
-//Début des vérifications de sécurité...
-if (!in_array($extension, $extensions_autorisees)) //Si l'extension n'est pas dans le tableau
-{
-    $erreur = true;
-    $MessageErreur[] = 'Erreur : le fichier n\'est pas au format .zip ou .rar';
-}
-if ($taille > $taille_maxi) {
-    $erreur = true;
-    $MessageErreur[] = 'Erreur : le fichier est trop volumineux (' . $taille / 1000000 . ' Mo  (max ' . $taille_maxi / 1000000 . ' Mo))';
-}
 if (!$erreur) //S'il n'y a pas d'erreur, on upload
 {
     // Vérifiez si le répertoire existe, sinon créez-le
@@ -41,12 +45,31 @@ if (!$erreur) //S'il n'y a pas d'erreur, on upload
         'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy'
     );
     $fichier = preg_replace('/([^.a-z0-9]+)/i', '-', $fichier);
+    $fichier = '_' . $user_name . '_' . $fichier;
+    // setcookie(
+    //     $name = 'GTFS_user_name',
+    //     $value = $user_name,
+    //     $expires_or_options = $expire,
+    //     $path = "",
+    //     $domain = "",
+    //     $secure = true,
+    //     httponly: $httponly = true
+    // );
+
     if (move_uploaded_file($_FILES['file']['tmp_name'], $dossier . $fichier)) {
         $fichierChargé = true;
-        //setcookie('userGTFS', $fichier, time() + 3600 * 6, null, null, false, true);
-    } else //Sinon (la fonction renvoie FALSE).
+    } else //Sinon (la fonction renvoie FALSE)
     {
         $erreur = true;
+        // setcookie(
+        //     $name,
+        //     $value = '',
+        //     $expires_or_options = 1,
+        //     $path = "/",
+        //     $domain = "",
+        //     $secure = true,
+        //     httponly: $httponly = true
+        // );
         $MessageErreur[] = 'Erreur : le fichier n\'a pas pu être copié dans le dossier de destination';
     }
 } else {

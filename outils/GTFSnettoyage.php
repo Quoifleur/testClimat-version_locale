@@ -1,22 +1,56 @@
-<?
-//Ce fichier supprime automatiquement les fichiers GTFS chargés.
-$dir = 'upload/extract' . $fichier;
-if (is_dir($dir)) {
+<?php
+// Fonction pour supprimer récursivement tous les fichiers et sous-dossiers
+function deleteDirectory($dir)
+{
+    if (!is_dir($dir)) {
+        echo "Erreur : $dir n'est pas un répertoire valide.\n";
+        return false;
+    }
+
     $files = scandir($dir);
     foreach ($files as $file) {
         if ($file != '.' && $file != '..') {
-            unlink($dir . '/' . $file);
+            $filePath = $dir . '/' . $file;
+            if (is_dir($filePath)) {
+                // Appel récursif pour les sous-dossiers
+                if (!deleteDirectory($filePath)) {
+                    echo "Erreur : Impossible de supprimer le sous-dossier $filePath.\n";
+                    return false;
+                }
+            } else {
+                // Supprime le fichier
+                if (!unlink($filePath)) {
+                    echo "Erreur : Impossible de supprimer le fichier $filePath.\n";
+                    return false;
+                }
+            }
         }
     }
-    sleep(1);
-    rmdir($dir);
+
+    // Supprime le dossier une fois qu'il est vide
+    if (!rmdir($dir)) {
+        echo "Erreur : Impossible de supprimer le dossier $dir.\n";
+        return false;
+    }
+
+    return true;
 }
-unlink('./upload/' . $fichier);
-//verification de la suppression du fichier
-if (is_dir($dir)) {
-    $MessageErreur[] = 'Erreur : Le fichier GTFS chargé n\'a pas pu être supprimé.';
-    $MessageErreur[] = 'Info : Pour supprimer le fichier manuellement : celui-ci se situe dans le répertoire testClimat-version-locale/upload Le repertoire upload doit être vide mais ne doit pas être supprimé.';
-    //$MessageErreur[] = 'ATTENTION : MERCI DE ME CONTACTER (<a href="mailto:victor.maury@testclimat.ovh">victor.maury@testclimat.ovh</a>) POUR QUE JE PUISSE LE FAIRE MANUELLEMENT.';
+
+// Chemin du répertoire à supprimer
+$dir = 'upload/extract' . $fichier;
+
+// Supprime le répertoire et son contenu
+if (deleteDirectory($dir)) {
+    echo "Info : Le fichier GTFS chargé a été supprimé avec succès.\n";
 } else {
-    $MessageErreur[] = 'Info : Le fichier GTFS chargé a été supprimé avec succès.';
+    echo "Erreur : Le fichier GTFS chargé n'a pas pu être supprimé.\n";
+}
+
+// Supprime le fichier ZIP
+if (file_exists('./upload/' . $fichier)) {
+    if (!unlink('./upload/' . $fichier)) {
+        echo "Erreur : Impossible de supprimer le fichier ZIP ./upload/$fichier.\n";
+    } else {
+        echo "Info : Le fichier ZIP ./upload/$fichier a été supprimé avec succès.\n";
+    }
 }
