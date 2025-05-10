@@ -129,7 +129,7 @@ $start_time = hrtime(true);
         for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) {
             $routeColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_color'] ?? null;
             $routeTexteColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_text_color'] ?? null
-                ?>
+    ?>
             var shape_id = <?= json_encode($dico_shapes_id['shape_names'][$index]['name']) ?? null; ?>;
             var route_id = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_id']) ?? null; ?>;
             var days_of_service = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['calendar']); ?>;
@@ -163,7 +163,6 @@ $start_time = hrtime(true);
                         echo ',';
                     }
                 }
-
             } ?>
             var popupContent = `
             <div class="popup-content">
@@ -182,8 +181,9 @@ $start_time = hrtime(true);
             //shapes.addLayer(polyline);
             arrayPolyline.push([polyline, shape_id, route_id, shape_color, shape_text_color]);
             temoin++;
-        <?php }
-    } ?> console.log("Info : " + temoin + " Shapes ajoutées à la carte");
+    <?php }
+    }
+    ?> console.log("Info : " + temoin + " Shapes ajoutées à la carte");
     //layerControl.addOverlay(shapes, 'Shapes');
     var shapesGroup = L.layerGroup();
     // Votre code existant pour ajouter les polylines
@@ -210,8 +210,8 @@ $start_time = hrtime(true);
         // Créer les boutons
         var zoomButton = document.createElement('button');
         zoomButton.innerHTML = '<img src="icones/svg/zoom.svg" alt="Zoom" style="width: 20px; height: 20px; align-item: center;">';
-        zoomButton.addEventListener('click', (function (polyline) {
-            return function () {
+        zoomButton.addEventListener('click', (function(polyline) {
+            return function() {
                 map.fitBounds(polyline.getBounds());
                 window.location.href = '#carte'; // Redirige vers la section "Carte"
 
@@ -222,8 +222,8 @@ $start_time = hrtime(true);
         toggleButton.innerHTML = map.hasLayer(polyline) ?
             '<img src="icones/svg/bouton_eyes_open.svg" alt="affiché" style="width: 20px; height: 20px; align-item: center;" >' :
             '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
-        toggleButton.addEventListener('click', (function (polyline, toggleButton) {
-            return function () {
+        toggleButton.addEventListener('click', (function(polyline, toggleButton) {
+            return function() {
                 if (map.hasLayer(polyline)) {
                     map.removeLayer(polyline);
                     toggleButton.innerHTML = '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
@@ -260,5 +260,6 @@ $start_time = hrtime(true);
     map.fitBounds(polyline.getBounds());
 </script>
 <?php
+fclose($handle);
 $end_time = hrtime(true);
 $execution_time_GTFSmap = $end_time - $start_time;
