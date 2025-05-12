@@ -260,6 +260,6 @@ $start_time = hrtime(true);
     map.fitBounds(polyline.getBounds());
 </script>
 <?php
-fclose($handle);
+
 $end_time = hrtime(true);
 $execution_time_GTFSmap = $end_time - $start_time;

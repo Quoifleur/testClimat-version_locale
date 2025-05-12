@@ -36,6 +36,7 @@ function deleteDirectory($dir)
     return true;
 }
 
+unset($handle);
 // Chemin du répertoire à supprimer
 $dir = 'upload/extract' . $fichier;
 
