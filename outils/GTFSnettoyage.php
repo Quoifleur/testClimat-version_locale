@@ -1,4 +1,31 @@
 <?php
+function rrmdir($dir)
+{
+
+    if (is_dir($dir)) {
+
+        $objects = scandir($dir);
+
+        foreach ($objects as $object) {
+
+            if ($object != "." && $object != "..") {
+
+                if (filetype($dir . "/" . $object) == "dir")
+                    rrmdir($dir . "/" . $object);
+                else
+                    unlink($dir . "/" . $object);
+
+            }
+
+        }
+
+        reset($objects);
+
+        rmdir($dir);
+
+    }
+
+}
 // Fonction pour supprimer récursivement tous les fichiers et sous-dossiers
 function deleteDirectory($dir)
 {
@@ -27,6 +54,13 @@ function deleteDirectory($dir)
         }
     }
 
+    // Vérifiez à nouveau que le répertoire est vide
+    $files = scandir($dir);
+    if (count($files) > 2) { // Plus de 2 signifie qu'il reste des fichiers (car . et .. sont toujours présents)
+        echo "Erreur : Le répertoire $dir n'est pas vide.\n";
+        return false;
+    }
+
     // Supprime le dossier une fois qu'il est vide
     if (!rmdir($dir)) {
         echo "Erreur : Impossible de supprimer le dossier $dir.\n";
@@ -51,6 +85,10 @@ if (file_exists('./upload/' . $fichier)) {
     if (!unlink('./upload/' . $fichier)) {
         echo "Erreur : Impossible de supprimer le fichier ZIP ./upload/$fichier.\n";
     } else {
-        echo "Info : Le fichier ZIP ./upload/$fichier a été supprimé avec succès.\n";
+        echo "<br>Info : Le fichier ZIP ./upload/$fichier a été supprimé avec succès.\n";
     }
 }
+echo $fichier;
+$dirname = 'upload/extract' . $fichier;
+closedir(opendir($dirname));
+rrmdir($dirname);

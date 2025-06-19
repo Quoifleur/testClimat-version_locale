@@ -129,7 +129,7 @@ $start_time = hrtime(true);
         for ($index = 0; $index < $dico_shapes_id['Nb_shape_id']; $index++) {
             $routeColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_color'] ?? null;
             $routeTexteColor = $CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_text_color'] ?? null
-    ?>
+                ?>
             var shape_id = <?= json_encode($dico_shapes_id['shape_names'][$index]['name']) ?? null; ?>;
             var route_id = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['route_id']) ?? null; ?>;
             var days_of_service = <?= json_encode($CorrespondanceShapeRoute[$dico_shapes_id['shape_names'][$index]['name']]['calendar']); ?>;
@@ -141,29 +141,32 @@ $start_time = hrtime(true);
             }
             <?php
             echo 'var latlngs = [';
-            while (($data[$Shapes_name] ?? null) == $dico_shapes_id['shape_names'][$index]['name']) {
-                if (memory_get_usage() >= $memoryLimit) {
-                    $handle->fseek(0, SEEK_SET); // Rewind the file pointer to the beginning
-                    $handle->fgetcsv(); // Skip the header line
-                    break; // Exit the loop if memory limit is reached
+            if ($handle) {
+                while (($data[$Shapes_name] ?? null) == $dico_shapes_id['shape_names'][$index]['name']) {
+                    if (memory_get_usage() >= $memoryLimit) {
+                        $handle->fseek(0, SEEK_SET); // Rewind the file pointer to the beginning
+                        $handle->fgetcsv(); // Skip the header line
+                        break; // Exit the loop if memory limit is reached
+                    }
+                    if (isset($data[$Xkey]) && isset($data[$Ykey])) {
+                        $firstdot = [0, 0];
+                        $first = true;
+                        if ($first) {
+                            $firstdot = [$data[$Xkey], $data[$Ykey]];
+                        }
+                        $first = false;
+                        echo '[' . json_encode(floatval($data[$Xkey])) . ', ' . json_encode(floatval($data[$Ykey])) . ']';
+                        $data = $handle->fgetcsv();
+                        if (($data[$Shapes_name] ?? null) !== $dico_shapes_id['shape_names'][$index]['name']) {
+                            echo '];';
+                        } else {
+                            echo ',';
+                        }
+                    }
                 }
+            }
 
-                if (isset($data[$Xkey]) && isset($data[$Ykey])) {
-                    $firstdot = [0, 0];
-                    $first = true;
-                    if ($first) {
-                        $firstdot = [$data[$Xkey], $data[$Ykey]];
-                    }
-                    $first = false;
-                    echo '[' . json_encode(floatval($data[$Xkey])) . ', ' . json_encode(floatval($data[$Ykey])) . ']';
-                    $data = $handle->fgetcsv();
-                    if (($data[$Shapes_name] ?? null) !== $dico_shapes_id['shape_names'][$index]['name']) {
-                        echo '];';
-                    } else {
-                        echo ',';
-                    }
-                }
-            } ?>
+            ?>
             var popupContent = `
             <div class="popup-content">
             <p><strong>Shape Id :</strong> ${shape_id}</p>
@@ -181,7 +184,7 @@ $start_time = hrtime(true);
             //shapes.addLayer(polyline);
             arrayPolyline.push([polyline, shape_id, route_id, shape_color, shape_text_color]);
             temoin++;
-    <?php }
+        <?php }
     }
     ?> console.log("Info : " + temoin + " Shapes ajoutées à la carte");
     //layerControl.addOverlay(shapes, 'Shapes');
@@ -210,8 +213,8 @@ $start_time = hrtime(true);
         // Créer les boutons
         var zoomButton = document.createElement('button');
         zoomButton.innerHTML = '<img src="icones/svg/zoom.svg" alt="Zoom" style="width: 20px; height: 20px; align-item: center;">';
-        zoomButton.addEventListener('click', (function(polyline) {
-            return function() {
+        zoomButton.addEventListener('click', (function (polyline) {
+            return function () {
                 map.fitBounds(polyline.getBounds());
                 window.location.href = '#carte'; // Redirige vers la section "Carte"
 
@@ -222,8 +225,8 @@ $start_time = hrtime(true);
         toggleButton.innerHTML = map.hasLayer(polyline) ?
             '<img src="icones/svg/bouton_eyes_open.svg" alt="affiché" style="width: 20px; height: 20px; align-item: center;" >' :
             '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
-        toggleButton.addEventListener('click', (function(polyline, toggleButton) {
-            return function() {
+        toggleButton.addEventListener('click', (function (polyline, toggleButton) {
+            return function () {
                 if (map.hasLayer(polyline)) {
                     map.removeLayer(polyline);
                     toggleButton.innerHTML = '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
@@ -260,6 +263,5 @@ $start_time = hrtime(true);
     map.fitBounds(polyline.getBounds());
 </script>
 <?php
-fclose($handle);
 $end_time = hrtime(true);
 $execution_time_GTFSmap = $end_time - $start_time;
