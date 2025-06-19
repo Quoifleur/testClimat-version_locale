@@ -1,4 +1,16 @@
-# Informations générales
+# testGTFS
+
+testGTFS est une visionneuse de fichier GTFS (https://testclimat.ovh/horsThemeGTFS.php).
+
+## Les fichiers GTFS
+
+Le General Transit Feed Specification (GTFS) est un format de fichier qui contient les horaires des transports en commun. Il est utilisé par de nombreuses applications de transport en commun, telles que Google Maps, pour afficher les horaires des bus, des trains et des métros. Le GTFS est un format de fichier simple et facile à utiliser qui permet aux développeurs de créer des applications de transport en commun.
+
+## Fonctionnement
+Voir les fichiers ZIPtoTXT.php -> GTFScsvTOmap.php -> GTFSmap.php -> GTFSexplicite.php -> GTFSnettoyage.php
+Aucun fichier n'est sauvegardé par testGTFS. Tous les fichiers uploadés sont immédiatement supprimés du serveur. Les données ne sont sauvegardées dans aucune base de données.
+
+# testClimat
 
 Le site internet testClimat (https://testclimat.ovh/) permet à partir de normales climatiques de déterminer le cliamt d'un lieu selon la classification de Koppen-Geigger.
 Il s'agit ici de la version locale du site. En tant que tel le site fonctionne donc en local avec MAMP.
