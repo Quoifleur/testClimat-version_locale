@@ -145,23 +145,6 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
             }
             ?>
         </section>
-        <section class="section_legende">
-            <div id="map_legend" class="texte">
-                <h4>Légende</h4>
-                <table id="legend-table" class="table-container">
-                    <thead>
-                        <tr>
-                            <th>Couleur</th>
-                            <th>Shape</th>
-                            <th>Route</th>
-                            <th>Zoom</th>
-                            <th>visibilité</th>
-                        </tr>
-                    </thead>
-                    <tbody id="legend-body">
-                    </tbody>
-                </table>
-        </section>
         <section class="section_recap">
             <?php
             if ($fichierChargé) {
@@ -188,6 +171,44 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
                 ?>
             </div>
 
+        </section>
+        <section class="section_legende">
+            <div id="map_legend" class="texte">
+                <h4>Légende</h4>
+                <form id="background-form">
+                    <label for="background-select">Arrière-plan</label>
+                    <select id="background-select" name="background-select">
+                        <option value="OSM">OpenStreetMap</option>
+                        <option value="OTP">OpenTopoMap</option>
+                        <option value="satellite">Satellite</option>
+                        <!--<option value="other">Autre</option>-->
+                        <option value="NA">Aucun</option>
+                    </select>
+                </form>
+                <form id="stops-form">
+                    <label for="stops-select">Arrêts et types d'arrêts</label>
+                    <select id="stops-select" name="stops-select">
+                        <option value="stops-all">Tous</option>
+                        <option value="stops-NA">Aucun</option>
+                        <option value="stops-0">stop or platform</option>
+                        <option value="stops-1">station</option>
+                        <option value="stops-2">Entrance/Exit</option>
+                        <option value="trips-3">Generic Node</option>
+                        <option value="trips-4">Boarding Area</option>
+                    </select>
+                    <table id="legend-table" class="table-container">
+                        <thead>
+                            <tr>
+                                <th>Couleur</th>
+                                <th>Shape</th>
+                                <th>Route</th>
+                                <th>Zoom</th>
+                                <th>visibilité</th>
+                            </tr>
+                        </thead>
+                        <tbody id="legend-body">
+                        </tbody>
+                    </table>
         </section>
         <section class="section_fin">
             <?php require('template/GTFSdebug.php'); ?>

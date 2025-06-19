@@ -41,7 +41,7 @@ unset($trips, $Nbtrips, $Nbpoints, $legende, $data, $filePath);
 //print_r($TripInfo);
 //calendar_dates
 $filePath = 'upload/extract' . $fichier . '/calendar.txt';
-$handle = fopen($filePath, 'r');
+$handle = fopen($filePath, 'r') ?? null;
 if ($handle) {
     $legende = fgetcsv($handle);
     $NbCalendar = count($legende);
@@ -207,9 +207,11 @@ if (isset($TripInfo)) {
             'route_text_color' => null,
             'calendar' => null
         ];
-        foreach ($CalendarInfo as $key => $value) {
-            if ($TripInfo[$i]['service_id'] == $value['service_id']) {
-                $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['calendar'] = $value[$TripInfo[$i]['service_id']];
+        if (isset($CalendarInfo)) {
+            foreach ($CalendarInfo as $key => $value) {
+                if ($TripInfo[$i]['service_id'] == $value['service_id']) {
+                    $CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['calendar'] = $value[$TripInfo[$i]['service_id']];
+                }
             }
         }
         if ($CorrespondanceShapeRoute[$TripInfo[$i]['shape_id']]['service_id']) {

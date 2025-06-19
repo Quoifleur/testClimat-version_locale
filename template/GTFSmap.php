@@ -1,23 +1,4 @@
 <?php
-/*Débug
-/require('outils/GTFScsvTOmap.php');
-echo '<pre>';
-$arraystring = print_r($stops);
-$arraystring = print_r($dico_shapes_id);
-fclose($LOG);
-//print_r($MessageErreur ?? '');
-//print_r($stops);
-//print_r($dico_shapes_id);
-//print_r($ShapesPositionXY);
-//echo $ShapesPresent;
-echo $dico_shapes_id['Nb_shape_id'] . '<br>';
-echo $NbligneParShape . 'nbligne<br>';
-echo $Nbshapes . ' shapes<br>';
-//echo array_sum(array_column($dico_shapes_id['shape_names'], 'Nb_ligne'));
-echo '</pre>';*/
-//initialisation de différentes variables
-//$NbshapesPourJS = $Nbshapes ?? 0;
-//echo $NbshapesPourJS;
 $start_time = 0;
 $end_time = 0;
 $start_time = hrtime(true);
@@ -26,46 +7,7 @@ $start_time = hrtime(true);
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 <script type="text/javascript">
-    console.log("Info : Script de carte chargé");
-    var Px = <?= json_encode($baricentre[0]); ?>;
-    var Py = <?= json_encode($baricentre[1]); ?>;
-    //var map = L.map("map").setView([Px, Py], 13);
-    const markers = L.markerClusterGroup();
-    const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    });
-
-    const pageBlanche = L.tileLayer('', {
-        maxZoom: 19,
-    });
-
-    const map = L.map('map', {
-        center: [Px, Py],
-        zoom: 10,
-        layers: [osm, markers]
-    });
-
-    const baseLayers = {
-        'OpenStreetMap': osm,
-        'Sans fond de carte': pageBlanche
-    };
-
-    const overlays = {
-        'Stops': markers
-    };
-
-    const layerControl = L.control.layers(baseLayers, overlays).addTo(map);
-
-    const openTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-    });
-    layerControl.addBaseLayer(openTopoMap, 'OpenTopoMap');
-    //tuto
-    var latlng = [Px, Py];
-    //var tooltip = L.tooltip().setLatLng(latlng).setContent('cliquez sur les lignes et les arrêts pour plus d\'informations <br/> Modifier la visibilité des couches ainsi que le type d\'arrière plan en cliquant sur le bouton en haut à droite.').addTo(map);
-    // Fonction pour générer une couleur aléatoire
+    // Fonction couleur aléatoire
     function getRandomColor() {
         var letters = '23456789ABC';
         var color = '#';
@@ -74,9 +16,84 @@ $start_time = hrtime(true);
         }
         return color;
     }
-    // Initialiser le groupe de clusters
-    // create a start
-    // create a stop
+
+    console.log("Info : Script de carte chargé");
+    var Px = <?= json_encode($baricentre[0]); ?>;
+    var Py = <?= json_encode($baricentre[1]); ?>;
+    var latlng = [Px, Py];
+
+    // Créer la carte
+    const map = L.map('map', {
+        center: [Px, Py],
+        zoom: 10,
+    });
+
+    //var map = L.map("map").setView([Px, Py], 13);
+    const markers = L.markerClusterGroup();
+    var layerControl = L.control.layers(null, null).addTo(map);
+    // const overlays = {
+    //     'Stops': markers
+    // };
+
+    //const layerControl = L.control.layers(baseLayers, overlays).addTo(map);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // // Initialiser la carte
+        //const map = L.map('map').setView([Px, Py], 13); // Coordonnées de Paris
+
+        // Ajouter la couche OpenStreetMap par défaut
+        let osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Autres couches
+        let otpLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+        });
+
+        let satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        });
+
+        let pageBlanche = L.tileLayer('', {
+            maxZoom: 19,
+        });
+
+        // Écouter les changements dans le menu déroulant
+        const backgroundSelect = document.getElementById('background-select');
+        backgroundSelect.addEventListener('change', function() {
+            const selectedValue = backgroundSelect.value;
+
+            // Supprimer toutes les couches
+            map.eachLayer(function(layer) {
+                if (layer instanceof L.TileLayer) {
+                    map.removeLayer(layer);
+                }
+            });
+
+            // Ajouter la couche sélectionnée
+            switch (selectedValue) {
+                case 'OSM':
+                    osmLayer.addTo(map);
+                    break;
+                case 'OTP':
+                    otpLayer.addTo(map);
+                    break;
+                case 'satellite':
+                    satelliteLayer.addTo(map);
+                    break;
+                case 'other':
+                    // Ajouter une autre couche si nécessaire
+                    break;
+                case 'NA':
+                    // Ne pas ajouter de couche
+                    break;
+                default:
+                    console.log('Valeur non reconnue');
+            }
+        });
+    });
+
     <?php
     if (isset($StopsPositionXY) && isset($Nbpoints) && is_array($StopsPositionXY) && is_int($Nbpoints)) {
         for ($i = 1; $i < $Nbpoints; $i++) {
@@ -110,7 +127,40 @@ $start_time = hrtime(true);
     }
 
     ?>
-    map.addLayer(markers);
+    markers.addTo(map);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Écouter les changements dans le menu déroulant
+        const stopsSelect = document.getElementById('stops-select');
+        stopsSelect.addEventListener('change', function() {
+            const selectedValue = stopsSelect.value;
+
+            // Ajouter la couche sélectionnée
+            switch (selectedValue) {
+                case 'stops-all':
+                    map.addLayer(markers);
+                    break;
+                case 'stops-NA':
+                    console.log('Info');
+
+                    break;
+                case 'stops-0':
+                    console.log('Info');
+                    break;
+                case 'stops-1':
+                    console.log('Info');
+
+                    break;
+                case 'stops-2':
+                    break;
+                case 'stops-3':
+                    break;
+                case 'stops-4':
+                    break;
+                default:
+                    console.log('Valeur non reconnue');
+            }
+        });
+    });
     // createshape
     var temoin = 0;
     var arrayPolyline = [];
@@ -185,6 +235,8 @@ $start_time = hrtime(true);
             arrayPolyline.push([polyline, shape_id, route_id, shape_color, shape_text_color]);
             temoin++;
         <?php }
+    <?php }
+        unset($handle);
     }
     ?> console.log("Info : " + temoin + " Shapes ajoutées à la carte");
     //layerControl.addOverlay(shapes, 'Shapes');
@@ -263,5 +315,6 @@ $start_time = hrtime(true);
     map.fitBounds(polyline.getBounds());
 </script>
 <?php
+fclose($handle);
 $end_time = hrtime(true);
 $execution_time_GTFSmap = $end_time - $start_time;
