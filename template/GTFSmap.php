@@ -37,7 +37,7 @@ $start_time = hrtime(true);
 
     //const layerControl = L.control.layers(baseLayers, overlays).addTo(map);
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // // Initialiser la carte
         //const map = L.map('map').setView([Px, Py], 13); // Coordonnées de Paris
 
@@ -61,11 +61,11 @@ $start_time = hrtime(true);
 
         // Écouter les changements dans le menu déroulant
         const backgroundSelect = document.getElementById('background-select');
-        backgroundSelect.addEventListener('change', function() {
+        backgroundSelect.addEventListener('change', function () {
             const selectedValue = backgroundSelect.value;
 
             // Supprimer toutes les couches
-            map.eachLayer(function(layer) {
+            map.eachLayer(function (layer) {
                 if (layer instanceof L.TileLayer) {
                     map.removeLayer(layer);
                 }
@@ -128,10 +128,10 @@ $start_time = hrtime(true);
 
     ?>
     markers.addTo(map);
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Écouter les changements dans le menu déroulant
         const stopsSelect = document.getElementById('stops-select');
-        stopsSelect.addEventListener('change', function() {
+        stopsSelect.addEventListener('change', function () {
             const selectedValue = stopsSelect.value;
 
             // Ajouter la couche sélectionnée
@@ -235,8 +235,6 @@ $start_time = hrtime(true);
             arrayPolyline.push([polyline, shape_id, route_id, shape_color, shape_text_color]);
             temoin++;
         <?php }
-    <?php }
-        unset($handle);
     }
     ?> console.log("Info : " + temoin + " Shapes ajoutées à la carte");
     //layerControl.addOverlay(shapes, 'Shapes');
