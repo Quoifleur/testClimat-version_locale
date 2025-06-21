@@ -28,7 +28,7 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
         function loadContent() {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', 'content.php', true);
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     document.getElementById('content').innerHTML = xhr.responseText;
                 }
@@ -155,6 +155,15 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
             }
             ?>
         </section>
+        <section class="section_graphique">
+            <div class="texte">
+                <h1 id="Graphique des lignes">Graphiques des lignes</h1>
+                <canvas id="myChart" width="400" height="400"></canvas>
+                <?php
+                require('template/GTFSgraphique.php');
+                ?>
+            </div>
+        </section>
         <section class="section_carte">
             <div class="texte">
                 <h1 id="carte">Carte</h1>
@@ -196,19 +205,27 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
                         <option value="trips-3">Generic Node</option>
                         <option value="trips-4">Boarding Area</option>
                     </select>
-                    <table id="legend-table" class="table-container">
-                        <thead>
-                            <tr>
-                                <th>Couleur</th>
-                                <th>Shape</th>
-                                <th>Route</th>
-                                <th>Zoom</th>
-                                <th>visibilité</th>
-                            </tr>
-                        </thead>
-                        <tbody id="legend-body">
-                        </tbody>
-                    </table>
+                </form>
+                <form id="shapes-form">
+                    <label for="shapes-select">Formes</label>
+                    <select id="shapes-select" name="shapes-select">
+                        <option value="shapes-all">Toutes</option>
+                        <option value="shapes-NA">Aucune</option>
+                    </select>
+                </form>
+                <table id="legend-table" class="table-container">
+                    <thead>
+                        <tr>
+                            <th>Couleur</th>
+                            <th>Shape</th>
+                            <th>Route</th>
+                            <th>Zoom</th>
+                            <th>visibilité</th>
+                        </tr>
+                    </thead>
+                    <tbody id="legend-body">
+                    </tbody>
+                </table>
         </section>
         <section class="section_fin">
             <?php require('template/GTFSdebug.php'); ?>

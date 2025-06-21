@@ -2,6 +2,16 @@
 $start_time = 0;
 $end_time = 0;
 $start_time = hrtime(true);
+/*$dataGraphique = [
+    'route' =>
+        [
+            'route_id' => '',
+            'trip_id' => [],
+            'arrival_time' => [],
+            'departure_time' => [],
+            'stop_id' => []
+        ]
+];*/
 
 //print_r($routeCouleur);w
 //print_r($RouteInfo);
@@ -124,7 +134,15 @@ for ($i = 0; $i < $Nbfichierthéorique; $i++) {
                             $y++;
                         }
                         echo '<td>' . $data[$y] . '</td>';
-                    } elseif ($ListeFichierGTFSprésent[$i][0] == 'trips.txt') {
+                    } /*elseif ($ListeFichierGTFSprésent[$i][0] == 'stop_times.txt') {
+                       if ($Legende[$y] == 'trip_id') {
+
+                           echo '<td>' . $data[$y] . '</td>';
+                           $y++;
+                       }
+                       echo '<td>' . $data[$y] . '</td>';
+
+                   }*/ elseif ($ListeFichierGTFSprésent[$i][0] == 'trips.txt') {
 
                         if ($Legende[$y] == 'route_id') {
                             echo '<td style="background:#' . $routeCouleur['route_color'][$y] . '; color:#' . $routeCouleur['route_text_color'][$y] . ';">' . $data[$y] . '</td>';

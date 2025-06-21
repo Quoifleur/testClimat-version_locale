@@ -25,12 +25,10 @@ $start_time = hrtime(true);
     // Créer la carte
     const map = L.map('map', {
         center: [Px, Py],
-        zoom: 10,
+        zoom: 13,
     });
 
     //var map = L.map("map").setView([Px, Py], 13);
-    const markers = L.markerClusterGroup();
-    var layerControl = L.control.layers(null, null).addTo(map);
     // const overlays = {
     //     'Stops': markers
     // };
@@ -93,6 +91,40 @@ $start_time = hrtime(true);
             }
         });
     });
+    const markers = L.markerClusterGroup();
+    document.addEventListener('DOMContentLoaded', function () {
+        map.addLayer(markers);
+        // Écouter les changements dans le menu déroulant
+        const stopsSelect = document.getElementById('stops-select');
+        stopsSelect.addEventListener('change', function () {
+            const selectedValue = stopsSelect.value;
+
+            // Ajouter la couche sélectionnée
+            switch (selectedValue) {
+                case 'stops-all':
+                    map.addLayer(markers);
+                    break;
+                case 'stops-NA':
+                    map.removeLayer(markers);
+                    break;
+                case 'stops-0':
+                    console.log('Info');
+                    break;
+                case 'stops-1':
+                    console.log('Info');
+
+                    break;
+                case 'stops-2':
+                    break;
+                case 'stops-3':
+                    break;
+                case 'stops-4':
+                    break;
+                default:
+                    console.log('Valeur non reconnue');
+            }
+        });
+    });
 
     <?php
     if (isset($StopsPositionXY) && isset($Nbpoints) && is_array($StopsPositionXY) && is_int($Nbpoints)) {
@@ -127,44 +159,42 @@ $start_time = hrtime(true);
     }
 
     ?>
-    markers.addTo(map);
+    // createshape
+    var temoin = 0;
+    var arrayPolyline = [];
+    var shapesGroup = L.layerGroup();
+    var shapesPresent = true; // Variable pour vérifier si des shapes sont présentes
+
     document.addEventListener('DOMContentLoaded', function () {
+        map.addLayer(shapesGroup);
         // Écouter les changements dans le menu déroulant
-        const stopsSelect = document.getElementById('stops-select');
-        stopsSelect.addEventListener('change', function () {
-            const selectedValue = stopsSelect.value;
+        const shapesSelect = document.getElementById('shapes-select');
+        shapesSelect.addEventListener('change', function () {
+            const selectedValue = shapesSelect.value;
 
             // Ajouter la couche sélectionnée
             switch (selectedValue) {
-                case 'stops-all':
-                    map.addLayer(markers);
+                case 'shapes-all':
+                    map.addLayer(shapesGroup);
+                    shapesPresent = true; // Indiquer que des shapes sont présentes
+                    // Mettre tous les boutons en mode "open"
+                    document.querySelectorAll('.toggle-shape-btn').forEach(function (btn) {
+                        btn.innerHTML = '<img src="icones/svg/bouton_eyes_open.svg" alt="affiché" style="width: 20px; height: 20px; align-item: center;">';
+                    });
                     break;
-                case 'stops-NA':
-                    console.log('Info');
-
-                    break;
-                case 'stops-0':
-                    console.log('Info');
-                    break;
-                case 'stops-1':
-                    console.log('Info');
-
-                    break;
-                case 'stops-2':
-                    break;
-                case 'stops-3':
-                    break;
-                case 'stops-4':
+                case 'shapes-NA':
+                    map.removeLayer(shapesGroup);
+                    shapesPresent = false; // Indiquer qu'aucune shape n'est présente 
+                    document.querySelectorAll('.toggle-shape-btn').forEach(function (btn) {
+                        btn.innerHTML = '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
+                    });
                     break;
                 default:
                     console.log('Valeur non reconnue');
             }
         });
     });
-    // createshape
-    var temoin = 0;
-    var arrayPolyline = [];
-    var shapes = L.layerGroup().addTo(map);
+
     <?php
     if (isset($dico_shapes_id['Nb_shape_id']) && is_int($dico_shapes_id['Nb_shape_id']) && $dico_shapes_id['Nb_shape_id'] > 0) {
         $filePath = 'upload/extract' . $fichier . '/shapes.txt';
@@ -229,6 +259,16 @@ $start_time = hrtime(true);
             var polyline = L.polyline(latlngs, {
                 color: shape_color
             }).addTo(map).bindPopup(popupContent);
+            polyline.on('mouseover', function () {
+                this.setStyle({
+                    weight: 14
+                });
+            });
+            polyline.on('mouseout', function () {
+                this.setStyle({
+                    weight: 5 // Remettez ici la valeur d'origine du weight
+                });
+            });
 
 
             //shapes.addLayer(polyline);
@@ -238,70 +278,73 @@ $start_time = hrtime(true);
     }
     ?> console.log("Info : " + temoin + " Shapes ajoutées à la carte");
     //layerControl.addOverlay(shapes, 'Shapes');
-    var shapesGroup = L.layerGroup();
+
     // Votre code existant pour ajouter les polylines
-    for (var i = 0; i < arrayPolyline.length; i++) {
-        var polyline = arrayPolyline[i][0];
-        shapesGroup.addLayer(polyline);
+    document.addEventListener('DOMContentLoaded', function () {
+        for (var i = 0; i < arrayPolyline.length; i++) {
+            var polyline = arrayPolyline[i][0];
+            shapesGroup.addLayer(polyline);
 
-        var colorBox = '<span class="color-box" style="background-color:' + arrayPolyline[i][3] + ';"></span>';
-        var shapeText = 'Shape ' + arrayPolyline[i][1];
-        var routeText = 'Route ' + arrayPolyline[i][2];
+            var colorBox = '<span class="color-box" style="background-color:' + arrayPolyline[i][3] + ';"></span>';
+            var shapeText = 'Shape ' + arrayPolyline[i][1];
+            var routeText = 'Route ' + arrayPolyline[i][2];
 
-        // Créer une ligne de tableau
-        var row = document.createElement('tr');
+            // Créer une ligne de tableau
+            var row = document.createElement('tr');
 
-        // Créer les cellules de tableau
-        var colorCell = document.createElement('td');
-        colorCell.innerHTML = colorBox;
+            // Créer les cellules de tableau
+            var colorCell = document.createElement('td');
+            colorCell.innerHTML = colorBox;
 
-        var shapeCell = document.createElement('td');
-        shapeCell.textContent = shapeText;
+            var shapeCell = document.createElement('td');
+            shapeCell.textContent = shapeText;
 
-        var routeCell = document.createElement('td');
-        routeCell.textContent = routeText;
-        // Créer les boutons
-        var zoomButton = document.createElement('button');
-        zoomButton.innerHTML = '<img src="icones/svg/zoom.svg" alt="Zoom" style="width: 20px; height: 20px; align-item: center;">';
-        zoomButton.addEventListener('click', (function (polyline) {
-            return function () {
-                map.fitBounds(polyline.getBounds());
-                window.location.href = '#carte'; // Redirige vers la section "Carte"
+            var routeCell = document.createElement('td');
+            routeCell.textContent = routeText;
+            // Créer les boutons
+            var zoomButton = document.createElement('button');
+            zoomButton.innerHTML = '<img src="icones/svg/zoom.svg" alt="Zoom" style="width: 20px; height: 20px; align-item: center;">';
+            zoomButton.addEventListener('click', (function (polyline) {
+                return function () {
+                    map.fitBounds(polyline.getBounds());
+                    window.location.href = '#carte'; // Redirige vers la section "Carte"
 
-            };
-        })(polyline));
+                };
+            })(polyline));
 
-        var toggleButton = document.createElement('button');
-        toggleButton.innerHTML = map.hasLayer(polyline) ?
-            '<img src="icones/svg/bouton_eyes_open.svg" alt="affiché" style="width: 20px; height: 20px; align-item: center;" >' :
-            '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
-        toggleButton.addEventListener('click', (function (polyline, toggleButton) {
-            return function () {
-                if (map.hasLayer(polyline)) {
-                    map.removeLayer(polyline);
-                    toggleButton.innerHTML = '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
-                } else {
-                    map.addLayer(polyline);
-                    toggleButton.innerHTML = '<img src="icones/svg/bouton_eyes_open.svg" alt="affiché" style="width: 20px; height: 20px; align-item: center;">';
-                }
-            };
-        })(polyline, toggleButton));
-        // Créer une cellule pour les boutons
-        var zoomCell = document.createElement('td');
-        zoomCell.appendChild(zoomButton);
-        var toggleCell = document.createElement('td');
-        toggleCell.appendChild(toggleButton);
+            var toggleButton = document.createElement('button');
+            toggleButton.classList.add('toggle-shape-btn');
+            toggleButton.innerHTML = map.hasLayer(polyline) ?
+                '<img src="icones/svg/bouton_eyes_open.svg" alt="affiché" style="width: 20px; height: 20px; align-item: center;" >' :
+                '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
+            toggleButton.addEventListener('click', (function (polyline, toggleButton) {
+                return function () {
+                    if (map.hasLayer(polyline)) {
+                        map.removeLayer(polyline);
+                        toggleButton.innerHTML = '<img src="icones/svg/bouton_eyes_close.svg" alt="masqué" style="width: 20px; height: 20px; align-item: center;">';
+                    } else {
+                        map.addLayer(polyline);
+                        toggleButton.innerHTML = '<img src="icones/svg/bouton_eyes_open.svg" alt="affiché" style="width: 20px; height: 20px; align-item: center;">';
+                    }
+                };
+            })(polyline, toggleButton));
+            // Créer une cellule pour les boutons
+            var zoomCell = document.createElement('td');
+            zoomCell.appendChild(zoomButton);
+            var toggleCell = document.createElement('td');
+            toggleCell.appendChild(toggleButton);
 
-        // Ajouter les cellules à la ligne
-        row.appendChild(colorCell);
-        row.appendChild(shapeCell);
-        row.appendChild(routeCell);
-        row.appendChild(zoomCell);
-        row.appendChild(toggleCell);
+            // Ajouter les cellules à la ligne
+            row.appendChild(colorCell);
+            row.appendChild(shapeCell);
+            row.appendChild(routeCell);
+            row.appendChild(zoomCell);
+            row.appendChild(toggleCell);
 
-        // Ajouter la ligne au corps du tableau
-        document.getElementById('legend-body').appendChild(row);
-    }
+            // Ajouter la ligne au corps du tableau
+            document.getElementById('legend-body').appendChild(row);
+        }
+    });
 
     // Ajouter le groupe de couches au contrôle de couches
     layerControl.addOverlay(shapesGroup, "Shapes");
@@ -313,6 +356,5 @@ $start_time = hrtime(true);
     map.fitBounds(polyline.getBounds());
 </script>
 <?php
-fclose($handle);
 $end_time = hrtime(true);
 $execution_time_GTFSmap = $end_time - $start_time;

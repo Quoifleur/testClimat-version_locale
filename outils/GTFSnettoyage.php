@@ -90,6 +90,3 @@ if (file_exists('./upload/' . $fichier)) {
     }
 }
 echo $fichier;
-$dirname = 'upload/extract' . $fichier;
-closedir(opendir($dirname));
-rrmdir($dirname);
