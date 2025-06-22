@@ -157,11 +157,15 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
         </section>
         <section class="section_graphique">
             <div class="texte">
-                <h1 id="Graphique des lignes">Graphiques des lignes</h1>
-                <canvas id="myChart" width="400" height="400"></canvas>
+                <h1 id="Graphicage">Graphicage</h1>
                 <?php
-                require('template/GTFSgraphique.php');
-                ?>
+                if ($fichierChargé) {
+                    echo '<p>Le fichier stop_times.txt a été détecté. Si le graphique ne s\'affiche pas, cela veut dire qu\'un problème et survenu. Tentez de recharger la page. Si le problème persiste merci de me contacter.</p>';
+                    require('template/GTFSgraphiquetemplate.php');
+                    require('outils/GTFSgraphique.php');
+                } else {
+                    echo '<p>Aucun fichier stop_times.txt n\'a été chargé et/ou détecté, en l\'absence de ces données, le graphique ne peut pas s\'afficher.</p>';
+                } ?>
             </div>
         </section>
         <section class="section_carte">

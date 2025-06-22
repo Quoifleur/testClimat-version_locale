@@ -195,7 +195,7 @@ if ($handle && $ShapesPresent) {
 } else {
     $messageErreur[] = "Info : Impossible d'ouvrir le fichier $filePath.";
 }
-unset($Xkey, $Ykey, $Nbcolonnes, $NbligneParShape, $data, $legende,  $ShapesPositionXY);
+unset($Xkey, $Ykey, $Nbcolonnes, $NbligneParShape, $data, $legende, $ShapesPositionXY);
 if (isset($TripInfo)) {
     $NbtripsLIGNE = count($TripInfo);
     for ($i = 0; $i < $NbtripsLIGNE; $i++) {
@@ -236,7 +236,7 @@ if (isset($RouteInfo)) {
         $routeCouleur['route_text_color'][] = $RouteInfo[$i]['route_text_color'] ?? contrasteColor($RouteInfo[$i]['route_color']);
     }
 }
-unset($TripInfo, $RouteInfo, $CalendarInfo);
+unset($CalendarInfo, $TripInfo['service_id'], $TripInfo['shape_id'], $handle, $filePath, $NbtripsLIGNE, $NbtripsVariables, $NbCalendarVariables, $Nbcolonnes, $NbligneParShape, $legende, $data);
 
 $end_time = hrtime(true);
 $execution_time_GTFcsvTOmap = $end_time - $start_time;
